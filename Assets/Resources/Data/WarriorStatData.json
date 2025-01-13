@@ -1,0 +1,24 @@
+{
+    "warriorStats": [
+        {
+            "level": "1",
+            "maxHp": "200",
+            "attack": "10",
+            "defense": "2",
+            "moveSpeed": "5",
+            "maxStaminaMP": "100",
+            "staminaMpRecoverySpeed": "30",
+            "totalExp": "100"
+        },
+        {
+            "level": "2",
+            "maxHp": "300",
+            "attack": "15",
+            "defense": "3",
+            "moveSpeed": "5",
+            "maxStaminaMP": "150",
+            "staminaMpRecoverySpeed": "30",
+            "totalExp": "200"
+        }
+    ]
+}

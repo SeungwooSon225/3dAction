@@ -1,0 +1,18 @@
+{
+    "warriorStaminaMPConsumptions": [
+        {
+            "level": "1",
+            "dodge": "15",
+            "basicAttack": "10",
+            "skillE": "0",
+            "skillR": "0"
+        },
+        {
+            "level": "2",
+            "dodge": "15",
+            "basicAttack": "10",
+            "skillE": "0",
+            "skillR": "0"
+        }
+    ]
+}

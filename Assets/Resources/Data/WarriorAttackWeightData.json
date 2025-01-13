@@ -1,0 +1,12 @@
+{
+    "warriorAttackWeight": [
+        {
+            "level": "0",
+            "basicComboOne": "1",
+            "basicComboTwo": "1.2",
+            "basicComboThree": "1.4",
+            "skillE": "2",
+            "skillR": "3"
+        }
+    ]
+}
