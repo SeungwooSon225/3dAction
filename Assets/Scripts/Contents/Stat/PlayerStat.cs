@@ -24,7 +24,23 @@ public class PlayerStat : Stat
     public int Exp { get { return _exp; } set { _hp = value; } }
     public int Gold { get { return _gold; } set { _hp = value; } }
 
-    protected virtual void SetStat(int level) { }
+    public void SetStat(int level) 
+    {
+        if (gameObject.GetComponent<WarriorStat>() != null)
+        {
+            Dictionary<int, Data.WarriorStat> dict = Managers.Data.WarriorStatDict;
+            Data.WarriorStat stat = dict[level];
+
+            _hp = stat.maxHp;
+            _maxHp = stat.maxHp;
+            _attack = stat.attack;
+            _defense = stat.defense;
+            _moveSpeed = stat.moveSpeed;
+            _staminaMp = stat.maxStaminaMP;
+            _maxStaminaMp = stat.maxStaminaMP;
+            _staminaMpRecoverySpeed = stat.staminaMpRecoverySpeed;
+        }
+    }
 
     public void SetStaminaMpConsumption(int level)
     {
@@ -37,7 +53,6 @@ public class PlayerStat : Stat
             _staminaMpConsumption.Add("BasicAttack", consumption.basicAttack);
             _staminaMpConsumption.Add("SkillE", consumption.skillE);
             _staminaMpConsumption.Add("SkillR", consumption.skillR);
-
         }
     }
 }

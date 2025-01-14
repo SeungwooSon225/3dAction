@@ -12,10 +12,6 @@ public class WizardStat : PlayerStat
     public int Mp { get { return _mp; } set { _hp = value; } }
     public int MaxMp { get { return _maxMp; } set { _hp = value; } }
 
-    protected override void SetStat(int level)
-    {
-        
-    }
 
     void Start()
     {

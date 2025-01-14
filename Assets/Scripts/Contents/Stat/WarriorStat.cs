@@ -18,20 +18,20 @@ public class WarriorStat : PlayerStat
         SetAttackWeight();
     }
 
-    protected override void SetStat(int level)
-    {
-        Dictionary<int, Data.WarriorStat> dict = Managers.Data.WarriorStatDict;
-        Data.WarriorStat stat = dict[level];
+    //protected override void SetStat(int level)
+    //{
+    //    Dictionary<int, Data.WarriorStat> dict = Managers.Data.WarriorStatDict;
+    //    Data.WarriorStat stat = dict[level];
 
-        _hp = stat.maxHp;
-        _maxHp = stat.maxHp;
-        _attack = stat.attack;
-        _defense = stat.defense;
-        _moveSpeed = stat.moveSpeed;
-        _staminaMp = stat.maxStaminaMP;
-        _maxStaminaMp = stat.maxStaminaMP;
-        _staminaMpRecoverySpeed = stat.staminaMpRecoverySpeed;
-    }
+    //    _hp = stat.maxHp;
+    //    _maxHp = stat.maxHp;
+    //    _attack = stat.attack;
+    //    _defense = stat.defense;
+    //    _moveSpeed = stat.moveSpeed;
+    //    _staminaMp = stat.maxStaminaMP;
+    //    _maxStaminaMp = stat.maxStaminaMP;
+    //    _staminaMpRecoverySpeed = stat.staminaMpRecoverySpeed;
+    //}
 
     protected override void SetAttackWeight()
     {

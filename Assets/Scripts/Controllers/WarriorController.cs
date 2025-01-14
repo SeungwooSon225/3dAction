@@ -7,6 +7,8 @@ public class WarriorController : PlayerController
     float _dashLength = 3.5f;
     float _dashDuration = 0.3f;
 
+
+
     //[SerializeField]
     //Attack _attack;
 
@@ -62,6 +64,8 @@ public class WarriorController : PlayerController
 
     protected override void OnDodgeEvent() 
     {
+        ResetClickTriggers();
+
         transform.rotation = Quaternion.LookRotation(_movementDir);
 
         StartCoroutine(MoveForwardCo(_dashLength, _dashDuration));

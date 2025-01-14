@@ -13,9 +13,14 @@ public class PlayerController : MonoBehaviour
     Vector3 _movementDirY;
 
     protected PlayerStat _playerStat;
+    protected IEnumerator _moveForwardCo;
 
     //protected Dictionary<string, float> _attackRatio = new Dictionary<string, float>();
-    protected Dictionary<string, ParticleSystem> _effects = new Dictionary<string, ParticleSystem>(); 
+    protected Dictionary<string, ParticleSystem> _effects = new Dictionary<string, ParticleSystem>();
+
+    // To do
+    [SerializeField]
+    Transform _lockOnTarget;
 
     void Start()
     {
@@ -126,6 +131,7 @@ public class PlayerController : MonoBehaviour
             if (_animator.GetBool("IsAttacking"))
                 return;  
 
+
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_movementDir), 20f * Time.deltaTime);
               
             if (!Physics.Raycast(transform.position + Vector3.up * 0.5f, transform.forward.normalized, out RaycastHit hit, 0.5f) ||
@@ -184,17 +190,30 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator FastRotationCo()
     {
-        while (Quaternion.Angle(transform.rotation, Quaternion.LookRotation(_movementDir)) > 0.1f)
+        if (_lockOnTarget == null)
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_movementDir), 30f * Time.deltaTime);
+            while (Quaternion.Angle(transform.rotation, Quaternion.LookRotation(_movementDir)) > 0.1f)
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_movementDir), 30f * Time.deltaTime);
 
-            yield return null;
+                yield return null;
+            }
         }
+        else
+        {
+            while (Quaternion.Angle(transform.rotation, Quaternion.LookRotation(_lockOnTarget.transform.position - gameObject.transform.position)) > 0.1f)
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_lockOnTarget.transform.position - gameObject.transform.position), 30f * Time.deltaTime);
+
+                yield return null;
+            }
+        }
+        
 
         yield return null;
     }
 
-    private void ResetClickTriggers()
+    protected void ResetClickTriggers()
     {
         _animator.ResetTrigger("LeftShortClick");
         _animator.ResetTrigger("LeftLongClick");
@@ -223,8 +242,9 @@ public class PlayerController : MonoBehaviour
         float duration = third + forth * 0.1f;
 
         //Debug.Log($"{distance} {duration}");
-
-        StartCoroutine(MoveForwardCo(distance, duration));
+        if (_moveForwardCo != null) StopCoroutine(_moveForwardCo);
+        _moveForwardCo = MoveForwardCo(distance, duration);
+        StartCoroutine(_moveForwardCo);
     }
 
     private void PlayEffect(string effectName)
