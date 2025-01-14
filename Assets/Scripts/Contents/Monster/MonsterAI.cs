@@ -11,6 +11,7 @@ public class MonsterAI : MonoBehaviour
 
     public Transform Player;
     public Attack RightHandAttack;
+    public Attack LeftHandAttack;
 
     void Start()
     {
@@ -41,6 +42,10 @@ public class MonsterAI : MonoBehaviour
         RightHandAttack.IsPlayer = false;
         Define.AttackWeight punchAttack = new Define.AttackWeight(RightHandAttack, 1.0f);
         _monsterStat.AttackWeight.Add("PunchAttack", punchAttack);
+
+        LeftHandAttack.IsPlayer = false;
+        Define.AttackWeight sliceAttack = new Define.AttackWeight(LeftHandAttack, 1.0f);
+        _monsterStat.AttackWeight.Add("SliceAttack", sliceAttack);
     }
 
 

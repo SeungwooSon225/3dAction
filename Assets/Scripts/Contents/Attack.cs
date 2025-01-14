@@ -10,6 +10,7 @@ public class Attack : MonoBehaviour
 
     public bool IsPlayer { get; set; } = true;
 
+
     private void OnTriggerEnter(Collider other)
     {
         //if (!IsActive || (other.tag == "Player" && IsPlayer)) return;
