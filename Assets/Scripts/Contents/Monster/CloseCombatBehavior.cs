@@ -36,7 +36,12 @@ public class CloseCombatBehavior : IBehavior
 
                 float random = Random.Range(0f, 1f);
 
-                if (random < 10.1f)
+                if (random < 10.2f)
+                {
+                    _animator.SetTrigger("ShockwaveAttack");
+                    //_monsterStat.SetAttackDamage("SliceAttack");
+                }
+                else if (random < 0.6f)
                 {
                     _animator.SetTrigger("SliceAttack");
                     //_monsterStat.SetAttackDamage("SliceAttack");

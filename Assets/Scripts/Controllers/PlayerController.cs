@@ -251,14 +251,11 @@ public class PlayerController : MonoBehaviour
     {
         _effects[effectName].gameObject.transform.position = transform.position;
         _effects[effectName].gameObject.transform.rotation = Quaternion.LookRotation(transform.forward);
+        Debug.Log($"e {transform.forward}, {_effects[effectName].gameObject.transform.rotation} {_effects[effectName].gameObject.transform.position}");
         _effects[effectName].Play();
     }
 
-    private void ShootProjectile(string name)
-    {
-        GameObject projectile = Managers.Resource.Instantiate($"Projectiles/{name}");
-        projectile.GetComponent<Projectile>().Shoot(_playerStat);
-    }
+    
 
     #endregion Animation
 }

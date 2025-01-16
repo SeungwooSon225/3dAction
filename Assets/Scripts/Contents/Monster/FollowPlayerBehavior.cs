@@ -57,7 +57,7 @@ public class FollowPlayerBehavior : IBehavior
 
         _elapsedTime = 0f;
 
-        Debug.Log("공격");
+        //Debug.Log("공격");
 
         if (_animator.GetBool("Fly Forward"))
             _animator.SetBool("Fly Forward", false);

@@ -27,6 +27,7 @@ public class MonsterStat : Stat
 
     void Start()
     {
+        // To do
         _hp = 200f;
         _maxHp = 200f;
         _attack = 10f;
@@ -39,5 +40,12 @@ public class MonsterStat : Stat
         _attackRange = 5f;
         _attackCoolTime = 2f;
         _escapeThreshold = 4f;
+
+        AttackWeight = new Dictionary<string, Define.AttackWeight>();
+
+        Define.AttackWeight shockwaveAttack = new Define.AttackWeight(null, 1.5f);
+        AttackWeight.Add("CrystalGuardian@ShockwaveAttack", shockwaveAttack);
+        Define.AttackWeight missile = new Define.AttackWeight(null, 1.5f);
+        AttackWeight.Add("CrystalGuardian@Missile", missile);
     }
 }

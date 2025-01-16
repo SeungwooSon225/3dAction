@@ -8,13 +8,20 @@ public class Attack : MonoBehaviour
 
     //public bool IsActive { get; set; }
 
-    public bool IsPlayer { get; set; } = true;
+    [SerializeField]
+    private bool _isPlayer = true;
+
+    public bool IsPlayer { get { return _isPlayer; } set { _isPlayer = value; } }
 
 
     private void OnTriggerEnter(Collider other)
     {
+        //Debug.Log(other.name);
         //if (!IsActive || (other.tag == "Player" && IsPlayer)) return;
-        if (other.tag == "Player" && IsPlayer) return;
+        if (other.tag == "Player" && _isPlayer) return;
+        if (other.tag == "Monster" && !_isPlayer) return;
+
+        //Debug.Log(other.name);
 
         Stat stat = other.GetComponent<Stat>();
 

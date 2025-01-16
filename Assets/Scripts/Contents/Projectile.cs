@@ -17,41 +17,90 @@ public class Projectile : MonoBehaviour
     public void Shoot(Stat stat)
     {
         Attack attack = gameObject.GetComponent<Attack>();
+
         attack.Damage = stat.Attack *  stat.AttackWeight[gameObject.name].Weight;
 
         //attack.IsActive = true;
         gameObject.GetComponent<Collider>().enabled = true;
 
-        StartCoroutine(ShootCo());
+        //StartCoroutine(ShootCo(stat.gameObject.transform, stat.Target));
+        StartCoroutine(HalfParabolicShootCo(stat.gameObject.transform, stat.Target));
+
     }
 
-    protected IEnumerator ShootCo()
+
+    private IEnumerator HalfParabolicShootCo(Transform shooter, Transform target)
     {
-        Transform player = GameObject.FindWithTag("Player").transform;
-        transform.rotation = Quaternion.LookRotation(player.forward);
-       
-        Vector3 startPosition = player.position + startOffset;
+        Vector3 startPosition = shooter.position +
+            shooter.right * startOffset.x +
+            Vector3.up * startOffset.y +
+            shooter.forward * startOffset.z;
+
         transform.position = startPosition;
-        Vector3 targetPosition = startPosition + player.forward * _distance;
+        transform.rotation = Quaternion.LookRotation(shooter.forward);
+
         float elapsedTime = 0f;
+        float speed = _distance / _duration;
+        float elapsedDistance = 0f;
 
         while (elapsedTime < _duration)
         {
             elapsedTime += Time.deltaTime;
 
-            float t = elapsedTime / _duration; // 진행 비율 (0~1)
+            elapsedDistance += speed * Time.deltaTime;
+
+            float height = 1f * Mathf.Sin(elapsedTime * 90f * Mathf.PI / 180f);
+            transform.position = startPosition  + transform.forward * elapsedDistance + Vector3.up * height;
+
+            yield return null;
+        }
+
+        Managers.Resource.Destroy(gameObject);
+
+        yield return null;
+    }
+
+
+    private IEnumerator ShootCo(Transform shooter, Transform target = null)
+    {
+        Vector3 startPosition = shooter.position +
+            shooter.right * startOffset.x +
+            Vector3.up * startOffset.y +
+            shooter.forward * startOffset.z;
+
+        transform.position = startPosition;
+        transform.rotation = Quaternion.LookRotation(shooter.forward);
+
+        float speed = _distance / _duration;
+        float elapsedTime = 0f;
+        while (elapsedTime < _duration)
+        {
+            elapsedTime += Time.deltaTime;
+
+            if (target != null)
+                transform.rotation = Quaternion.LookRotation(target.position + Vector3.up * 1.3f - transform.position);
 
             // 위치 업데이트
-            if (!Physics.Raycast(transform.position + Vector3.up * 0.5f, transform.forward.normalized, out RaycastHit hit, 0.5f) ||
-                !hit.collider.CompareTag("Obstacle"))
+            //transform.position = Vector3.Slerp(startPosition, targetPosition, t);
+            transform.position += transform.forward * speed * Time.deltaTime;
+
+            if ((transform.position - target.position).magnitude < 2.0f)
             {
-                transform.position = Vector3.Slerp(startPosition, targetPosition, t);
+                while (elapsedTime < _duration)
+                {
+                    elapsedTime += Time.deltaTime;
+
+                    transform.position += transform.forward * speed * Time.deltaTime;
+                    yield return null;
+                }
             }
 
             yield return null;
         }
 
         yield return new WaitForSeconds(_lifeTime);
+
+        gameObject.GetComponent<Collider>().enabled = false;
 
         Managers.Resource.Destroy(gameObject);
     }
