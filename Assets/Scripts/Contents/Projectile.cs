@@ -23,7 +23,7 @@ public class Projectile : MonoBehaviour
         //attack.IsActive = true;
         gameObject.GetComponent<Collider>().enabled = true;
 
-        StartCoroutine(ShootCo(stat.gameObject.transform, stat.Target));
+        StartCoroutine(ShootCo(stat.gameObject.transform, null));
         //StartCoroutine(HalfParabolicShootCo(stat.gameObject.transform, stat.Target, new Vector3(2.0f, 1.0f, 0f)));
 
     }

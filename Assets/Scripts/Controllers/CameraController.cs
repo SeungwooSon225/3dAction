@@ -5,6 +5,9 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     [SerializeField]
+    float _head = 1.0f;
+
+    [SerializeField]
     Vector3 _offset = new Vector3(0f, 0f, -5f);
 
     float _minYAngle = -30f;     // 카메라의 최소 각도 제한
@@ -41,7 +44,7 @@ public class CameraController : MonoBehaviour
     void LateUpdate()
     {
         // 타겟 위치 계산 (플레이어의 머리 높이를 기준으로 조정 가능)
-        _target = _player.position + Vector3.up * 1f;
+        _target = _player.position + Vector3.up * _head;
 
         // 카메라 회전 및 위치 계산
         Quaternion rotation = Quaternion.Euler(_currentPitch, _currentYaw, 0);
