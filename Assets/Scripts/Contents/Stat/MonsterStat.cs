@@ -39,7 +39,7 @@ public class MonsterStat : Stat
         _stopDistance = 5f;
         _attackRange = 5f;
         _attackCoolTime = 2f;
-        _escapeThreshold = 4f;
+        _escapeThreshold = 3f;
 
         AttackWeight = new Dictionary<string, Define.AttackWeight>();
 

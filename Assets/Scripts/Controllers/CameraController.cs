@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     [SerializeField]
-    float _head = 1.0f;
+    float _head = 1.8f;
 
     [SerializeField]
     Vector3 _offset = new Vector3(0f, 0f, -5f);
