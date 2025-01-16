@@ -16,7 +16,7 @@ public class Attack : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //Debug.Log(other.name);
+        Debug.Log(other.name);
         //if (!IsActive || (other.tag == "Player" && IsPlayer)) return;
         if (other.tag == "Player" && _isPlayer) return;
         if (other.tag == "Monster" && !_isPlayer) return;

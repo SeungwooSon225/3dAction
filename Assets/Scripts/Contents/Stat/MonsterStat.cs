@@ -45,7 +45,7 @@ public class MonsterStat : Stat
 
         Define.AttackWeight shockwaveAttack = new Define.AttackWeight(null, 1.5f);
         AttackWeight.Add("CrystalGuardian@ShockwaveAttack", shockwaveAttack);
-        Define.AttackWeight missile = new Define.AttackWeight(null, 1.5f);
+        Define.AttackWeight missile = new Define.AttackWeight(null, 0.5f);
         AttackWeight.Add("CrystalGuardian@Missile", missile);
     }
 }

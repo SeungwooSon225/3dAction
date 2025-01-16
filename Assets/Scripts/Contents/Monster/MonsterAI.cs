@@ -53,4 +53,16 @@ public class MonsterAI : MonoBehaviour
     {
         _behaviorTree.Execute();
     }
+
+    private void ShootProjectiles()
+    {
+        GameObject projectile1 = Managers.Resource.Instantiate($"Projectiles/CrystalGuardian@Missile");
+        projectile1.GetComponent<Projectile>().HalfParabolicShoot(_monsterStat, new Vector3(2f, 1f, 0f));
+
+        GameObject projectile2 = Managers.Resource.Instantiate($"Projectiles/CrystalGuardian@Missile");
+        projectile2.GetComponent<Projectile>().HalfParabolicShoot(_monsterStat, new Vector3(0f, 1f, 0f));
+
+        GameObject projectile3 = Managers.Resource.Instantiate($"Projectiles/CrystalGuardian@Missile");
+        projectile3.GetComponent<Projectile>().HalfParabolicShoot(_monsterStat, new Vector3(-2f, 1f, 0f));
+    }
 }

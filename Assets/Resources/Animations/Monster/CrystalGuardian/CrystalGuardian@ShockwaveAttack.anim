@@ -47453,7 +47453,7 @@ AnimationClip:
   m_Events:
   - time: 0.73333335
     functionName: ShootProjectile
-    data: CrystalGuardian@Missile
+    data: CrystalGuardian@ShockwaveAttack
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0

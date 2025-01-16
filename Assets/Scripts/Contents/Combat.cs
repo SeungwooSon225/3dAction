@@ -21,9 +21,5 @@ public class Combat : MonoBehaviour
         GameObject projectile = Managers.Resource.Instantiate($"Projectiles/{name}");
         projectile.GetComponent<Projectile>().Shoot(_stat);
     }
-
-    private void ShootParProjectile(string name)
-    {
-    }
 }
 
