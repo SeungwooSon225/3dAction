@@ -13,6 +13,9 @@ public class MonsterAI : MonoBehaviour
     public Attack RightHandAttack;
     public Attack LeftHandAttack;
 
+    public bool IsAttacking;
+
+
     void Start()
     {
         Init();
@@ -26,13 +29,13 @@ public class MonsterAI : MonoBehaviour
         List<IBehavior> IBehaviorTreeList = new List<IBehavior>();
 
         List<IBehavior> IBehaviorMoveList = new List<IBehavior>();
-        IBehaviorMoveList.Add(new IdleBehavior(transform, Player, _animator, _monsterStat));
+        IBehaviorMoveList.Add(new IdleBehavior(transform, Player, _animator, this, _monsterStat));
         IBehaviorMoveList.Add(new FollowPlayerBehavior(transform, Player, _animator, _monsterStat));
         Sequence moveSequence = new Sequence(IBehaviorMoveList);
 
         List<IBehavior> IBehaviorAttackList = new List<IBehavior>();
-        IBehaviorAttackList.Add(new CloseCombatBehavior(transform, Player, _animator, _monsterStat));
-        IBehaviorAttackList.Add(new RangedCombatBehavior(Player, _animator, _monsterStat));
+        IBehaviorAttackList.Add(new CloseCombatBehavior(transform, Player, _animator, this, _monsterStat));
+        IBehaviorAttackList.Add(new RangedCombatBehavior(Player, _animator, this, _monsterStat));
         Selector attackSelector = new Selector(IBehaviorAttackList);
 
         IBehaviorTreeList.Add(moveSequence);
@@ -64,5 +67,10 @@ public class MonsterAI : MonoBehaviour
 
         GameObject projectile3 = Managers.Resource.Instantiate($"Projectiles/CrystalGuardian@Missile");
         projectile3.GetComponent<Projectile>().HalfParabolicShoot(_monsterStat, new Vector3(-2f, 1f, 0f));
+    }
+
+    private void EndAttack()
+    {
+        IsAttacking = false;
     }
 }

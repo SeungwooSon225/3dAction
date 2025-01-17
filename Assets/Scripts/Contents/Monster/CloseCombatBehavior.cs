@@ -10,30 +10,33 @@ public class CloseCombatBehavior : IBehavior
     Transform _player;
     MonsterStat _monsterStat;
 
+    MonsterAI _monsterAI;
+
     float _elapsedTime;
 
 
-    public CloseCombatBehavior(Transform monster, Transform player, Animator animator, MonsterStat monsterStat)
+    public CloseCombatBehavior(Transform monster, Transform player, Animator animator, MonsterAI monsterAI, MonsterStat monsterStat)
     {
         _monster = monster;
         _player = player;
         _monsterStat = monsterStat;
         _animator = animator;
         _elapsedTime = _monsterStat.AttackCoolTime;
+        _monsterAI = monsterAI;
     }
 
     public BehaviorState Execute()
     {
+        _monster.rotation = Quaternion.Slerp(_monster.rotation, Quaternion.LookRotation(_player.position - _monster.position), 10f * Time.deltaTime);
+
         if (Vector3.Distance(_monster.position, _player.position) < _monsterStat.AttackRange)
         {
-            _monster.rotation = Quaternion.Slerp(_monster.rotation, Quaternion.LookRotation(_player.position - _monster.position), 10f * Time.deltaTime);
-
             _elapsedTime += Time.deltaTime;
 
             if (_elapsedTime >= _monsterStat.AttackCoolTime)
             {
                 //Debug.Log("근접 공격");
-
+                _monsterAI.IsAttacking = true;
                 float random = Random.Range(0f, 1f);
 
                 if (random < 0.2f)

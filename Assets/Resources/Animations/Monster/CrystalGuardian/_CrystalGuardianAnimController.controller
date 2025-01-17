@@ -291,7 +291,7 @@ AnimatorStateTransition:
   m_TransitionDuration: 0.25
   m_TransitionOffset: 0
   m_ExitTime: 0.625
-  m_HasExitTime: 1
+  m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
@@ -1162,40 +1162,40 @@ AnimatorStateMachine:
     m_Position: {x: 650, y: -120, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 110241928}
-    m_Position: {x: 1200, y: -90, z: 0}
+    m_Position: {x: 1190, y: -220, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 110248538}
-    m_Position: {x: 1240, y: -220, z: 0}
+    m_Position: {x: 1190, y: -290, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 110259180}
-    m_Position: {x: 1030, y: 530, z: 0}
+    m_Position: {x: 150, y: 690, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 110250786}
-    m_Position: {x: 1000, y: 670, z: 0}
+    m_Position: {x: 70, y: 780, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 110277994}
-    m_Position: {x: 1270, y: 630, z: 0}
+    m_Position: {x: 340, y: 740, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 110269358}
-    m_Position: {x: 1150, y: 270, z: 0}
+    m_Position: {x: 1200, y: 10, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 110289096}
-    m_Position: {x: 1000, y: 740, z: 0}
+    m_Position: {x: 1140, y: 190, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 110203022}
-    m_Position: {x: 1000, y: 810, z: 0}
+    m_Position: {x: 1130, y: 260, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 110286632}
-    m_Position: {x: 1270, y: 780, z: 0}
+    m_Position: {x: 1410, y: 230, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 110284600}
     m_Position: {x: -156, y: -96, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 110205058}
-    m_Position: {x: 1200, y: 40, z: 0}
+    m_Position: {x: 1190, y: -150, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 110244888}
-    m_Position: {x: 380, y: 320, z: 0}
+    m_Position: {x: -90, y: 590, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
   - {fileID: 110169428}

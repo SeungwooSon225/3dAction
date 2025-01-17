@@ -11,12 +11,15 @@ public class IdleBehavior : IBehavior
     bool _isDetect;
     bool _isDie;
 
-    public IdleBehavior(Transform monster, Transform player, Animator animator, MonsterStat monsterStat)
+    MonsterAI _monsterAI;
+
+    public IdleBehavior(Transform monster, Transform player, Animator animator, MonsterAI monsterAI, MonsterStat monsterStat)
     {
         _monster = monster;
         _player = player;
         _animator = animator;
-        _monsterStat = monsterStat;
+        _monsterAI = monsterAI;
+        _monsterStat = monsterStat;     
     }
 
     public BehaviorState Execute()
@@ -27,7 +30,7 @@ public class IdleBehavior : IBehavior
             _animator.SetTrigger("Die");       
         }
 
-        if(_isDie)
+        if(_isDie || _monsterAI.IsAttacking)
             return BehaviorState.Failure;
 
         if (_isDetect)
