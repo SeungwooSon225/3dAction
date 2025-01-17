@@ -8,31 +8,36 @@ public class SnowStorm : MonoBehaviour
     float _radius;
 
     Transform _player;
-
+    Animator _animator;
     Vector3 _previousSpawnPos = Vector3.zero;
 
-    private void Start()
+
+    public void CastStorm(Transform player, Animator animator)
     {
-        _player = GameObject.FindWithTag("Player").transform;
+        _player = player;
+        _animator = animator;
         StartCoroutine(CastStormCo());
     }
 
 
-
-
     IEnumerator CastStormCo()
     {
-        while (true)
+        yield return new WaitForSeconds(.5f);
+
+        for (int i=0; i<5; i++)
         {
             CastStorm();
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(.5f);
 
             CastStorm();
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(.5f);
 
             CastStormNearPlayer();
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(.5f);
         }
+
+        _animator.SetBool("SnowStorm", false);
+        gameObject.GetComponent<ParticleSystem>().Stop();
     }
 
     void CastStormNearPlayer()
@@ -60,7 +65,6 @@ public class SnowStorm : MonoBehaviour
 
         if ((_previousSpawnPos - spawnPosition).magnitude < 5f)
         {
-            Debug.Log("sss");
             float offsetX = Random.Range(10f, 12f);
             if (offsetX > 11f)
                 offsetX *= -1;

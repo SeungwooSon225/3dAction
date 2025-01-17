@@ -73,4 +73,11 @@ public class MonsterAI : MonoBehaviour
     {
         IsAttacking = false;
     }
+
+    private void SummonSnowStorm()
+    {
+        GameObject snowStorm = Managers.Resource.Instantiate("CrystalGuardian/snowStorm");
+        snowStorm.transform.position = gameObject.transform.position + Vector3.up * 9f;
+        snowStorm.GetComponent<SnowStorm>().CastStorm(Player, _animator);
+    }
 }

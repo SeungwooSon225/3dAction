@@ -9751,13 +9751,14 @@ GameObject:
   - component: {fileID: 4327151025134216532}
   - component: {fileID: 616363477788354066}
   - component: {fileID: 2315101366750389532}
+  - component: {fileID: 3411120989823617909}
   m_Layer: 0
   m_Name: SnowStorm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5387310065869863464
 Transform:
   m_ObjectHideFlags: 0
@@ -14571,6 +14572,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _radius: 10
+--- !u!114 &3411120989823617909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3351840540922372817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8bd019a0130b314d955963f427f8b0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsUsing: 0
 --- !u!1 &3452831615906505225
 GameObject:
   m_ObjectHideFlags: 0
