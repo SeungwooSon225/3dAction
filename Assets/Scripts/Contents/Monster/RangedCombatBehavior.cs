@@ -26,8 +26,8 @@ public class RangedCombatBehavior : IBehavior
     {
         Debug.Log("원거리 공격");
         _monsterAI.IsAttacking = true;
-        //_animator.SetTrigger("Cast Spell");
-        _animator.SetBool("SnowStorm", true);
+        _animator.SetTrigger("Cast Spell");
+        //_animator.SetBool("SnowStorm", true);
 
         return BehaviorState.Success;
     }

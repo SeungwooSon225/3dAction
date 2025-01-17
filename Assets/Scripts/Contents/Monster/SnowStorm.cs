@@ -23,6 +23,7 @@ public class SnowStorm : MonoBehaviour
     IEnumerator CastStormCo()
     {
         yield return new WaitForSeconds(.5f);
+        
 
         for (int i=0; i<5; i++)
         {

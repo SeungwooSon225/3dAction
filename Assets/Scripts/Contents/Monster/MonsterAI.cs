@@ -34,6 +34,7 @@ public class MonsterAI : MonoBehaviour
         Sequence moveSequence = new Sequence(IBehaviorMoveList);
 
         List<IBehavior> IBehaviorAttackList = new List<IBehavior>();
+        IBehaviorAttackList.Add(new SpecialAttackBehavor(transform, Player, _animator, this, _monsterStat));
         IBehaviorAttackList.Add(new CloseCombatBehavior(transform, Player, _animator, this, _monsterStat));
         IBehaviorAttackList.Add(new RangedCombatBehavior(Player, _animator, this, _monsterStat));
         Selector attackSelector = new Selector(IBehaviorAttackList);
