@@ -24,10 +24,14 @@ public class PlayerStat : Stat
     public int Exp { get { return _exp; } set { _hp = value; } }
     public int Gold { get { return _gold; } set { _hp = value; } }
 
+    Animator _animator;
+
     public void SetStat(int level) 
     {
         if (gameObject.GetComponent<WarriorStat>() != null)
         {
+            _animator = gameObject.GetComponent<Animator>();
+
             Dictionary<int, Data.WarriorStat> dict = Managers.Data.WarriorStatDict;
             Data.WarriorStat stat = dict[level];
 
@@ -53,6 +57,33 @@ public class PlayerStat : Stat
             _staminaMpConsumption.Add("BasicAttack", consumption.basicAttack);
             _staminaMpConsumption.Add("SkillE", consumption.skillE);
             _staminaMpConsumption.Add("SkillR", consumption.skillR);
+        }
+    }
+
+    public override void OnAttacked(Attack attacker)
+    {
+        if (!IsAttackable) return;
+
+        float damage = Mathf.Max(0, attacker.Damage - Defense);
+        
+        Hp -= damage;
+
+        _animator.SetTrigger("OnAttacked");
+        _animator.SetBool("IsAttacking", false);
+        _animator.SetBool("IsDodging", false);
+        _animator.ResetTrigger("LeftShortClick");
+        _animator.ResetTrigger("LeftLongClick");
+        _animator.ResetTrigger("SkillE");
+        _animator.ResetTrigger("SkillR");
+
+        _isAttackable = true;
+
+        if (Hp <= 0)
+        {
+            Hp = 0;
+            OnDead(attacker);
+
+            IsAttackable = false;
         }
     }
 }

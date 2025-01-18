@@ -255,7 +255,15 @@ public class PlayerController : MonoBehaviour
         _effects[effectName].Play();
     }
 
-    
+    private void SetAttackableTrue()
+    {
+        _playerStat.IsAttackable = true;
+    }
+
+    private void SetAttackableFalse()
+    {
+        _playerStat.IsAttackable = false;
+    }
 
     #endregion Animation
 }
