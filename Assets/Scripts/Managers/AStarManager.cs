@@ -36,6 +36,8 @@ public class AStarManager
                                              new Vector2Int((int)target.transform.position.x, (int)target.transform.position.z));
 
         if (_currentPath == null) return null;
+        
+        Debug.Log($"{_currentPath.Count}, {_currentPath[_currentPath.Count - 1].GCost}");
 
         return _currentPath[0];
     }

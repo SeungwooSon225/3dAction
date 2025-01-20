@@ -16,6 +16,9 @@ public class PlayerStat : Stat
     protected int _exp;
     protected int _gold;
 
+    [SerializeField]
+    protected bool _isOnAttacked;
+
     public Dictionary<string, float> StaminaMpConsumption { get { return _staminaMpConsumption; } }
     public float StaminaMp { get { return _staminaMp; } set { _staminaMp = value; } }
     public float MaxStaminaMp { get { return _maxStaminaMp; } set { _maxStaminaMp = value; } }
@@ -23,6 +26,8 @@ public class PlayerStat : Stat
 
     public int Exp { get { return _exp; } set { _hp = value; } }
     public int Gold { get { return _gold; } set { _hp = value; } }
+
+    public bool IsOnAttacked { get { return _isOnAttacked; } set { _isOnAttacked = value; } }
 
     Animator _animator;
 
@@ -64,8 +69,15 @@ public class PlayerStat : Stat
     {
         if (!IsAttackable) return;
 
+        StartCoroutine(OnAttackedCo(attacker));
+    }
+
+    IEnumerator OnAttackedCo(Attack attacker)
+    {
+        IsOnAttacked = true;
+
         float damage = Mathf.Max(0, attacker.Damage - Defense);
-        
+
         Hp -= damage;
 
         _animator.SetTrigger("OnAttacked");
@@ -85,5 +97,10 @@ public class PlayerStat : Stat
 
             IsAttackable = false;
         }
+
+        yield return new WaitForSeconds(0.5f);
+
+        IsOnAttacked = false;
+
     }
 }

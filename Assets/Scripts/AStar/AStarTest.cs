@@ -35,6 +35,8 @@ public class AStarTest : MonoBehaviour
 
         if (_currentPath == null) return null;
 
+        
+
         return _currentPath[0];
     }
 

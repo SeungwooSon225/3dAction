@@ -56,7 +56,7 @@ public class Stat : MonoBehaviour
         if (!IsAttackable) return;
 
         float damage = Mathf.Max(0, attacker.Damage - Defense);
-        //Debug.Log(damage);
+
         Hp -= damage;
         if (Hp <= 0)
         {
@@ -66,6 +66,7 @@ public class Stat : MonoBehaviour
             IsAttackable = false;
         }
     }
+
 
     protected virtual void OnDead(Attack attacker)
     {

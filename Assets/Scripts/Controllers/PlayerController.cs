@@ -55,6 +55,9 @@ public class PlayerController : MonoBehaviour
 
     protected virtual void OnMouseEvent(Define.MouseEvent evt)
     {
+        if (_playerStat.IsOnAttacked)
+            return;
+
         switch (evt)
         {
             case Define.MouseEvent.LeftShortClick:
@@ -70,6 +73,9 @@ public class PlayerController : MonoBehaviour
 
     protected virtual void Skill()
     {
+        if (_playerStat.IsOnAttacked)
+            return;
+
         if (_animator.GetBool("IsAttacking") || _animator.GetBool("IsDodging"))
             return;
 
@@ -86,6 +92,9 @@ public class PlayerController : MonoBehaviour
 
     protected virtual void Moving()
     {
+        if (_playerStat.IsOnAttacked)
+            return;
+
         if (!_animator.GetBool("IsDodging") && Input.GetKeyDown(KeyCode.Space) && _playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["Dodge"])
         {
             _playerStat.StaminaMp -= _playerStat.StaminaMpConsumption["Dodge"];

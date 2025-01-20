@@ -26,7 +26,7 @@ public class AStarPathfinding
     {
         foreach (var node in grid)
         {
-            node.GCost = float.MaxValue;
+            node.GCost = 99999;
             node.HCost = 0;
             node.Parent = null;
         }
@@ -37,6 +37,7 @@ public class AStarPathfinding
         //Debug.Log("Start FindPath!");
 
         Node startNode = _grid[start.x, start.y];
+        startNode.GCost = 0;
         Node targetNode = _grid[target.x, target.y];
 
         List<Node> openList = new List<Node>();
