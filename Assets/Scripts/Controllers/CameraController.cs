@@ -18,7 +18,6 @@ public class CameraController : MonoBehaviour
     float _currentYaw = 0f;     // 좌우 회전 값
     float _currentPitch = 0f;  // 상하 회전 값
 
-    [SerializeField]
     Transform _player = null;
     Vector3 _target;
 
@@ -56,5 +55,10 @@ public class CameraController : MonoBehaviour
 
         // 카메라가 타겟을 항상 바라보도록 설정
         transform.LookAt(_target);
+    }
+
+    public void SetPlayer(GameObject player)
+    {
+        _player = player.transform;
     }
 }

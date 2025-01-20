@@ -41,7 +41,8 @@ public class MonsterStat : Stat
         _attackCoolTime = 2f;
         _escapeThreshold = 3f;
 
-        AttackWeight = new Dictionary<string, Define.AttackWeight>();
+        if(AttackWeight == null)
+            AttackWeight = new Dictionary<string, Define.AttackWeight>();
 
         Define.AttackWeight shockwaveAttack = new Define.AttackWeight(null, 1.5f);
         AttackWeight.Add("CrystalGuardian@ShockwaveAttack", shockwaveAttack);

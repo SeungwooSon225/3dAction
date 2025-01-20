@@ -26,7 +26,7 @@ public class DataManager
     Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>
     {
         TextAsset textAsset = Managers.Resource.Load<TextAsset>($"Data/{path}");
-        Debug.Log(textAsset);
+        //Debug.Log(textAsset);
         return JsonUtility.FromJson<Loader>(textAsset.text);
     }
 }

@@ -8,6 +8,7 @@ public class Managers : MonoBehaviour
     static Managers s_instance;
     static Managers Instance { get { Init();  return s_instance; } }
 
+    GameManager _game = new GameManager();
     DataManager _data = new DataManager();
     InputManager _input = new InputManager();
     PoolManager _pool = new PoolManager();
@@ -15,6 +16,7 @@ public class Managers : MonoBehaviour
     AStarManager _aStar = new AStarManager();
     UIManager _ui = new UIManager();
 
+    public static GameManager Game { get { return Instance._game; } }
     public static DataManager Data { get { return Instance._data; } }
     public static InputManager Input { get { return Instance._input; } }
     public static PoolManager Pool { get { return Instance._pool; } }

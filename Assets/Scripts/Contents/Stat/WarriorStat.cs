@@ -53,7 +53,7 @@ public class WarriorStat : PlayerStat
         Define.AttackWeight skillR = new Define.AttackWeight(null, weight.skillR);
         AttackWeight.Add("Warrior@SkillR", skillR);
 
-        Debug.Log(AttackWeight["BasicComboOne"].Weight);
+        //Debug.Log(AttackWeight["BasicComboOne"].Weight);
     }
 
 }

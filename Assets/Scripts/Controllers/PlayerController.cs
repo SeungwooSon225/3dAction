@@ -14,13 +14,11 @@ public class PlayerController : MonoBehaviour
 
     protected PlayerStat _playerStat;
     protected IEnumerator _moveForwardCo;
+    protected IEnumerator _fastRotationCo;
 
     //protected Dictionary<string, float> _attackRatio = new Dictionary<string, float>();
     protected Dictionary<string, ParticleSystem> _effects = new Dictionary<string, ParticleSystem>();
 
-    // To do
-    [SerializeField]
-    Transform _lockOnTarget;
 
     void Start()
     {
@@ -95,10 +93,15 @@ public class PlayerController : MonoBehaviour
         if (_playerStat.IsOnAttacked)
             return;
 
+        if (Input.GetKeyDown(KeyCode.F))
+            SetLockOnTarget();
+
         if (!_animator.GetBool("IsDodging") && Input.GetKeyDown(KeyCode.Space) && _playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["Dodge"])
         {
             _playerStat.StaminaMp -= _playerStat.StaminaMpConsumption["Dodge"];
             _animator.SetTrigger("Dodge");
+            if (_fastRotationCo != null) StopCoroutine(_fastRotationCo);
+            if(_moveForwardCo != null) StopCoroutine(_moveForwardCo);
             OnDodgeEvent();
         }
 
@@ -158,10 +161,6 @@ public class PlayerController : MonoBehaviour
 
     protected virtual void OnDodgeEvent() { }
 
-    //protected virtual void SetDamage(Attack attack, string attackName)
-    //{
-    //    attack.Damage = _stat.Attack * _attackRatio[attackName];
-    //}
 
     protected IEnumerator MoveForwardCo(float distance, float duration)
     {
@@ -186,6 +185,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void SetLockOnTarget()
+    {  
+        //Debug.Log("S L T " + (gameObject.transform.position - Managers.Game.Monster.transform.position).magnitude);
+        if (_playerStat.Target == null && (gameObject.transform.position - Managers.Game.Monster.transform.position).magnitude < 1000f)
+        {
+            //Debug.Log("S L T sdf" + Managers.Game.Monster);
+            _playerStat.Target = Managers.Game.Monster.transform;
+        }
+        else if (_playerStat.Target != null)
+            _playerStat.Target = null;
+    }
+
     #region Animation
     private void SetIsAttacking(int value)
     {
@@ -194,12 +205,15 @@ public class PlayerController : MonoBehaviour
 
     private void DoFastRotation()
     {
-        StartCoroutine(FastRotationCo());
+        if (_fastRotationCo != null)
+            StopCoroutine(_fastRotationCo);
+        _fastRotationCo = FastRotationCo();
+        StartCoroutine(_fastRotationCo);
     }
 
     private IEnumerator FastRotationCo()
     {
-        if (_lockOnTarget == null)
+        if (_playerStat.Target == null)
         {
             while (Quaternion.Angle(transform.rotation, Quaternion.LookRotation(_movementDir)) > 0.1f)
             {
@@ -210,9 +224,9 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            while (Quaternion.Angle(transform.rotation, Quaternion.LookRotation(_lockOnTarget.transform.position - gameObject.transform.position)) > 0.1f)
+            while (Quaternion.Angle(transform.rotation, Quaternion.LookRotation(_playerStat.Target.position - gameObject.transform.position)) > 0.1f)
             {
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_lockOnTarget.transform.position - gameObject.transform.position), 30f * Time.deltaTime);
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_playerStat.Target.position - gameObject.transform.position), 30f * Time.deltaTime);
 
                 yield return null;
             }
