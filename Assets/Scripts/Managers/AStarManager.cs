@@ -37,7 +37,8 @@ public class AStarManager
 
         if (_currentPath == null) return null;
         
-        Debug.Log($"{_currentPath.Count}, {_currentPath[_currentPath.Count - 1].GCost}");
+        //if(_currentPath[0].Position.x < 34 && _currentPath[0].Position.y == 35)
+        //    Debug.Log($"{_currentPath.Count}, {_currentPath[_currentPath.Count - 1].GCost}");
 
         return _currentPath[0];
     }
@@ -56,27 +57,30 @@ public class AStarManager
         }
 
         // To Do
-        GameObject map = GameObject.Find("Map");
-
-        foreach (Transform child in map.transform)
+        GameObject mapObstacles = GameObject.Find("Map@Obstacles");
+        foreach (Transform child in mapObstacles.transform)
         {
-            if (child.name == "Obstacle")
+            Grid[(int)child.transform.position.x, (int)child.transform.position.z].IsWalkable = false;
+            //Grid[(int)child.transform.position.x, (int)child.transform.position.z].ZoneWeight = 5;
+
+            foreach (Vector2Int dir in directions)
             {
-                Grid[(int)child.transform.position.x, (int)child.transform.position.z].IsWalkable = false;
-                //Grid[(int)child.transform.position.x, (int)child.transform.position.z].ZoneWeight = 5;
+                int checkX = (int)child.transform.position.x + dir.x;
+                int checkY = (int)child.transform.position.z + dir.y;
 
-                foreach (Vector2Int dir in directions)
+                if (checkX >= 0 && checkX < Grid.GetLength(0) && checkY >= 0 && checkY < Grid.GetLength(1) && Grid[checkX, checkY].IsWalkable)
                 {
-                    int checkX = (int)child.transform.position.x + dir.x;
-                    int checkY = (int)child.transform.position.z + dir.y;
-
-                    if (checkX >= 0 && checkX < Grid.GetLength(0) && checkY >= 0 && checkY < Grid.GetLength(1) && Grid[checkX, checkY].IsWalkable)
-                    {
-                        //Debug.Log($"{checkX}, {checkY}");
-                        Grid[checkX, checkY].ZoneWeight += 50;
-                    }
+                    //Debug.Log($"{checkX}, {checkY}");
+                    Grid[checkX, checkY].ZoneWeight = 50;
                 }
             }
+        }
+
+        GameObject mapRemovableObstacles = GameObject.Find("Map@RemovableObstacles");
+        foreach (Transform child in mapRemovableObstacles.transform)
+        {
+            //Grid[(int)child.transform.position.x, (int)child.transform.position.z].IsWalkable = false;
+            Grid[(int)child.transform.position.x, (int)child.transform.position.z].ZoneWeight = 10.123f;
         }
     }
 }

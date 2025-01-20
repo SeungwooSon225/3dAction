@@ -5,24 +5,25 @@ using UnityEngine.UI;
 
 public class EnvObjectStat : Stat
 {
-    Stat _stat;
+    [SerializeField]
+    UI_EnvObjHPBar _uI_EnvObjHPBar;
 
     void Start()
     {
-        _stat = transform.parent.GetComponent<Stat>();
+        _isAttackable = true;
+        _hp = 40;
+        _maxHp = 40;
+        _uI_EnvObjHPBar = transform.GetComponentInChildren<UI_EnvObjHPBar>();
     }
 
-    void Update()
+    protected override void OnDead(Attack attacker)
     {
-        transform.position = transform.parent.position + Vector3.up * (transform.parent.GetComponent<Collider>().bounds.size.y) + Vector3.up * 0.5f;
-        transform.rotation = Camera.main.transform.rotation;
-
-        float ratio = _stat.Hp / (float)_stat.MaxHp;
-        SetHPRatio(ratio);
+        Managers.Resource.Destroy(gameObject); ;
     }
 
-    public void SetHPRatio(float ratio)
+    public override void OnAttacked(Attack attacker)
     {
-       gameObject.GetComponent<Slider>().value = ratio;
+        base.OnAttacked(attacker);
+        _uI_EnvObjHPBar.FadeInOut();
     }
 }

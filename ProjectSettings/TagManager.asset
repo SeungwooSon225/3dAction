@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Obstacle
   - Monster
+  - RemovableObstacle
   layers:
   - Default
   - TransparentFX

@@ -143,7 +143,7 @@ public class PlayerController : MonoBehaviour
 
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_movementDir), 20f * Time.deltaTime);
               
-            if (!Physics.Raycast(transform.position + Vector3.up * 0.5f, transform.forward.normalized, out RaycastHit hit, 0.5f) ||
+            if (!Physics.Raycast(transform.position + Vector3.up * 1.5f, transform.forward.normalized, out RaycastHit hit, 0.5f) ||
                 (!hit.collider.CompareTag("Obstacle") && !hit.collider.CompareTag("Monster")))
             {
                 transform.position += _movementDir * Time.deltaTime * _playerStat.MoveSpeed;
@@ -176,7 +176,7 @@ public class PlayerController : MonoBehaviour
             float t = elapsedTime / duration; // 진행 비율 (0~1)
 
             // 위치 업데이트
-            if (!Physics.Raycast(transform.position + Vector3.up * 0.5f, transform.forward.normalized, out RaycastHit hit, 0.5f) ||
+            if (!Physics.Raycast(transform.position + Vector3.up * 1.5f, transform.forward.normalized, out RaycastHit hit, 0.5f) ||
                 (!hit.collider.CompareTag("Obstacle") && !hit.collider.CompareTag("Monster")))
             {
                 transform.position = Vector3.Slerp(startPosition, targetPosition, t);

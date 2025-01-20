@@ -58,6 +58,7 @@ public class Stat : MonoBehaviour
         float damage = Mathf.Max(0, attacker.Damage - Defense);
 
         Hp -= damage;
+
         if (Hp <= 0)
         {
             Hp = 0;
