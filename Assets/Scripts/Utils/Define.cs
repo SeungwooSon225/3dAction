@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class Define 
 {
+    public enum PlayerClass
+    {
+        Warrior,
+        Wizard,
+    }
+
     public enum WorldObject
     {
         Unknown,

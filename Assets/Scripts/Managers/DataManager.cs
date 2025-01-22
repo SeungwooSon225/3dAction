@@ -11,16 +11,25 @@ public interface ILoader<Key, Value>
 
 public class DataManager
 {
-    public Dictionary<int, Data.WarriorStat> WarriorStatDict { get; private set; } = new Dictionary<int, Data.WarriorStat>();
-    public Dictionary<int, Data.WarriorStaminaMPConsumption> WarriorStaminaMPConsumptionDict { get; private set; } = new Dictionary<int, Data.WarriorStaminaMPConsumption>();
-    public Dictionary<int, Data.WarriorAttackWeight> WarriorAttackWeightDict { get; private set; } = new Dictionary<int, Data.WarriorAttackWeight>();
+    public Dictionary<int, Data.Stat> StatDict { get; private set; } = new Dictionary<int, Data.Stat>();
+    //public Dictionary<int, Data.StaminaMPConsumption> StaminaMPConsumptionDict { get; private set; } = new Dictionary<int, Data.StaminaMPConsumption>();
+    //public Dictionary<int, Data.WarriorAttackWeight> AttackWeightDict { get; private set; } = new Dictionary<int, Data.WarriorAttackWeight>();
 
 
     public void Init()
     {
-        WarriorStatDict = LoadJson<Data.WarriorStatData, int, Data.WarriorStat>("WarriorStatData").MakeDict();
-        WarriorStaminaMPConsumptionDict = LoadJson<Data.WarriorStaminaMPConsumptionData, int, Data.WarriorStaminaMPConsumption>("WarriorStaminaMPConsumptionData").MakeDict();
-        WarriorAttackWeightDict = LoadJson<Data.WarriorAttackWeightData, int, Data.WarriorAttackWeight>("WarriorAttackWeightData").MakeDict();
+        //InitPlayerStat(Define.PlayerClass.Warrior);
+        //Debug.Log(Define.PlayerClass.Warrior);
+        //WarriorStatDict = LoadJson<Data.WarriorStatData, int, Data.WarriorStat>("WarriorStatData").MakeDict();
+        //WarriorStaminaMPConsumptionDict = LoadJson<Data.WarriorStaminaMPConsumptionData, int, Data.WarriorStaminaMPConsumption>("WarriorStaminaMPConsumptionData").MakeDict();
+        //WarriorAttackWeightDict = LoadJson<Data.WarriorAttackWeightData, int, Data.WarriorAttackWeight>("WarriorAttackWeightData").MakeDict();
+    }
+
+    public void InitPlayerStat(Define.PlayerClass playerClass)
+    {
+        StatDict = LoadJson<Data.StatData, int, Data.Stat>($"{playerClass.ToString()}StatData").MakeDict();
+        //StaminaMPConsumptionDict = LoadJson<Data.StaminaMPConsumptionData, int, Data.StaminaMPConsumption>($"{playerClass.ToString()}StaminaMPConsumptionData").MakeDict();
+        //AttackWeightDict = LoadJson<Data.WarriorAttackWeightData, int, Data.WarriorAttackWeight>($"{playerClass.ToString()}AttackWeightData").MakeDict();
     }
 
     Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>

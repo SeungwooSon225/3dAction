@@ -8,13 +8,16 @@ public class WarriorStat : PlayerStat
     Attack _weapon;
 
     void Start()
-    { 
-        _isAttackable = true;
+    {
+        Init();
+    }
 
-        AttackWeight = new Dictionary<string, Define.AttackWeight>();
+    protected override void Init()
+    {
+        _playerClass = Define.PlayerClass.Warrior;
 
-        SetStat(1);
-        SetStaminaMpConsumption(1);
+        base.Init();
+
         SetAttackWeight();
     }
 
@@ -35,22 +38,22 @@ public class WarriorStat : PlayerStat
 
     protected override void SetAttackWeight()
     {
-        Dictionary<int, Data.WarriorAttackWeight> dict = Managers.Data.WarriorAttackWeightDict;
-        Data.WarriorAttackWeight weight = dict[0];
+        Dictionary<int, Data.Stat> dict = Managers.Data.StatDict;
+        Data.Stat stat = dict[1];
 
-        Define.AttackWeight basicComboOne = new Define.AttackWeight(_weapon, weight.basicComboOne);
+        Define.AttackWeight basicComboOne = new Define.AttackWeight(_weapon, stat.basicComboOneWeight);
         AttackWeight.Add("BasicComboOne", basicComboOne);
 
-        Define.AttackWeight basicComboTwo = new Define.AttackWeight(_weapon, weight.basicComboTwo);
+        Define.AttackWeight basicComboTwo = new Define.AttackWeight(_weapon, stat.basicComboTwoWeight);
         AttackWeight.Add("BasicComboTwo", basicComboTwo);
 
-        Define.AttackWeight basicComboThree = new Define.AttackWeight(_weapon, weight.basicComboThree);
+        Define.AttackWeight basicComboThree = new Define.AttackWeight(_weapon, stat.basicComboThreeWeight);
         AttackWeight.Add("BasicComboThree", basicComboThree);
 
-        Define.AttackWeight skillE = new Define.AttackWeight(null, weight.skillE);
+        Define.AttackWeight skillE = new Define.AttackWeight(null, stat.skillEWeight);
         AttackWeight.Add("Warrior@SkillE", skillE);
 
-        Define.AttackWeight skillR = new Define.AttackWeight(null, weight.skillR);
+        Define.AttackWeight skillR = new Define.AttackWeight(null, stat.skillRWeight);
         AttackWeight.Add("Warrior@SkillR", skillR);
 
         //Debug.Log(AttackWeight["BasicComboOne"].Weight);

@@ -18,6 +18,7 @@ public class CameraController : MonoBehaviour
     float _currentYaw = 0f;     // 좌우 회전 값
     float _currentPitch = 0f;  // 상하 회전 값
 
+    [SerializeField]
     Transform _player = null;
     Vector3 _target;
 

@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class PlayerStat : Stat
 {
-    protected Dictionary<string, float> _staminaMpConsumption = new Dictionary<string, float>();
+    protected Dictionary<string, float> _staminaMpConsumption;
+
+    [SerializeField]
+    protected Define.PlayerClass _playerClass;
 
     [SerializeField]
     protected float _staminaMp;
@@ -19,7 +22,11 @@ public class PlayerStat : Stat
     [SerializeField]
     protected bool _isOnAttacked;
 
+
     public Dictionary<string, float> StaminaMpConsumption { get { return _staminaMpConsumption; } }
+
+    public Define.PlayerClass PlayerClass { get { return _playerClass; } set { _playerClass = value; } }
+
     public float StaminaMp { get { return _staminaMp; } set { _staminaMp = value; } }
     public float MaxStaminaMp { get { return _maxStaminaMp; } set { _maxStaminaMp = value; } }
     public float StaminaMpRecoverySpeed { get { return _staminaMpRecoverySpeed; } set { _staminaMpRecoverySpeed = value; } }
@@ -31,39 +38,49 @@ public class PlayerStat : Stat
 
     Animator _animator;
 
+    protected virtual void Init()
+    {
+        Managers.Data.InitPlayerStat(_playerClass);
+
+        _isAttackable = true;
+        _attackWeight = new Dictionary<string, Define.AttackWeight>();
+        _staminaMpConsumption = new Dictionary<string, float>();
+        _animator = gameObject.GetComponent<Animator>();
+
+        SetStat(1);
+        //SetStaminaMpConsumption(1);
+    }
+
+
+
     public void SetStat(int level) 
     {
-        if (gameObject.GetComponent<WarriorStat>() != null)
-        {
-            _animator = gameObject.GetComponent<Animator>();
+        Data.Stat stat = Managers.Data.StatDict[level];
 
-            Dictionary<int, Data.WarriorStat> dict = Managers.Data.WarriorStatDict;
-            Data.WarriorStat stat = dict[level];
+        _hp = stat.maxHp;
+        _maxHp = stat.maxHp;
+        _attack = stat.attack;
+        _defense = stat.defense;
+        _moveSpeed = stat.moveSpeed;
+        _staminaMp = stat.maxStaminaMP;
+        _maxStaminaMp = stat.maxStaminaMP;
+        _staminaMpRecoverySpeed = stat.staminaMpRecoverySpeed;
 
-            _hp = stat.maxHp;
-            _maxHp = stat.maxHp;
-            _attack = stat.attack;
-            _defense = stat.defense;
-            _moveSpeed = stat.moveSpeed;
-            _staminaMp = stat.maxStaminaMP;
-            _maxStaminaMp = stat.maxStaminaMP;
-            _staminaMpRecoverySpeed = stat.staminaMpRecoverySpeed;
-        }
+        _staminaMpConsumption.Add("Dodge", stat.dodgeConsumption);
+        _staminaMpConsumption.Add("BasicAttack", stat.basicAttackConsumption);
+        _staminaMpConsumption.Add("SkillE", stat.skillEConsumption);
+        _staminaMpConsumption.Add("SkillR", stat.skillRConsumption);
     }
 
-    public void SetStaminaMpConsumption(int level)
-    {
-        if (gameObject.GetComponent<WarriorStat>() != null)
-        {
-            Dictionary<int, Data.WarriorStaminaMPConsumption> dict = Managers.Data.WarriorStaminaMPConsumptionDict;
-            Data.WarriorStaminaMPConsumption consumption = dict[level];
+    //public void SetStaminaMpConsumption(int level)
+    //{
+    //    Data.StaminaMPConsumption consumption = Managers.Data.StaminaMPConsumptionDict[level];
 
-            _staminaMpConsumption.Add("Dodge", consumption.dodge);
-            _staminaMpConsumption.Add("BasicAttack", consumption.basicAttack);
-            _staminaMpConsumption.Add("SkillE", consumption.skillE);
-            _staminaMpConsumption.Add("SkillR", consumption.skillR);
-        }
-    }
+    //    _staminaMpConsumption.Add("Dodge", consumption.dodge);
+    //    _staminaMpConsumption.Add("BasicAttack", consumption.basicAttack);
+    //    _staminaMpConsumption.Add("SkillE", consumption.skillE);
+    //    _staminaMpConsumption.Add("SkillR", consumption.skillR);  
+    //}
 
     public override void OnAttacked(Attack attacker)
     {

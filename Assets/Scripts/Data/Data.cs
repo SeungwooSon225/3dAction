@@ -8,7 +8,7 @@ namespace Data
 {
     #region Stat
     [Serializable]
-    public class WarriorStat
+    public class Stat
     {
         public int level;
         public float maxHp;
@@ -18,17 +18,28 @@ namespace Data
         public float maxStaminaMP;
         public float staminaMpRecoverySpeed;
         public float totalExp;
+
+        public float dodgeConsumption;
+        public float basicAttackConsumption;
+        public float skillEConsumption;
+        public float skillRConsumption;
+
+        public float basicComboOneWeight;
+        public float basicComboTwoWeight;
+        public float basicComboThreeWeight;
+        public float skillEWeight;
+        public float skillRWeight;
     }
 
     [Serializable]
-    public class WarriorStatData : ILoader<int, WarriorStat>
+    public class StatData : ILoader<int, Stat>
     {
-        public List<WarriorStat> warriorStats = new List<WarriorStat>();
+        public List<Stat> stats = new List<Stat>();
 
-        public Dictionary<int, WarriorStat> MakeDict()
+        public Dictionary<int, Stat> MakeDict()
         {
-            Dictionary<int, WarriorStat> dict = new Dictionary<int, WarriorStat>();
-            foreach (WarriorStat stat in warriorStats)
+            Dictionary<int, Stat> dict = new Dictionary<int, Stat>();
+            foreach (Stat stat in stats)
                 dict.Add(stat.level, stat);
             return dict;
         }
@@ -37,7 +48,7 @@ namespace Data
 
     #region StaminaMPConsumption
     [Serializable]
-    public class WarriorStaminaMPConsumption
+    public class StaminaMPConsumption
     {
         public int level;
         public float dodge;
@@ -47,14 +58,14 @@ namespace Data
     }
 
     [Serializable]
-    public class WarriorStaminaMPConsumptionData : ILoader<int, WarriorStaminaMPConsumption>
+    public class StaminaMPConsumptionData : ILoader<int, StaminaMPConsumption>
     {
-        public List<WarriorStaminaMPConsumption> warriorStaminaMPConsumptions = new List<WarriorStaminaMPConsumption>();
+        public List<StaminaMPConsumption> staminaMPConsumptions = new List<StaminaMPConsumption>();
 
-        public Dictionary<int, WarriorStaminaMPConsumption> MakeDict()
+        public Dictionary<int, StaminaMPConsumption> MakeDict()
         {
-            Dictionary<int, WarriorStaminaMPConsumption> dict = new Dictionary<int, WarriorStaminaMPConsumption>();
-            foreach (WarriorStaminaMPConsumption consumption in warriorStaminaMPConsumptions)
+            Dictionary<int, StaminaMPConsumption> dict = new Dictionary<int, StaminaMPConsumption>();
+            foreach (StaminaMPConsumption consumption in staminaMPConsumptions)
                 dict.Add(consumption.level, consumption);
             return dict;
         }

@@ -1,5 +1,5 @@
 {
-    "warriorStats": [
+    "stats": [
         {
             "level": "1",
             "maxHp": "200",
@@ -8,7 +8,18 @@
             "moveSpeed": "5",
             "maxStaminaMP": "100",
             "staminaMpRecoverySpeed": "30",
-            "totalExp": "100"
+            "totalExp": "100",
+
+            "dodgeConsumption": "15",
+            "basicAttackConsumption": "10",
+            "skillEConsumption": "0",
+            "skillRConsumption": "0",
+
+            "basicComboOneWeight": "1",
+            "basicComboTwoWeight": "1.2",
+            "basicComboThreeWeight": "1.4",
+            "skillEWeight": "2",
+            "skillRWeight": "3"
         },
         {
             "level": "2",
@@ -18,7 +29,19 @@
             "moveSpeed": "5",
             "maxStaminaMP": "150",
             "staminaMpRecoverySpeed": "30",
-            "totalExp": "200"
+            "totalExp": "200",
+
+            "dodgeConsumption": "15",
+            "basicAttackConsumption": "10",
+            "skillEConsumption": "0",
+            "skillRConsumption": "0",
+
+
+            "basicComboOneWeight": "1",
+            "basicComboTwoWeight": "1.2",
+            "basicComboThreeWeight": "1.4",
+            "skillEWeight": "2",
+            "skillRWeight": "3"
         }
     ]
 }
