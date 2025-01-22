@@ -20,7 +20,7 @@ public class Projectile : MonoBehaviour
     {
         Attack attack = gameObject.GetComponent<Attack>();
 
-        attack.Damage = stat.Attack *  stat.AttackWeight[gameObject.name].Weight;
+        attack.Damage = stat.Attack * stat.AttackWeight[gameObject.name].Weight;
 
         //attack.IsActive = true;
         gameObject.GetComponent<Collider>().enabled = true;
@@ -90,14 +90,17 @@ public class Projectile : MonoBehaviour
     private IEnumerator ShootCo(Transform shooter, Transform target = null)
     {
         if (_effect != null)
-            _effect.Stop();
+            _effect.Stop();    
 
-        Vector3 startPosition = shooter.position +
+        if ((_startOffset - Vector3.zero).magnitude > 0.1f)
+        {
+            Vector3 startPosition = shooter.position +
             shooter.right * _startOffset.x +
             Vector3.up * _startOffset.y +
             shooter.forward * _startOffset.z;
+            transform.position = startPosition;
+        }
 
-        transform.position = startPosition;
         transform.rotation = Quaternion.LookRotation(shooter.forward);
 
         if (_effect != null)

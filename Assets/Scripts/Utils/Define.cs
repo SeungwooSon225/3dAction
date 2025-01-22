@@ -21,6 +21,8 @@ public class Define
     {
         LeftShortClick,
         LeftLongClick,
+        LeftClickHold,
+        LeftClickUp,
     }
 
     public class AttackWeight

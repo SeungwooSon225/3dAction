@@ -25,10 +25,11 @@ public class InputManager
                 {
                     _isPressed = true;
                     _pressedTime = Time.time;
+                    MouseAction.Invoke(Define.MouseEvent.LeftShortClick);
                 }
                 else
                 {
-                    if (!_isLongPressed && Time.time > _pressedTime + 0.2f)
+                    if (!_isLongPressed && Time.time > _pressedTime + 0.3f)
                     {
                         MouseAction.Invoke(Define.MouseEvent.LeftLongClick);
 
@@ -41,10 +42,12 @@ public class InputManager
             {
                 if (_isPressed)
                 {
-                    if (!_isLongPressed && Time.time < _pressedTime + 0.2f)
-                    {
-                        MouseAction.Invoke(Define.MouseEvent.LeftShortClick);
-                    }
+                    //if (!_isLongPressed && Time.time < _pressedTime + 0.2f)
+                    //{
+                    //    MouseAction.Invoke(Define.MouseEvent.LeftShortClick);
+                    //}
+
+                    MouseAction.Invoke(Define.MouseEvent.LeftClickUp);
 
                     _isPressed = false;
                     _isLongPressed = false;

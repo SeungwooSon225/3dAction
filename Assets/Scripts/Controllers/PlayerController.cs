@@ -64,10 +64,12 @@ public class PlayerController : MonoBehaviour
             case Define.MouseEvent.LeftShortClick:
                 if (_playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["BasicAttack"])
                     _animator.SetTrigger("LeftShortClick");
-
                 break;
             case Define.MouseEvent.LeftLongClick:
                 _animator.SetTrigger("LeftLongClick");
+                break;
+            case Define.MouseEvent.LeftClickUp:
+                _animator.SetTrigger("LeftClickUp");
                 break;
         }
     }
@@ -243,6 +245,7 @@ public class PlayerController : MonoBehaviour
     {
         _animator.ResetTrigger("LeftShortClick");
         _animator.ResetTrigger("LeftLongClick");
+        _animator.ResetTrigger("LeftClickUp");
         _animator.ResetTrigger("SkillE");
         _animator.ResetTrigger("SkillR");
     }
