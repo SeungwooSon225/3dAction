@@ -19,5 +19,11 @@ public class WizardStat : PlayerStat
         base.Init();
 
         SetAttackWeight();
+
+        Define.AttackWeight fireBall = new Define.AttackWeight(null, 1f);
+        AttackWeight.Add("Wizard@FireBall", fireBall);
+
+        Define.AttackWeight fireBall2 = new Define.AttackWeight(null, 1f);
+        AttackWeight.Add("Wizard@FireBall2", fireBall2);
     }
 }

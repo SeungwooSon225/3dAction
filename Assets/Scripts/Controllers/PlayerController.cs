@@ -291,5 +291,11 @@ public class PlayerController : MonoBehaviour
         _playerStat.IsAttackable = false;
     }
 
+    private void ShootProjectile(string name)
+    {
+        GameObject projectile = Managers.Resource.Instantiate($"Projectiles/{name}");
+        projectile.GetComponent<Projectile>().Shoot(_playerStat);
+    }
+
     #endregion Animation
 }

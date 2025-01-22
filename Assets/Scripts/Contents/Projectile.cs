@@ -5,13 +5,15 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [SerializeField]
-    Vector3 startOffset;
+    Vector3 _startOffset;
     [SerializeField]
     float _duration;
     [SerializeField]
     float _distance;
     [SerializeField]
     float _lifeTime;
+    [SerializeField]
+    ParticleSystem _effect;
 
 
     public void Shoot(Stat stat)
@@ -23,7 +25,7 @@ public class Projectile : MonoBehaviour
         //attack.IsActive = true;
         gameObject.GetComponent<Collider>().enabled = true;
 
-        StartCoroutine(ShootCo(stat.gameObject.transform, null));
+        StartCoroutine(ShootCo(stat.gameObject.transform, stat.Target));
         //StartCoroutine(HalfParabolicShootCo(stat.gameObject.transform, stat.Target, new Vector3(2.0f, 1.0f, 0f)));
 
     }
@@ -42,9 +44,9 @@ public class Projectile : MonoBehaviour
     private IEnumerator HalfParabolicShootCo(Transform shooter, Transform target, Vector3 dir)
     {
         Vector3 startPosition = shooter.position +
-            shooter.right * startOffset.x +
-            Vector3.up * startOffset.y +
-            shooter.forward * startOffset.z;
+            shooter.right * _startOffset.x +
+            Vector3.up * _startOffset.y +
+            shooter.forward * _startOffset.z;
 
         transform.position = startPosition;
         transform.rotation = Quaternion.LookRotation(shooter.forward);
@@ -87,13 +89,19 @@ public class Projectile : MonoBehaviour
 
     private IEnumerator ShootCo(Transform shooter, Transform target = null)
     {
+        if (_effect != null)
+            _effect.Stop();
+
         Vector3 startPosition = shooter.position +
-            shooter.right * startOffset.x +
-            Vector3.up * startOffset.y +
-            shooter.forward * startOffset.z;
+            shooter.right * _startOffset.x +
+            Vector3.up * _startOffset.y +
+            shooter.forward * _startOffset.z;
 
         transform.position = startPosition;
         transform.rotation = Quaternion.LookRotation(shooter.forward);
+
+        if (_effect != null)
+            _effect.Play();
 
         float speed = _distance / _duration;
         float elapsedTime = 0f;
@@ -121,6 +129,9 @@ public class Projectile : MonoBehaviour
 
             yield return null;
         }
+
+        if (_effect != null)
+            _effect.Stop();
 
         yield return new WaitForSeconds(_lifeTime);
 

@@ -956,7 +956,6 @@ GameObject:
   - component: {fileID: 5349061497174187691}
   - component: {fileID: 4069294732079362923}
   - component: {fileID: 592001977497971688}
-  - component: {fileID: 4954208028618042986}
   m_Layer: 0
   m_Name: Warrior
   m_TagString: Player
@@ -1017,7 +1016,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animator: {fileID: 0}
   _movementDir: {x: 0, y: 0, z: 0}
-  _lockOnTarget: {fileID: 0}
 --- !u!136 &5349061497174187691
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1087,23 +1085,12 @@ MonoBehaviour:
   _moveSpeed: 0
   _isAttackable: 0
   _target: {fileID: 0}
+  _playerClass: 0
   _staminaMp: 0
   _maxStaminaMp: 0
   _staminaMpRecoverySpeed: 0
   _isOnAttacked: 0
   _weapon: {fileID: 75907533714420445}
---- !u!114 &4954208028618042986
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3192325604997802973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63e535e929585ad42b5bae1682c96eed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3248128618062482585
 GameObject:
   m_ObjectHideFlags: 0
