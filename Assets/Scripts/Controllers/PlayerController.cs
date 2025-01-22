@@ -43,12 +43,15 @@ public class PlayerController : MonoBehaviour
         //_playerStat.StaminaMpConsumption.Add("Dodge", 10f);
 
         Transform effects = transform.Find("Effects");
-        Transform skillE = effects.Find("SkillE");
-        _effects.Add("SkillE", skillE.GetComponent<ParticleSystem>());
-        skillE.parent = null;
-        Transform skillR = effects.Find("SkillR");
-        _effects.Add("SkillR", skillR.GetComponent<ParticleSystem>());
-        skillR.parent = null;
+        if (effects != null)
+        {
+            Transform skillE = effects.Find("SkillE");
+            _effects.Add("SkillE", skillE.GetComponent<ParticleSystem>());
+            skillE.parent = null;
+            Transform skillR = effects.Find("SkillR");
+            _effects.Add("SkillR", skillR.GetComponent<ParticleSystem>());
+            skillR.parent = null;
+        }
     }
 
     protected virtual void OnMouseEvent(Define.MouseEvent evt)

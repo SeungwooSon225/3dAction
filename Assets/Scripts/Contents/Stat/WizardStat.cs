@@ -5,22 +5,19 @@ using UnityEngine;
 public class WizardStat : PlayerStat
 {
     [SerializeField]
-    protected int _mp;
-    [SerializeField]
-    protected int _maxMp;
-
-    public int Mp { get { return _mp; } set { _hp = value; } }
-    public int MaxMp { get { return _maxMp; } set { _hp = value; } }
-
+    Attack _weapon;
 
     void Start()
     {
-        _hp = 100;
-        _maxHp = 100;
-        _attack = 10;
-        _defense = 10;
-        _moveSpeed = 5;
-        _mp = 100;
-        _maxMp = 100;
+        Init();
+    }
+
+    protected override void Init()
+    {
+        _playerClass = Define.PlayerClass.Wizard;
+
+        base.Init();
+
+        SetAttackWeight();
     }
 }
