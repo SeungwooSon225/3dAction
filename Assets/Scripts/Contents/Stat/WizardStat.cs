@@ -28,5 +28,8 @@ public class WizardStat : PlayerStat
 
         Define.AttackWeight chargeAttack = new Define.AttackWeight(null, 1.5f);
         AttackWeight.Add("Wizard@ChargeAttack", chargeAttack);
+
+        Define.AttackWeight skillEAttack = new Define.AttackWeight(null, 1.5f);
+        AttackWeight.Add("Wizard@SkillE", skillEAttack);
     }
 }

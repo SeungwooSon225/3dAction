@@ -55,4 +55,10 @@ public class WizardController : PlayerController
         _chargeAttack.transform.parent = null;
         _chargeAttackProjectile.Shoot(_playerStat);
     }
+
+    private void SkillE()
+    {
+        GameObject skillE = Managers.Resource.Instantiate($"Projectiles/Wizard@SkillE");
+        skillE.GetComponent<WizardSkillE>().Shoot(_playerStat);
+    }
 }
