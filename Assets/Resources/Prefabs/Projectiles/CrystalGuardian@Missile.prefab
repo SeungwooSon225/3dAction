@@ -4915,10 +4915,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a509f82ee3b0eb44b83c13d6b01f9183, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startOffset: {x: 0, y: 5, z: 1.75}
+  _startOffset: {x: 0, y: 4.5, z: 0}
   _duration: 10
   _distance: 500
   _lifeTime: 0
+  _effect: {fileID: 0}
 --- !u!114 &8049476444726042789
 MonoBehaviour:
   m_ObjectHideFlags: 0

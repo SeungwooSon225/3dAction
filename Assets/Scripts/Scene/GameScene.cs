@@ -8,7 +8,8 @@ public class GameScene : BaseScene
     {
         base.Init();
 
-        GameObject player = Managers.Game.Spawn(Define.WorldObject.Player, "Warrior");
+        GameObject player = Managers.Game.Spawn(Define.WorldObject.Player, "Wizard");
+        Managers.Game.PlayerCalss = Define.PlayerClass.Wizard;
         Camera.main.gameObject.GetOrAddCompoenet<CameraController>().SetPlayer(player);
         player.transform.position = new Vector3(39f, 0f, 26f);
 

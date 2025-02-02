@@ -18,12 +18,58 @@ public class UI_Stat : MonoBehaviour
     Image _skillEIcon;
     [SerializeField]
     Image _skillRIcon;
+    [SerializeField]
+    Image _lockOnIcon;
 
+    [SerializeField]
+    Stat _stat;
+    Canvas _canvas;
+    Transform _lockOnPoint;
+
+    private void Start()
+    {
+        switch (Managers.Game.PlayerCalss)
+        {
+            case Define.PlayerClass.Wizard:
+                _stat = Managers.Game.Player.GetComponent<WizardStat>();
+                break;
+            case Define.PlayerClass.Warrior:
+                _stat = Managers.Game.Player.GetComponent<WarriorStat>();
+                break;
+        }
+        
+        _canvas = GetComponent<Canvas>();
+    }
 
     void Update()
     {
         SetHPBar();
         SetAbilityBar();
+        SetLockOnIcon();
+    }
+
+    public void SetLockOnIcon()
+    {
+        if (_stat.Target != null)
+        {
+            if (!_lockOnIcon.enabled)
+            {
+                _lockOnIcon.enabled = true;
+
+                _lockOnPoint = Util.FindDeepChild(_stat.Target, "LockOnPoint");
+            }
+
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(_lockOnPoint.position);
+
+            Vector2 uiPosition;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvas.GetComponent<RectTransform>(), screenPos, _canvas.worldCamera, out uiPosition);
+
+            _lockOnIcon.rectTransform.localPosition = uiPosition;
+        }
+        else if (_stat.Target == null && _lockOnIcon.enabled)
+        {
+            _lockOnIcon.enabled = false;
+        }
     }
 
     public void SetHPBar()

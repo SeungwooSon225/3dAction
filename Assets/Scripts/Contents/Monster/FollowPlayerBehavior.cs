@@ -94,6 +94,8 @@ public class FollowPlayerBehavior : IBehavior
                 }
                 else
                 {
+                    _monsterStat.Target = _player;
+
                     _monster.rotation = Quaternion.Slerp(_monster.rotation, Quaternion.LookRotation(new Vector3(node.Position.x, 0, node.Position.y) - _monster.position), 10f * Time.deltaTime);
                     _monster.position += _monster.forward * Time.deltaTime * _monsterStat.MoveSpeed;
                 }

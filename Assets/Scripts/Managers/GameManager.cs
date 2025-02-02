@@ -8,6 +8,8 @@ public class GameManager
     GameObject _player;
     GameObject _monster;
 
+    public Define.PlayerClass PlayerCalss { get; set; }
+
     public Action<int> OnSpawnEvent;
 
     public GameObject Player { get { return _player; } }

@@ -39,6 +39,7 @@ public class IdleBehavior : IBehavior
         if (Vector3.Distance(_monster.position, _player.position) < _monsterStat.DetectRange)
         {
             Debug.Log("플레이어 탐지!");
+            _monsterStat.Target = _player;
             _isDetect = true;
 
             UI_MonsterStat ui = Managers.UI.ShowUI<UI_MonsterStat>();
