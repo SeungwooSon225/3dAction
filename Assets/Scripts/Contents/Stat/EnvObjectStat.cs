@@ -10,7 +10,7 @@ public class EnvObjectStat : Stat
 
     void Start()
     {
-        _isAttackable = true;
+        //_isAttackable = true;
         _hp = 40;
         _maxHp = 40;
         _uI_EnvObjHPBar = transform.GetComponentInChildren<UI_EnvObjHPBar>();

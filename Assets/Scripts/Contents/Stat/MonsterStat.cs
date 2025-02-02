@@ -33,7 +33,7 @@ public class MonsterStat : Stat
         _attack = 10f;
         _defense = 0f;
         _moveSpeed = 2f;
-        _isAttackable = true;
+        //_isAttackable = true;
 
         _detectRange = 10f;
         _stopDistance = 5f;

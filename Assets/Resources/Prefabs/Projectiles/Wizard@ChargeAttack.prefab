@@ -4878,7 +4878,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a509f82ee3b0eb44b83c13d6b01f9183, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _startOffset: {x: 0, y: 0, z: 0}
+  _startOffset: {x: 0.7944366, y: 1.11526, z: 1.498637}
   _duration: 10
   _distance: 300
   _lifeTime: 0

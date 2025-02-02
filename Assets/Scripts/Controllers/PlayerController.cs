@@ -21,6 +21,8 @@ public class PlayerController : MonoBehaviour
 
     protected UI_Stat _uiStat;
 
+    Collider _collider;
+
     void Start()
     {
         Init();
@@ -28,8 +30,9 @@ public class PlayerController : MonoBehaviour
 
     protected virtual void Init()
     {
-        _playerStat = gameObject.GetComponent<PlayerStat>();
-        _animator = gameObject.GetComponent<Animator>();
+        _playerStat = GetComponent<PlayerStat>();
+        _animator = GetComponent<Animator>();
+        _collider = GetComponent<Collider>();
 
         Managers.Input.MouseAction -= OnMouseEvent;
         Managers.Input.MouseAction += OnMouseEvent;
@@ -296,12 +299,14 @@ public class PlayerController : MonoBehaviour
 
     private void SetAttackableTrue()
     {
-        _playerStat.IsAttackable = true;
+        //_playerStat.IsAttackable = true;
+        _collider.enabled = true;
     }
 
     private void SetAttackableFalse()
     {
-        _playerStat.IsAttackable = false;
+        //_playerStat.IsAttackable = false;
+        _collider.enabled = false;
     }
 
     private void ShootProjectile(string name)

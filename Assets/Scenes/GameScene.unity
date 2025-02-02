@@ -848,7 +848,6 @@ MonoBehaviour:
   _attack: 0
   _defense: 0
   _moveSpeed: 0
-  _isAttackable: 0
   _target: {fileID: 0}
   _uI_EnvObjHPBar: {fileID: 0}
 --- !u!1001 &480433259

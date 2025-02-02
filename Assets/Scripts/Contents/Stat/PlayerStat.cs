@@ -42,7 +42,7 @@ public class PlayerStat : Stat
     {
         Managers.Data.InitPlayerStat(_playerClass);
 
-        _isAttackable = true;
+        //_isAttackable = true;
         _attackWeight = new Dictionary<string, Define.AttackWeight>();
         _staminaMpConsumption = new Dictionary<string, float>();
         _animator = gameObject.GetComponent<Animator>();
@@ -85,7 +85,7 @@ public class PlayerStat : Stat
 
     public override void OnAttacked(Attack attacker)
     {
-        if (!IsAttackable) return;
+        //if (!IsAttackable) return;
 
         StartCoroutine(OnAttackedCo(attacker));
     }
@@ -106,14 +106,14 @@ public class PlayerStat : Stat
         _animator.ResetTrigger("SkillE");
         _animator.ResetTrigger("SkillR");
 
-        _isAttackable = true;
+        //_isAttackable = true;
 
         if (Hp <= 0)
         {
             Hp = 0;
             OnDead(attacker);
 
-            IsAttackable = false;
+            //IsAttackable = false;
         }
 
         yield return new WaitForSeconds(0.5f);

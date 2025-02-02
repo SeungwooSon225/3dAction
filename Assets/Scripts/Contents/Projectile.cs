@@ -98,8 +98,7 @@ public class Projectile : MonoBehaviour
             startPosition +=
             shooter.right * _startOffset.x +
             Vector3.up * _startOffset.y +
-            shooter.forward * _startOffset.z;
-            
+            shooter.forward * _startOffset.z;           
         }
 
         transform.position = startPosition;
