@@ -11,8 +11,6 @@ public class Projectile : MonoBehaviour
     [SerializeField]
     float _distance;
     [SerializeField]
-    float _lifeTime;
-    [SerializeField]
     ParticleSystem _effect;
 
 
@@ -93,7 +91,7 @@ public class Projectile : MonoBehaviour
             _effect.Stop();
 
         Vector3 startPosition = shooter.position;
-        if ((_startOffset - Vector3.zero).magnitude > 0.1f)
+        if (_startOffset.magnitude > 0.1f)
         {
             startPosition +=
             shooter.right * _startOffset.x +
@@ -109,35 +107,39 @@ public class Projectile : MonoBehaviour
 
         float speed = _distance / _duration;
         float elapsedTime = 0f;
-        while (elapsedTime < _duration)
+
+        if (_distance < 0.001f)
+            yield return new WaitForSeconds(_duration);
+        else
         {
-            elapsedTime += Time.deltaTime;
-
-            if (target != null)
-                transform.rotation = Quaternion.LookRotation(target.position + Vector3.up * 1.3f - transform.position);
-
-            // 위치 업데이트
-            //transform.position = Vector3.Slerp(startPosition, targetPosition, t);
-            transform.position += transform.forward * speed * Time.deltaTime;
-
-            if (target != null && (transform.position - target.position).magnitude < 2.0f)
+            while (elapsedTime < _duration)
             {
-                while (elapsedTime < _duration)
+                elapsedTime += Time.deltaTime;
+
+                if (target != null)
+                    transform.rotation = Quaternion.LookRotation(target.position + Vector3.up * 1.3f - transform.position);
+
+                // 위치 업데이트
+                //transform.position = Vector3.Slerp(startPosition, targetPosition, t);
+                transform.position += transform.forward * speed * Time.deltaTime;
+
+                if (target != null && (transform.position - target.position).magnitude < 2.0f)
                 {
-                    elapsedTime += Time.deltaTime;
+                    while (elapsedTime < _duration)
+                    {
+                        elapsedTime += Time.deltaTime;
 
-                    transform.position += transform.forward * speed * Time.deltaTime;
-                    yield return null;
+                        transform.position += transform.forward * speed * Time.deltaTime;
+                        yield return null;
+                    }
                 }
-            }
 
-            yield return null;
+                yield return null;
+            }
         }
 
         if (_effect != null)
             _effect.Stop();
-
-        yield return new WaitForSeconds(_lifeTime);
 
         gameObject.GetComponent<Collider>().enabled = false;
 

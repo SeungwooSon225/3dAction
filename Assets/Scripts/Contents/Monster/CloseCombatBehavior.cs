@@ -45,7 +45,7 @@ public class CloseCombatBehavior : IBehavior
                     _monsterAI.IsAttacking = true;
                     float random = Random.Range(0f, 1f);
 
-                    if (random < 0.2f)
+                    if (random < 10.2f)
                     {
                         _animator.SetTrigger("ShockwaveAttack");
                         //_monsterStat.SetAttackDamage("SliceAttack");
