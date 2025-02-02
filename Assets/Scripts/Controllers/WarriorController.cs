@@ -33,8 +33,8 @@ public class WarriorController : PlayerController
 
         _warriorStat = _playerStat as WarriorStat;
 
-        UI_Stat uiStat = Managers.UI.ShowUI<UI_Stat>();
-        uiStat.PlayerStat = _playerStat;
+        _uiStat = Managers.UI.ShowUI<UI_Stat>();
+        _uiStat.PlayerStat = _playerStat;
 
         //_warriorStat.
         //_attackRatio.Add("BasicComboOne", 1.0f);

@@ -36,8 +36,8 @@ public class WizardController : PlayerController
             skillR.GetComponent<Attack>().Damage = 20f;
         }
 
-        UI_Stat uiStat = Managers.UI.ShowUI<UI_Stat>("UI_WizardStat");
-        uiStat.PlayerStat = _playerStat;
+        _uiStat = Managers.UI.ShowUI<UI_Stat>("UI_WizardStat");
+        _uiStat.PlayerStat = _playerStat;
     }
 
     Vector3 _previousPos = Vector3.zero;

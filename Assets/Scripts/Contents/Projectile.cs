@@ -90,17 +90,19 @@ public class Projectile : MonoBehaviour
     private IEnumerator ShootCo(Transform shooter, Transform target = null)
     {
         if (_effect != null)
-            _effect.Stop();    
+            _effect.Stop();
 
+        Vector3 startPosition = shooter.position;
         if ((_startOffset - Vector3.zero).magnitude > 0.1f)
         {
-            Vector3 startPosition = shooter.position +
+            startPosition +=
             shooter.right * _startOffset.x +
             Vector3.up * _startOffset.y +
             shooter.forward * _startOffset.z;
-            transform.position = startPosition;
+            
         }
 
+        transform.position = startPosition;
         transform.rotation = Quaternion.LookRotation(shooter.forward);
 
         if (_effect != null)

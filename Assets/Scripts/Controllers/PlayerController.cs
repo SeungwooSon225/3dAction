@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     //protected Dictionary<string, float> _attackRatio = new Dictionary<string, float>();
     protected Dictionary<string, ParticleSystem> _effects = new Dictionary<string, ParticleSystem>();
 
+    protected UI_Stat _uiStat;
 
     void Start()
     {
@@ -86,13 +87,15 @@ public class PlayerController : MonoBehaviour
         if (_animator.GetBool("IsAttacking") || _animator.GetBool("IsDodging"))
             return;
 
-        if (Input.GetKeyDown(KeyCode.E) && _playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["SkillE"])
+        if (Input.GetKeyDown(KeyCode.E) && _playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["SkillE"] && !_uiStat.IsSkillECool)
         {
             _animator.SetTrigger("SkillE");
+            StartCoroutine(_uiStat.SkillECoolDown());
         }
-        else if (Input.GetKeyDown(KeyCode.R) && _playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["SkillR"])
+        else if (Input.GetKeyDown(KeyCode.R) && _playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["SkillR"] && !_uiStat.IsSkillRCool)
         {
             _animator.SetTrigger("SkillR");
+            StartCoroutine(_uiStat.SkillRCoolDown());
         }
 
     }
@@ -303,6 +306,7 @@ public class PlayerController : MonoBehaviour
 
     private void ShootProjectile(string name)
     {
+        Debug.Log("Shoot " + name);
         GameObject projectile = Managers.Resource.Instantiate($"Projectiles/{name}");
         projectile.GetComponent<Projectile>().Shoot(_playerStat);
     }
