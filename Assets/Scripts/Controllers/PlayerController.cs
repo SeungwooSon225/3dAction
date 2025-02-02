@@ -33,10 +33,6 @@ public class PlayerController : MonoBehaviour
         Managers.Input.MouseAction -= OnMouseEvent;
         Managers.Input.MouseAction += OnMouseEvent;
 
-        UI_Stat uiStat = Managers.UI.ShowUI<UI_Stat>();
-        uiStat.PlayerStat = _playerStat;
-
-
         _movementDir = Vector3.forward;
 
         // To do
@@ -73,7 +69,8 @@ public class PlayerController : MonoBehaviour
                     _animator.SetTrigger("LeftShortClick");
                 break;
             case Define.MouseEvent.LeftLongClick:
-                _animator.SetTrigger("LeftLongClick");
+                if (_playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["ChargeAttack"])
+                    _animator.SetTrigger("LeftLongClick");
                 break;
             case Define.MouseEvent.LeftClickUp:
                 _animator.SetTrigger("LeftClickUp");
@@ -171,7 +168,10 @@ public class PlayerController : MonoBehaviour
         } 
     }
 
-    protected virtual void OnDodgeEvent() { }
+    protected virtual void OnDodgeEvent() 
+    {
+        ResetClickTriggers();
+    }
 
 
     protected IEnumerator MoveForwardCo(float distance, float duration)

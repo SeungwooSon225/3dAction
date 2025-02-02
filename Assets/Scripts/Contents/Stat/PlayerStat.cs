@@ -68,6 +68,7 @@ public class PlayerStat : Stat
 
         _staminaMpConsumption.Add("Dodge", stat.dodgeConsumption);
         _staminaMpConsumption.Add("BasicAttack", stat.basicAttackConsumption);
+        _staminaMpConsumption.Add("ChargeAttack", stat.chargeAttackConsumption);
         _staminaMpConsumption.Add("SkillE", stat.skillEConsumption);
         _staminaMpConsumption.Add("SkillR", stat.skillRConsumption);
     }

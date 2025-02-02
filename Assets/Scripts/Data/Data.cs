@@ -21,6 +21,7 @@ namespace Data
 
         public float dodgeConsumption;
         public float basicAttackConsumption;
+        public float chargeAttackConsumption;
         public float skillEConsumption;
         public float skillRConsumption;
 

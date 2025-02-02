@@ -19,6 +19,7 @@ public class WizardController : PlayerController
     {
         Moving();
         Skill();
+        RecoverMana();
     }
 
     protected override void Init()
@@ -35,9 +36,42 @@ public class WizardController : PlayerController
             skillR.GetComponent<Attack>().Damage = 20f;
         }
 
-
+        UI_Stat uiStat = Managers.UI.ShowUI<UI_Stat>("UI_WizardStat");
+        uiStat.PlayerStat = _playerStat;
     }
 
+    Vector3 _previousPos = Vector3.zero;
+    float _stopTime;
+    [SerializeField]
+    bool _isStop = false;
+
+
+    private void RecoverMana()
+    {
+        if (!_isStop && (transform.position - _previousPos).magnitude < 0.01f)
+        {
+            _isStop = true;
+            _stopTime = Time.time;
+        }
+        else if (_isStop && (transform.position - _previousPos).magnitude >= 0.01f)
+        {
+            _isStop = false;
+            _stopTime = 0f;
+        }
+
+        _previousPos = transform.position;
+
+        if (_playerStat.StaminaMp < _playerStat.MaxStaminaMp && !_animator.GetBool("IsDodging") && !_animator.GetBool("IsAttacking"))
+        {
+            if(_isStop && (Time.time - _stopTime) > 1f)
+                _playerStat.StaminaMp += _playerStat.StaminaMpRecoverySpeed * Time.deltaTime * 5f;
+            else
+                _playerStat.StaminaMp += _playerStat.StaminaMpRecoverySpeed * Time.deltaTime;
+
+            if (_playerStat.StaminaMp > _playerStat.MaxStaminaMp)
+                _playerStat.StaminaMp = _playerStat.MaxStaminaMp;
+        }     
+    }
 
     void ChargeAttackStart()
     {

@@ -12,6 +12,7 @@
 
             "dodgeConsumption": "15",
             "basicAttackConsumption": "10",
+            "chargeAttackConsumption": "15",
             "skillEConsumption": "0",
             "skillRConsumption": "0",
 
