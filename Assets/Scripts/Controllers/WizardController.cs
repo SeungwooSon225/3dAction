@@ -12,6 +12,9 @@ public class WizardController : PlayerController
 
     Collider wizardSkillR;
 
+    [SerializeField]
+    WizardMaterialController _wizardMaterialController;
+
     void Update()
     {
         Moving();
@@ -31,6 +34,8 @@ public class WizardController : PlayerController
             // Todo
             skillR.GetComponent<Attack>().Damage = 20f;
         }
+
+
     }
 
 
@@ -86,5 +91,15 @@ public class WizardController : PlayerController
         yield return new WaitForSeconds(0.5f);
 
         wizardSkillR.enabled = false;
+    }
+
+    private void TeleportStart()
+    {
+        StartCoroutine(_wizardMaterialController.FadeOutCo());
+    }
+
+    private void TeleportEnd()
+    {
+        StartCoroutine(_wizardMaterialController.FadeInCo());
     }
 }
