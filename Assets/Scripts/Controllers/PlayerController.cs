@@ -46,11 +46,18 @@ public class PlayerController : MonoBehaviour
         if (effects != null)
         {
             Transform skillE = effects.Find("SkillE");
-            _effects.Add("SkillE", skillE.GetComponent<ParticleSystem>());
-            skillE.parent = null;
+            if (skillE != null)
+            {
+                _effects.Add("SkillE", skillE.GetComponent<ParticleSystem>());
+                skillE.parent = null;
+            }
+
             Transform skillR = effects.Find("SkillR");
-            _effects.Add("SkillR", skillR.GetComponent<ParticleSystem>());
-            skillR.parent = null;
+            if (skillR != null)
+            {
+                _effects.Add("SkillR", skillR.GetComponent<ParticleSystem>());
+                skillR.parent = null;
+            }
         }
     }
 
@@ -280,7 +287,7 @@ public class PlayerController : MonoBehaviour
     {
         _effects[effectName].gameObject.transform.position = transform.position;
         _effects[effectName].gameObject.transform.rotation = Quaternion.LookRotation(transform.forward);
-        Debug.Log($"e {transform.forward}, {_effects[effectName].gameObject.transform.rotation} {_effects[effectName].gameObject.transform.position}");
+        //Debug.Log($"e {transform.forward}, {_effects[effectName].gameObject.transform.rotation} {_effects[effectName].gameObject.transform.position}");
         _effects[effectName].Play();
     }
 

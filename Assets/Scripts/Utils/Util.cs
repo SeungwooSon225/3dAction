@@ -12,4 +12,20 @@ public class Util
 
         return component;
     }
+
+    public static Transform FindDeepChild(Transform parent, string name)
+    {
+        // 직속 자식 먼저 검사
+        Transform result = parent.Find(name);
+        if (result != null) return result;
+
+        // 모든 자식의 하위 계층 탐색
+        foreach (Transform child in parent)
+        {
+            result = FindDeepChild(child, name);
+            if (result != null) return result;
+        }
+
+        return null;
+    }
 }

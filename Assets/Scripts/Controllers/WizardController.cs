@@ -10,6 +10,8 @@ public class WizardController : PlayerController
     GameObject _chargeAttack;
     Projectile _chargeAttackProjectile;
 
+    Collider wizardSkillR;
+
     void Update()
     {
         Moving();
@@ -19,6 +21,16 @@ public class WizardController : PlayerController
     protected override void Init()
     {
         base.Init();
+
+        Transform skillR = Util.FindDeepChild(transform, "SkillR");
+        if (skillR != null)
+        {
+            _effects.Add("SkillR", skillR.GetComponent<ParticleSystem>());
+            wizardSkillR = skillR.GetComponent<Collider>();
+
+            // Todo
+            skillR.GetComponent<Attack>().Damage = 20f;
+        }
     }
 
 
@@ -60,5 +72,19 @@ public class WizardController : PlayerController
     {
         GameObject skillE = Managers.Resource.Instantiate($"Projectiles/Wizard@SkillE");
         skillE.GetComponent<WizardSkillE>().Shoot(_playerStat);
+    }
+
+    private void SkillR()
+    {
+        _effects["SkillR"].Play();
+    }
+
+    IEnumerator SkillRExplosionCo()
+    {
+        wizardSkillR.enabled = true;
+
+        yield return new WaitForSeconds(0.5f);
+
+        wizardSkillR.enabled = false;
     }
 }
