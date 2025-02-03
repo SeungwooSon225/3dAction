@@ -20,13 +20,6 @@ public class WarriorController : PlayerController
         BasicComboTwo = 13,
     }
 
-    void Update()
-    {
-        Moving();
-        RecoverStamina();
-        Skill();
-    }
-
     protected override void Init()
     {
         base.Init();
@@ -35,26 +28,9 @@ public class WarriorController : PlayerController
 
         _uiStat = Managers.UI.ShowUI<UI_Stat>();
         _uiStat.PlayerStat = _playerStat;
-
-        //_warriorStat.
-        //_attackRatio.Add("BasicComboOne", 1.0f);
-        //_attackRatio.Add("BasicComboTwo", 1.2f);
-
-        //Define.AttackWeight basicComboOne = new Define.AttackWeight(_attack, 1.0f);
-        //_playerStat.AttackWeight.Add("BasicComboOne", basicComboOne);
-        //Define.AttackWeight basicComboTwo = new Define.AttackWeight(_attack, 1.2f);
-        //_playerStat.AttackWeight.Add("BasicComboTwo", basicComboTwo);
-        //Define.AttackWeight skillE = new Define.AttackWeight(null, 2.0f);
-        //_playerStat.AttackWeight.Add("Warrior@SkillE", skillE);
-        //Define.AttackWeight skillR = new Define.AttackWeight(null, 3.0f);
-        //_playerStat.AttackWeight.Add("Warrior@SkillR", skillR);
-
-        //_playerStat.StaminaMpConsumption.Add("BasicAttack", 10f);
-        //_playerStat.StaminaMpConsumption.Add("SkillE", 0f);
-        //_playerStat.StaminaMpConsumption.Add("SkillR", 0f);
     }
 
-    private void RecoverStamina()
+    protected override void RecoverMpStamina()
     {
         if (_playerStat.StaminaMp <= _playerStat.MaxStaminaMp && !_animator.GetBool("IsDodging") && !_animator.GetBool("IsAttacking"))
         {

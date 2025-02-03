@@ -45,6 +45,7 @@ public class ResourceManager
         Poolable poolable = go.GetComponent<Poolable>();
         if (poolable != null)
         {
+            go.transform.position = Vector3.up * 100f;
             Managers.Pool.Push(poolable);
             return;
         }

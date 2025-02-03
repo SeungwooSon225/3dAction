@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
     protected IEnumerator _moveForwardCo;
     protected IEnumerator _fastRotationCo;
 
+    protected bool _isCanDodge;
+
     //protected Dictionary<string, float> _attackRatio = new Dictionary<string, float>();
     protected Dictionary<string, ParticleSystem> _effects = new Dictionary<string, ParticleSystem>();
 
@@ -26,6 +28,16 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         Init();
+    }
+
+    void Update()
+    {
+        if (_playerStat.IsDead)
+            return;
+
+        Moving();
+        RecoverMpStamina();
+        Skill();
     }
 
     protected virtual void Init()
@@ -39,8 +51,7 @@ public class PlayerController : MonoBehaviour
 
         _movementDir = Vector3.forward;
 
-        // To do
-        //_playerStat.StaminaMpConsumption.Add("Dodge", 10f);
+        _isCanDodge = true;
 
         Transform effects = transform.Find("Effects");
         if (effects != null)
@@ -111,7 +122,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F))
             SetLockOnTarget();
 
-        if (!_animator.GetBool("IsDodging") && Input.GetKeyDown(KeyCode.Space) && _playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["Dodge"])
+        if (_isCanDodge && !_animator.GetBool("IsDodging") && Input.GetKeyDown(KeyCode.Space) && _playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["Dodge"])
         {
             _playerStat.StaminaMp -= _playerStat.StaminaMpConsumption["Dodge"];
             _animator.SetTrigger("Dodge");
@@ -179,6 +190,7 @@ public class PlayerController : MonoBehaviour
         ResetClickTriggers();
     }
 
+    protected virtual void RecoverMpStamina() { }
 
     protected IEnumerator MoveForwardCo(float distance, float duration)
     {
@@ -262,6 +274,7 @@ public class PlayerController : MonoBehaviour
         _animator.ResetTrigger("SkillE");
         _animator.ResetTrigger("SkillR");
     }
+
     private void SpendStaminaMp(string attackName)
     {
         if (_playerStat.StaminaMp >= _playerStat.StaminaMpConsumption[attackName])
@@ -307,6 +320,16 @@ public class PlayerController : MonoBehaviour
     {
         //_playerStat.IsAttackable = false;
         _collider.enabled = false;
+    }
+
+    private void SetIsCanDodgeTrue()
+    {
+        _isCanDodge = true;
+    }
+
+    private void SetIsCanDodgeFalse()
+    {
+        _isCanDodge = false;
     }
 
     private void ShootProjectile(string name)

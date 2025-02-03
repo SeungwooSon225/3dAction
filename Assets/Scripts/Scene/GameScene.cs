@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class GameScene : BaseScene
 {
+    [SerializeField]
+    Define.PlayerClass _playerClass;
+
     protected override void Init()
     {
         base.Init();
 
-        GameObject player = Managers.Game.Spawn(Define.WorldObject.Player, "Wizard");
-        Managers.Game.PlayerCalss = Define.PlayerClass.Wizard;
+        GameObject player = Managers.Game.Spawn(Define.WorldObject.Player, _playerClass.ToString());
+        Managers.Game.PlayerCalss = _playerClass;
         Camera.main.gameObject.GetOrAddCompoenet<CameraController>().SetPlayer(player);
         player.transform.position = new Vector3(39f, 0f, 26f);
 

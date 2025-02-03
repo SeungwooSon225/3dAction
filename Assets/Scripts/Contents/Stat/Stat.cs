@@ -17,6 +17,8 @@ public class Stat : MonoBehaviour
     //[SerializeField]
     //protected bool _isAttackable;
     [SerializeField]
+    protected bool _isDead;
+    [SerializeField]
     protected Transform _target;
 
     protected Dictionary<string, Define.AttackWeight> _attackWeight = new Dictionary<string, Define.AttackWeight>();
@@ -26,6 +28,7 @@ public class Stat : MonoBehaviour
     public float Attack { get { return _attack; } set { _attack = value; } }
     public float Defense { get { return _defense; } set { _defense = value; } }
     public float MoveSpeed { get { return _moveSpeed; } set { _moveSpeed = value; } }
+    public bool IsDead { get { return _isDead; } set { _isDead = value; } }
     //public bool IsAttackable { get { return _isAttackable; } set { _isAttackable = value; } }
     public Transform Target { get { return _target; } set { _target = value; } }
 

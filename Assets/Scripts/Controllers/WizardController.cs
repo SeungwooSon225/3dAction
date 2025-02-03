@@ -15,12 +15,11 @@ public class WizardController : PlayerController
     [SerializeField]
     WizardMaterialController _wizardMaterialController;
 
-    void Update()
-    {
-        Moving();
-        Skill();
-        RecoverMana();
-    }
+    Vector3 _previousPos = Vector3.zero;
+    float _stopTime;
+    [SerializeField]
+    bool _isStop = false;
+
 
     protected override void Init()
     {
@@ -40,13 +39,23 @@ public class WizardController : PlayerController
         _uiStat.PlayerStat = _playerStat;
     }
 
-    Vector3 _previousPos = Vector3.zero;
-    float _stopTime;
-    [SerializeField]
-    bool _isStop = false;
+    
 
+    protected override void OnDodgeEvent()
+    {
+        ResetClickTriggers();
 
-    private void RecoverMana()
+        transform.rotation = Quaternion.LookRotation(_movementDir);
+
+        if (_chargeCo != null)
+        {
+            StopCoroutine(_chargeCo);
+            _chargeAttack.GetComponent<ParticleSystem>().Stop();
+            Managers.Resource.Destroy(_chargeAttack);
+        } 
+    }
+
+    protected override void RecoverMpStamina()
     {
         if (!_isStop && (transform.position - _previousPos).magnitude < 0.01f)
         {
@@ -73,17 +82,20 @@ public class WizardController : PlayerController
         }     
     }
 
+    IEnumerator _chargeCo;
+
     void ChargeAttackStart()
     {
         _chargeAttack = Managers.Resource.Instantiate($"Projectiles/Wizard@ChargeAttack");
 
-        _chargeAttackProjectile = _chargeAttack.GetComponent<Projectile>();
         _chargeAttack.GetComponent<ParticleSystem>().Stop();
         _chargeAttack.transform.parent = _staff;
         _chargeAttack.transform.localPosition = Vector3.zero;
         _chargeAttack.GetComponent<ParticleSystem>().Play();
 
-        StartCoroutine(ChargeCo());
+        if (_chargeCo != null) StopCoroutine(_chargeCo);
+        _chargeCo = ChargeCo();
+        StartCoroutine(_chargeCo);
     }
 
     IEnumerator ChargeCo()
@@ -103,8 +115,9 @@ public class WizardController : PlayerController
 
     void ShootChargeAttack()
     {
+        if (_chargeCo != null) StopCoroutine(_chargeCo);
         _chargeAttack.transform.parent = null;
-        _chargeAttackProjectile.Shoot(_playerStat);
+        _chargeAttack.GetComponent<Projectile>().Shoot(_playerStat);
     }
 
     private void SkillE()

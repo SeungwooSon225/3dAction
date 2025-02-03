@@ -22,6 +22,8 @@ public class PlayerStat : Stat
     [SerializeField]
     protected bool _isOnAttacked;
 
+    protected bool _isOnAttackResist;
+
 
     public Dictionary<string, float> StaminaMpConsumption { get { return _staminaMpConsumption; } }
 
@@ -35,6 +37,7 @@ public class PlayerStat : Stat
     public int Gold { get { return _gold; } set { _hp = value; } }
 
     public bool IsOnAttacked { get { return _isOnAttacked; } set { _isOnAttacked = value; } }
+    public bool IsOnAttackResist { get { return _isOnAttackResist; } set { _isOnAttackResist = value; } }
 
     Animator _animator;
 
@@ -47,13 +50,13 @@ public class PlayerStat : Stat
         _staminaMpConsumption = new Dictionary<string, float>();
         _animator = gameObject.GetComponent<Animator>();
 
+        _isOnAttackResist = false;
+
         SetStat(1);
-        //SetStaminaMpConsumption(1);
     }
 
 
-
-    public void SetStat(int level) 
+    public void SetStat(int level)
     {
         Data.Stat stat = Managers.Data.StatDict[level];
 
@@ -73,19 +76,25 @@ public class PlayerStat : Stat
         _staminaMpConsumption.Add("SkillR", stat.skillRConsumption);
     }
 
-    //public void SetStaminaMpConsumption(int level)
-    //{
-    //    Data.StaminaMPConsumption consumption = Managers.Data.StaminaMPConsumptionDict[level];
-
-    //    _staminaMpConsumption.Add("Dodge", consumption.dodge);
-    //    _staminaMpConsumption.Add("BasicAttack", consumption.basicAttack);
-    //    _staminaMpConsumption.Add("SkillE", consumption.skillE);
-    //    _staminaMpConsumption.Add("SkillR", consumption.skillR);  
-    //}
 
     public override void OnAttacked(Attack attacker)
     {
-        //if (!IsAttackable) return;
+        if (_isDead) return;
+
+        float damage = Mathf.Max(0, attacker.Damage - Defense);
+
+        Hp -= damage;
+
+        if (Hp <= 0)
+        {
+            Hp = 0;
+            OnDead(attacker);
+
+            return;
+        }
+
+        if (IsOnAttackResist || IsOnAttacked)
+            return;
 
         StartCoroutine(OnAttackedCo(attacker));
     }
@@ -93,10 +102,6 @@ public class PlayerStat : Stat
     IEnumerator OnAttackedCo(Attack attacker)
     {
         IsOnAttacked = true;
-
-        float damage = Mathf.Max(0, attacker.Damage - Defense);
-
-        Hp -= damage;
 
         _animator.SetTrigger("OnAttacked");
         _animator.SetBool("IsAttacking", false);
@@ -106,19 +111,24 @@ public class PlayerStat : Stat
         _animator.ResetTrigger("SkillE");
         _animator.ResetTrigger("SkillR");
 
-        //_isAttackable = true;
-
-        if (Hp <= 0)
-        {
-            Hp = 0;
-            OnDead(attacker);
-
-            //IsAttackable = false;
-        }
-
         yield return new WaitForSeconds(0.5f);
 
         IsOnAttacked = false;
+    }
 
+    protected override void OnDead(Attack attacker)
+    {
+        _isDead = true;
+        _animator.SetTrigger("Die");
+    }
+
+    void SetOnAttackedResistTrue()
+    {
+        _isOnAttackResist = true;
+    }
+
+    void SetOnAttackedResistFalse()
+    {
+        _isOnAttackResist = false;
     }
 }
