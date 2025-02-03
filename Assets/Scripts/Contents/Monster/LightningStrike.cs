@@ -26,6 +26,8 @@ public class LightningStrike : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         _collider.enabled = false;
+
+        Managers.Resource.Destroy(gameObject);
     }
 
 }

@@ -39,6 +39,10 @@ public class SnowStorm : MonoBehaviour
 
         _animator.SetBool("SnowStorm", false);
         gameObject.GetComponent<ParticleSystem>().Stop();
+
+        yield return new WaitForSeconds(1f);
+
+        Managers.Resource.Destroy(gameObject);
     }
 
     void CastStormNearPlayer()

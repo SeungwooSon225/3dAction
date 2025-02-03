@@ -14602,7 +14602,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _startOffset: {x: 0, y: 0, z: 2.6}
-  _duration: 0.5
+  _duration: 0.15
   _distance: 0
   _effect: {fileID: 0}
 --- !u!114 &2834611270383672921
