@@ -45,10 +45,10 @@ public class CloseCombatBehavior : IBehavior
                     _monsterAI.IsAttacking = true;
                     float random = Random.Range(0f, 1f);
 
-                    if (random < 10.2f)
+                    if (random < 0.2f)
                     {
-                        //_animator.SetTrigger("ShockwaveAttack");
-                        _animator.SetTrigger("SliceAttack");
+                        _animator.SetTrigger("ShockwaveAttack");
+                        //_animator.SetTrigger("SliceAttack");
                     }
                     else if (random < 0.6f)
                     {
