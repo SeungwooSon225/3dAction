@@ -28,7 +28,5 @@ public class Attack : MonoBehaviour
         if (stat == null) return;
 
         stat.OnAttacked(this);
-
-        gameObject.GetComponent<Collider>().enabled = false;
     }
 }

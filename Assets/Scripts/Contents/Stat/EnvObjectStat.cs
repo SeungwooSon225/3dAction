@@ -18,7 +18,9 @@ public class EnvObjectStat : Stat
 
     protected override void OnDead(Attack attacker)
     {
-        Managers.Resource.Destroy(gameObject); ;
+        Managers.AStar.RemoveObstacle(transform);
+
+        Managers.Resource.Destroy(gameObject);
     }
 
     public override void OnAttacked(Attack attacker)

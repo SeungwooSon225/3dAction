@@ -79,23 +79,9 @@ public class AStarManager
                     // 장애물
                     else 
                     {
+                        Grid[x, z].NodeType = NodeType.Obstacle;
                         Grid[x, z].IsWalkable = false;
                     }      
-                }
-            }
-
-
-            //Grid[(int)child.transform.position.x, (int)child.transform.position.z].ZoneWeight = 5;
-
-            foreach (Vector2Int dir in directions)
-            {
-                int checkX = (int)child.transform.position.x + dir.x;
-                int checkY = (int)child.transform.position.z + dir.y;
-
-                if (checkX >= 0 && checkX < Grid.GetLength(0) && checkY >= 0 && checkY < Grid.GetLength(1) && Grid[checkX, checkY].IsWalkable)
-                {
-                    //Debug.Log($"{checkX}, {checkY}");
-                    Grid[checkX, checkY].ZoneWeight = 50;
                 }
             }
         }
@@ -103,8 +89,65 @@ public class AStarManager
         GameObject mapRemovableObstacles = GameObject.Find("Map@RemovableObstacles");
         foreach (Transform child in mapRemovableObstacles.transform)
         {
-            //Grid[(int)child.transform.position.x, (int)child.transform.position.z].IsWalkable = false;
-            Grid[(int)child.transform.position.x, (int)child.transform.position.z].ZoneWeight = 10.123f;
+            int centerX = (int)child.transform.position.x;
+            int centerZ = (int)child.transform.position.z;
+            int lenghtX = (int)child.transform.localScale.x / 2;
+            int lenghtZ = (int)child.transform.localScale.z / 2;
+
+            for (int offsetX = -lenghtX - 3; offsetX <= lenghtX + 3; offsetX++)
+            {
+                for (int offsetZ = -lenghtZ - 3; offsetZ <= lenghtZ + 3; offsetZ++)
+                {
+                    int x = centerX + offsetX;
+                    int z = centerZ + offsetZ;
+
+                    // 장애물 주변
+                    if (x < centerX - lenghtX || x > centerX + lenghtX || z < centerZ - lenghtZ || z > centerZ + lenghtZ)
+                    {
+                        if(Grid[x, z].ZoneWeight < 0.9f)
+                            Grid[x, z].ZoneWeight += 1f;
+                    }
+                    // 장애물
+                    else
+                    {
+                        Grid[x, z].Object = child.gameObject;
+                        Grid[x, z].NodeType = NodeType.RemovableObstacle;
+                        Grid[x, z].ZoneWeight = 5f;
+                    }
+                }
+            }
         }
+    }
+
+    public void RemoveObstacle(Transform obstacle)
+    {
+        int centerX = (int)obstacle.position.x;
+        int centerZ = (int)obstacle.position.z;
+        int lenghtX = (int)obstacle.localScale.x / 2;
+        int lenghtZ = (int)obstacle.localScale.z / 2;
+
+        for (int offsetX = -lenghtX - 3; offsetX <= lenghtX + 3; offsetX++)
+        {
+            for (int offsetZ = -lenghtZ - 3; offsetZ <= lenghtZ + 3; offsetZ++)
+            {
+                int x = centerX + offsetX;
+                int z = centerZ + offsetZ;
+
+                // 장애물 주변
+                if (x < centerX - lenghtX || x > centerX + lenghtX || z < centerZ - lenghtZ || z > centerZ + lenghtZ)
+                {
+                    if (Grid[x, z].ZoneWeight < 1.9f)
+                        Grid[x, z].ZoneWeight = 0f;
+                }
+                // 장애물
+                else
+                {
+                    Grid[x, z].Object = null;
+                    Grid[x, z].NodeType = NodeType.None;
+                    Grid[x, z].ZoneWeight = 0f;
+                }
+            }
+        }
+
     }
 }

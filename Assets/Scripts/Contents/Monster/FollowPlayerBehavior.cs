@@ -30,9 +30,13 @@ public class FollowPlayerBehavior : IBehavior
             return BehaviorState.Failure;
         }
 
-        float distanceToPlayer = Vector3.Distance(_monster.position, _player.position);
 
-        if (distanceToPlayer > _monsterStat.StopDistance)
+        if (_monsterStat.Target == null)
+            _monsterStat.Target = _player;
+
+        float distanceToTarget = Vector3.Distance(_monster.position, _monsterStat.Target.position);
+
+        if (distanceToTarget > _monsterStat.StopDistance)
         {
             //Debug.Log("추적");
             // 부술 수 있는 장애물일 경우
@@ -87,6 +91,7 @@ public class FollowPlayerBehavior : IBehavior
             float distance = direction.magnitude; 
             if (Physics.Raycast(_monster.position + Vector3.up * 0.5f, direction.normalized, out RaycastHit hit, distance))
             {
+
                 // 장애물 있을 때
                 if (hit.collider.CompareTag("Obstacle") || hit.collider.CompareTag("RemovableObstacle") || hit.collider.CompareTag("MonsterObstacle"))
                 {
@@ -97,9 +102,10 @@ public class FollowPlayerBehavior : IBehavior
                         return false;
 
                     // 부술 수 있는 장애물
-                    if (Mathf.Abs(node.ZoneWeight - 10.123f) < 0.0001f)
+                    if (node.NodeType == NodeType.RemovableObstacle)
                     {
-                        _monsterStat.Target = GameObject.Find("Fence").transform;
+                        Debug.Log("Find Pole");
+                        _monsterStat.Target = node.Object.transform;
 
                         return true;
 
@@ -119,7 +125,7 @@ public class FollowPlayerBehavior : IBehavior
 
                     _moveDestination = _player.position;
 
-                    Debug.Log(_moveDestination);
+                    //Debug.Log(_moveDestination);
 
                     //_monster.rotation = Quaternion.Slerp(_monster.rotation, Quaternion.LookRotation(_player.position - _monster.position), 10f * Time.deltaTime);
 
