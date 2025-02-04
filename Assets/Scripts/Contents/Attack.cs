@@ -2,12 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum AttackType
+{
+    Basic,
+    Heavy,
+}
+
 public class Attack : MonoBehaviour
 {
+    public AttackType AttackType { get; set; } = AttackType.Basic;
+
     public float Damage { get; set; }
 
     //public bool IsActive { get; set; }
-
     [SerializeField]
     private bool _isPlayer = true;
 

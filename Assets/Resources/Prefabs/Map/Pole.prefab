@@ -238,7 +238,6 @@ MonoBehaviour:
   _moveSpeed: 0
   _isDead: 0
   _target: {fileID: 0}
-  _uI_EnvObjHPBar: {fileID: 0}
 --- !u!1 &6815494330657492562
 GameObject:
   m_ObjectHideFlags: 0
@@ -444,6 +443,18 @@ PrefabInstance:
       value: 1080
       objectReference: {fileID: 0}
     - target: {fileID: 2404734445395057697, guid: ddf24557fa3872e4ca8a5fe928665cad, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 2404734445395057697, guid: ddf24557fa3872e4ca8a5fe928665cad, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 2404734445395057697, guid: ddf24557fa3872e4ca8a5fe928665cad, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 2404734445395057697, guid: ddf24557fa3872e4ca8a5fe928665cad, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -491,9 +502,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2404734445395057697, guid: ddf24557fa3872e4ca8a5fe928665cad, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4037896456300820419, guid: ddf24557fa3872e4ca8a5fe928665cad, type: 3}
+      propertyPath: yOffset
+      value: 4.5
+      objectReference: {fileID: 0}
     - target: {fileID: 6178317259791110091, guid: ddf24557fa3872e4ca8a5fe928665cad, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 25
+      value: 83.7
       objectReference: {fileID: 0}
     - target: {fileID: 6178317259791110091, guid: ddf24557fa3872e4ca8a5fe928665cad, type: 3}
       propertyPath: m_SizeDelta.y

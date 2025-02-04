@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class UI_EnvObjHPBar : MonoBehaviour
 {
     Stat _stat;
+    [SerializeField]
+    float yOffset = 1f;
 
     [SerializeField]
     Slider _slider;
@@ -15,6 +17,8 @@ public class UI_EnvObjHPBar : MonoBehaviour
 
     IEnumerator _fadeInOutCo;
 
+    public Transform Parent { get; set; }
+
     void Start()
     {
         _stat = transform.parent.GetComponent<Stat>();
@@ -22,7 +26,7 @@ public class UI_EnvObjHPBar : MonoBehaviour
 
     void Update()
     {
-        transform.position = transform.parent.position + Vector3.up * (transform.parent.GetComponent<Collider>().bounds.size.y) + Vector3.up * 1f;
+        transform.position = Parent.position + Vector3.up * yOffset;
         transform.rotation = Camera.main.transform.rotation;
 
         float ratio = _stat.Hp / (float)_stat.MaxHp;
