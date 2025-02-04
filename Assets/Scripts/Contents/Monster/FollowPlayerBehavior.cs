@@ -30,12 +30,10 @@ public class FollowPlayerBehavior : IBehavior
             return BehaviorState.Failure;
         }
 
-
         if (_monsterStat.Target == null)
             _monsterStat.Target = _player;
 
         float distanceToTarget = Vector3.Distance(_monster.position, _monsterStat.Target.position);
-
         if (distanceToTarget > _monsterStat.StopDistance)
         {
             //Debug.Log("추적");
@@ -48,24 +46,20 @@ public class FollowPlayerBehavior : IBehavior
 
             _elapsedTime += Time.deltaTime;
 
-            if (_elapsedTime > _monsterStat.EscapeThreshold)
-            {
-                _elapsedTime = 0f;
-                //Debug.Log("멀어");
+            //if (_elapsedTime > _monsterStat.EscapeThreshold)
+            //{
+            //    _elapsedTime = 0f;
 
-                if (_animator.GetBool("Fly Forward"))
-                    _animator.SetBool("Fly Forward", false);
+            //    if (_animator.GetBool("Fly Forward"))
+            //        _animator.SetBool("Fly Forward", false);
 
-                return BehaviorState.Success;
-            }
+            //    return BehaviorState.Success;
+            //}
 
             return BehaviorState.Failure;
         }
 
-        _elapsedTime = 0f;
-
         //Debug.Log("공격");
-
         if (_animator.GetBool("Fly Forward"))
             _animator.SetBool("Fly Forward", false);
         return BehaviorState.Success;
@@ -91,9 +85,8 @@ public class FollowPlayerBehavior : IBehavior
             float distance = direction.magnitude; 
             if (Physics.Raycast(_monster.position + Vector3.up * 0.5f, direction.normalized, out RaycastHit hit, distance))
             {
-
                 // 장애물 있을 때
-                if (hit.collider.CompareTag("Obstacle") || hit.collider.CompareTag("RemovableObstacle") || hit.collider.CompareTag("MonsterObstacle"))
+                if (hit.collider.CompareTag("Obstacle") || hit.collider.CompareTag("RemovableObstacle"))
                 {
                     //Debug.Log($"Obstacle 발견");
                     Node node = Managers.AStar.FindPath(_monster.gameObject, _player.gameObject);
@@ -102,18 +95,16 @@ public class FollowPlayerBehavior : IBehavior
                         return false;
 
                     // 부술 수 있는 장애물
-                    if (node.NodeType == NodeType.RemovableObstacle)
+                    if (hit.collider.CompareTag("RemovableObstacle") && (distance + 5f < Managers.AStar.CurrentCost))
                     {
-                        Debug.Log("Find Pole");
-                        _monsterStat.Target = node.Object.transform;
+                        Debug.Log(Managers.AStar.CurrentCost + "  " + distance);
 
-                        return true;
-
+                        _monsterStat.Target = hit.transform;
+                        _moveDestination = hit.transform.position;                     
                     }
                     else
                     {
                         _monsterStat.Target = _player;
-
                         _moveDestination = new Vector3(node.Position.x, 0, node.Position.y);
                     }
 
@@ -122,15 +113,7 @@ public class FollowPlayerBehavior : IBehavior
                 else
                 {
                     _monsterStat.Target = _player;
-
                     _moveDestination = _player.position;
-
-                    //Debug.Log(_moveDestination);
-
-                    //_monster.rotation = Quaternion.Slerp(_monster.rotation, Quaternion.LookRotation(_player.position - _monster.position), 10f * Time.deltaTime);
-
-                    //if ((_monster.position - _player.position).magnitude > 2f)
-                    //    _monster.position += _monster.forward * Time.deltaTime * _monsterStat.MoveSpeed;
                 }
             }
         }

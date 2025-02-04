@@ -9,6 +9,8 @@ public class Projectile : MonoBehaviour
     [SerializeField]
     float _duration;
     [SerializeField]
+    float _lifeTime;
+    [SerializeField]
     float _distance;
     [SerializeField]
     ParticleSystem _effect;
@@ -142,6 +144,8 @@ public class Projectile : MonoBehaviour
             _effect.Stop();
 
         gameObject.GetComponent<Collider>().enabled = false;
+
+        yield return new WaitForSeconds(_lifeTime);
 
         Managers.Resource.Destroy(gameObject);
     }

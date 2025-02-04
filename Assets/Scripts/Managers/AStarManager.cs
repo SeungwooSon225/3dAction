@@ -14,6 +14,8 @@ public class AStarManager
     public AStarPathfinding _pathfinding;
     public List<Node> _currentPath;
 
+    public float CurrentCost { get; set; }
+
     Vector2Int[] directions = {
             new Vector2Int(-1, 0), new Vector2Int(1, 0),    // 좌우
             new Vector2Int(0, -1), new Vector2Int(0, 1),    // 상하
@@ -35,9 +37,11 @@ public class AStarManager
                                              new Vector2Int((int)target.transform.position.x, (int)target.transform.position.z));
 
         if (_currentPath == null) return null;
-        
+
         //if(_currentPath[0].Position.x < 34 && _currentPath[0].Position.y == 35)
         //    Debug.Log($"{_currentPath.Count}, {_currentPath[_currentPath.Count - 1].GCost}");
+
+        CurrentCost = _currentPath.Count;
 
         return _currentPath[0];
     }
@@ -64,9 +68,9 @@ public class AStarManager
             int lenghtX = (int)child.transform.localScale.x / 2;
             int lenghtZ = (int)child.transform.localScale.z / 2;
 
-            for (int offsetX = -lenghtX - 3; offsetX <= lenghtX + 3; offsetX++)
+            for (int offsetX = -lenghtX - 1; offsetX <= lenghtX + 1; offsetX++)
             {
-                for (int offsetZ = -lenghtZ - 3; offsetZ <= lenghtZ + 3; offsetZ++)
+                for (int offsetZ = -lenghtZ - 1; offsetZ <= lenghtZ + 1; offsetZ++)
                 {
                     int x = centerX + offsetX;
                     int z = centerZ + offsetZ;
@@ -74,7 +78,7 @@ public class AStarManager
                     // 장애물 주변
                     if (x < centerX - lenghtX || x > centerX + lenghtX || z < centerZ - lenghtZ || z > centerZ + lenghtZ)
                     {
-                        Grid[x, z].ZoneWeight = 10f;
+                        Grid[x, z].ZoneWeight = 5f;
                     }
                     // 장애물
                     else 
@@ -94,26 +98,17 @@ public class AStarManager
             int lenghtX = (int)child.transform.localScale.x / 2;
             int lenghtZ = (int)child.transform.localScale.z / 2;
 
-            for (int offsetX = -lenghtX - 3; offsetX <= lenghtX + 3; offsetX++)
+            for (int offsetX = -lenghtX; offsetX <= lenghtX; offsetX++)
             {
-                for (int offsetZ = -lenghtZ - 3; offsetZ <= lenghtZ + 3; offsetZ++)
+                for (int offsetZ = -lenghtZ; offsetZ <= lenghtZ; offsetZ++)
                 {
                     int x = centerX + offsetX;
                     int z = centerZ + offsetZ;
 
-                    // 장애물 주변
-                    if (x < centerX - lenghtX || x > centerX + lenghtX || z < centerZ - lenghtZ || z > centerZ + lenghtZ)
-                    {
-                        if(Grid[x, z].ZoneWeight < 0.9f)
-                            Grid[x, z].ZoneWeight += 1f;
-                    }
-                    // 장애물
-                    else
-                    {
-                        Grid[x, z].Object = child.gameObject;
-                        Grid[x, z].NodeType = NodeType.RemovableObstacle;
-                        Grid[x, z].ZoneWeight = 5f;
-                    }
+                    Grid[x, z].NodeType = NodeType.RemovableObstacle;
+                    Grid[x, z].IsWalkable = true;
+                    Grid[x, z].ZoneWeight = 100f;
+                    Grid[x, z].Object = child.gameObject;                   
                 }
             }
         }
@@ -145,6 +140,7 @@ public class AStarManager
                     Grid[x, z].Object = null;
                     Grid[x, z].NodeType = NodeType.None;
                     Grid[x, z].ZoneWeight = 0f;
+                    Grid[x, z].IsWalkable = true;
                 }
             }
         }

@@ -20,8 +20,9 @@ public class EnvObjectStat : Stat
         _hp = 3;
         _maxHp = 3;
         _uI_EnvObjHPBar = transform.GetComponentInChildren<UI_EnvObjHPBar>();
+        _uI_EnvObjHPBar.Stat = this;
         _uI_EnvObjHPBar.Parent = transform;
-        _uI_EnvObjHPBar.transform.parent = null;
+        _uI_EnvObjHPBar.transform.SetParent(GameObject.Find("@EnvUI").transform);
         _effect = transform.Find("Effect");
         _collider = GetComponent<Collider>();
     }
