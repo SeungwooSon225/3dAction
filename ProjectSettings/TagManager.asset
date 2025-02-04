@@ -7,6 +7,10 @@ TagManager:
   - Obstacle
   - Monster
   - RemovableObstacle
+  - Attack
+  - Enemy
+  - WeakPointStack
+  - MonsterObstacle
   layers:
   - Default
   - TransparentFX

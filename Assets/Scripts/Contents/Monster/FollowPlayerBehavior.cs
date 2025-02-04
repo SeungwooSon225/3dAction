@@ -67,51 +67,70 @@ public class FollowPlayerBehavior : IBehavior
         return BehaviorState.Success;
     }
 
+
+    float _pathFindingTimer = 0.25f;
+    Vector3 _moveDestination;
+
     bool TracePlayer()
     {
-        Vector3 direction = _player.position - _monster.position;
-        float distance = direction.magnitude; // 시작 지점과 끝 지점 사이의 거리
+        _pathFindingTimer += Time.deltaTime;
 
-        if (Physics.Raycast(_monster.position + Vector3.up * 0.5f, direction.normalized, out RaycastHit hit, distance))
+        // 0.25초마다 실행
+        if (_pathFindingTimer > 0.25f)
         {
-            // 장애물 있을 때
-            if (hit.collider.CompareTag("Obstacle") || hit.collider.CompareTag("RemovableObstacle"))
+            //Debug.Log("PathFinding");
+
+            _pathFindingTimer = 0f;
+
+            // 몬스터와 플레이어 사이에 장애물이 있는지 검사: Y -> AStarPathFinding 실행, N -> 직선 거리로 이동
+            Vector3 direction = _player.position - _monster.position;
+            float distance = direction.magnitude; 
+            if (Physics.Raycast(_monster.position + Vector3.up * 0.5f, direction.normalized, out RaycastHit hit, distance))
             {
-                Debug.Log($"Obstacle 발견");
-
-                Node node = Managers.AStar.FindPath(_monster.gameObject, _player.gameObject);
-
-                if (node == null)
-                    return false;
-
-                // 부술 수 있는 장애물
-                if (Mathf.Abs(node.ZoneWeight - 10.123f) < 0.0001f)
+                // 장애물 있을 때
+                if (hit.collider.CompareTag("Obstacle") || hit.collider.CompareTag("RemovableObstacle") || hit.collider.CompareTag("MonsterObstacle"))
                 {
-                    _monsterStat.Target = GameObject.Find("Fence").transform;
+                    //Debug.Log($"Obstacle 발견");
+                    Node node = Managers.AStar.FindPath(_monster.gameObject, _player.gameObject);
 
-                    return true;
+                    if (node == null)
+                        return false;
+
+                    // 부술 수 있는 장애물
+                    if (Mathf.Abs(node.ZoneWeight - 10.123f) < 0.0001f)
+                    {
+                        _monsterStat.Target = GameObject.Find("Fence").transform;
+
+                        return true;
+
+                    }
+                    else
+                    {
+                        _monsterStat.Target = _player;
+
+                        _moveDestination = new Vector3(node.Position.x, 0, node.Position.y);
+                    }
 
                 }
+                // 장애물 없을 때
                 else
                 {
                     _monsterStat.Target = _player;
 
-                    _monster.rotation = Quaternion.Slerp(_monster.rotation, Quaternion.LookRotation(new Vector3(node.Position.x, 0, node.Position.y) - _monster.position), 10f * Time.deltaTime);
-                    _monster.position += _monster.forward * Time.deltaTime * _monsterStat.MoveSpeed;
+                    _moveDestination = _player.position;
+
+                    Debug.Log(_moveDestination);
+
+                    //_monster.rotation = Quaternion.Slerp(_monster.rotation, Quaternion.LookRotation(_player.position - _monster.position), 10f * Time.deltaTime);
+
+                    //if ((_monster.position - _player.position).magnitude > 2f)
+                    //    _monster.position += _monster.forward * Time.deltaTime * _monsterStat.MoveSpeed;
                 }
-
-            }
-            // 장애물 없을 때
-            else
-            {
-                _monsterStat.Target = _player;
-
-                _monster.rotation = Quaternion.Slerp(_monster.rotation, Quaternion.LookRotation(_player.position - _monster.position), 10f * Time.deltaTime);
-
-                if ((_monster.position - _player.position).magnitude > 2f)
-                    _monster.position += _monster.forward * Time.deltaTime * _monsterStat.MoveSpeed;
             }
         }
+
+        _monster.rotation = Quaternion.Slerp(_monster.rotation, Quaternion.LookRotation(new Vector3(_moveDestination.x, 0, _moveDestination.z) - _monster.position), 10f * Time.deltaTime);
+        _monster.position += _monster.forward * Time.deltaTime * _monsterStat.MoveSpeed;
 
         return false;
     }

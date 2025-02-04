@@ -28,7 +28,6 @@ public class AStarManager
         _pathfinding = new AStarPathfinding(Grid);
     }
 
-
     public Node FindPath(GameObject start, GameObject target)
     {
         _pathfinding.ResetGrid(Grid);
@@ -60,7 +59,32 @@ public class AStarManager
         GameObject mapObstacles = GameObject.Find("Map@Obstacles");
         foreach (Transform child in mapObstacles.transform)
         {
-            Grid[(int)child.transform.position.x, (int)child.transform.position.z].IsWalkable = false;
+            int centerX = (int)child.transform.position.x;
+            int centerZ = (int)child.transform.position.z;
+            int lenghtX = (int)child.transform.localScale.x / 2;
+            int lenghtZ = (int)child.transform.localScale.z / 2;
+
+            for (int offsetX = -lenghtX - 3; offsetX <= lenghtX + 3; offsetX++)
+            {
+                for (int offsetZ = -lenghtZ - 3; offsetZ <= lenghtZ + 3; offsetZ++)
+                {
+                    int x = centerX + offsetX;
+                    int z = centerZ + offsetZ;
+
+                    // 장애물 주변
+                    if (x < centerX - lenghtX || x > centerX + lenghtX || z < centerZ - lenghtZ || z > centerZ + lenghtZ)
+                    {
+                        Grid[x, z].ZoneWeight = 10f;
+                    }
+                    // 장애물
+                    else 
+                    {
+                        Grid[x, z].IsWalkable = false;
+                    }      
+                }
+            }
+
+
             //Grid[(int)child.transform.position.x, (int)child.transform.position.z].ZoneWeight = 5;
 
             foreach (Vector2Int dir in directions)
