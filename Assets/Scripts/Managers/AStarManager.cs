@@ -85,6 +85,9 @@ public class AStarManager
                     {
                         Grid[x, z].NodeType = NodeType.Obstacle;
                         Grid[x, z].IsWalkable = false;
+
+                        //Managers.Resource.Instantiate("RedCube").transform.position = new Vector3(x, 0f, z);
+
                     }      
                 }
             }
@@ -107,8 +110,10 @@ public class AStarManager
 
                     Grid[x, z].NodeType = NodeType.RemovableObstacle;
                     Grid[x, z].IsWalkable = true;
-                    Grid[x, z].ZoneWeight = 100f;
-                    Grid[x, z].Object = child.gameObject;                   
+                    Grid[x, z].ZoneWeight = 5f;
+                    Grid[x, z].Object = child.gameObject;
+
+                    //Managers.Resource.Instantiate("BlueCube").transform.position = new Vector3(x, 0f, z);
                 }
             }
         }

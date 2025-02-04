@@ -74,7 +74,7 @@ public class FollowPlayerBehavior : IBehavior
         _pathFindingTimer += Time.deltaTime;
 
         // 0.25초마다 실행
-        if (_pathFindingTimer > 0.25f)
+        if (_pathFindingTimer > 0.1f)
         {
             //Debug.Log("PathFinding");
 
@@ -94,8 +94,12 @@ public class FollowPlayerBehavior : IBehavior
                     if (node == null)
                         return false;
 
+                    //if (hit.collider.CompareTag("RemovableObstacle"))
+                    //    Debug.Log(Managers.AStar.CurrentCost + "  " + distance);
+
                     // 부술 수 있는 장애물
-                    if (hit.collider.CompareTag("RemovableObstacle") && (distance + 5f < Managers.AStar.CurrentCost))
+                    //if (hit.collider.CompareTag("RemovableObstacle") && (distance + 10f < Managers.AStar.CurrentCost))
+                    if (hit.collider.CompareTag("RemovableObstacle") && node.NodeType == NodeType.RemovableObstacle)
                     {
                         Debug.Log(Managers.AStar.CurrentCost + "  " + distance);
 
