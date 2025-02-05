@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 964800047605206430}
   - component: {fileID: 1598059504505797390}
-  - component: {fileID: -430703287022487982}
   - component: {fileID: 7106609515251367487}
   - component: {fileID: 3076873939754071496}
   m_Layer: 0
@@ -47,23 +46,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a509f82ee3b0eb44b83c13d6b01f9183, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startOffset: {x: 0, y: 1, z: 0}
-  _duration: 0.7
-  _distance: 15
-  _lifeTime: 2
---- !u!114 &-430703287022487982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8149112509021780795}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e35b7b84ee646ac48a7f3a7de290b34c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   _isPlayer: 1
+  _isHeavy: 1
+  _startOffset: {x: 0, y: 0, z: 0}
+  _duration: 0.7
+  _lifeTime: 2
+  _distance: 15
+  _effect: {fileID: 0}
 --- !u!65 &7106609515251367487
 BoxCollider:
   m_ObjectHideFlags: 0

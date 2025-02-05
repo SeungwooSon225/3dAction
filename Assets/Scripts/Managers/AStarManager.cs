@@ -136,6 +136,11 @@ public class AStarManager
         int lenghtX = (int)obstacle.localScale.x / 2;
         int lenghtZ = (int)obstacle.localScale.z / 2;
 
+        if (Grid[centerX, centerZ].NodeType == NodeType.Barrel)
+        {
+            _barrelList.Remove(Grid[centerX, centerZ]);
+        }
+
         for (int offsetX = -lenghtX - 3; offsetX <= lenghtX + 3; offsetX++)
         {
             for (int offsetZ = -lenghtZ - 3; offsetZ <= lenghtZ + 3; offsetZ++)
@@ -158,11 +163,6 @@ public class AStarManager
                     Grid[x, z].IsWalkable = true;
                 }
             }
-        }
-
-        if (obstacle.name == "Barrel")
-        {
-            _barrelList.Remove(Grid[centerX, centerZ]);
         }
     }
 

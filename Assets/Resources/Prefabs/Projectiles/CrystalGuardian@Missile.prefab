@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 2635880637366396199}
   - component: {fileID: 407327539532240057}
   - component: {fileID: 8049476444726042789}
-  - component: {fileID: -730639019121473605}
   - component: {fileID: 2241593028144398845}
   m_Layer: 0
   m_Name: CrystalGuardian@Missile
@@ -4915,10 +4914,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a509f82ee3b0eb44b83c13d6b01f9183, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isPlayer: 0
   _startOffset: {x: 0, y: 4.5, z: 0}
   _duration: 10
-  _distance: 500
   _lifeTime: 0
+  _distance: 500
   _effect: {fileID: 0}
 --- !u!114 &8049476444726042789
 MonoBehaviour:
@@ -4933,19 +4933,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsUsing: 0
---- !u!114 &-730639019121473605
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1614537894882843747}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e35b7b84ee646ac48a7f3a7de290b34c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _isPlayer: 0
 --- !u!135 &2241593028144398845
 SphereCollider:
   m_ObjectHideFlags: 0

@@ -2,8 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+public class Projectile : Attack
 {
+    [SerializeField]
+    bool _isHeavy;
+
     [SerializeField]
     Vector3 _startOffset;
     [SerializeField]
@@ -14,20 +17,15 @@ public class Projectile : MonoBehaviour
     float _distance;
     [SerializeField]
     ParticleSystem _effect;
+    [SerializeField]
+    ParticleSystem _explosionEffect;
 
 
     public void Shoot(Stat stat)
     {
-        Attack attack = gameObject.GetComponent<Attack>();
-
-        attack.Damage = stat.Attack * stat.AttackWeight[gameObject.name].Weight;
-
-        //attack.IsActive = true;
+        Damage = stat.Attack * stat.AttackWeight[gameObject.name].Weight;
         gameObject.GetComponent<Collider>().enabled = true;
-
         StartCoroutine(ShootCo(stat.gameObject.transform, stat.Target));
-        //StartCoroutine(HalfParabolicShootCo(stat.gameObject.transform, stat.Target, new Vector3(2.0f, 1.0f, 0f)));
-
     }
 
     public void HalfParabolicShoot(Stat stat, Vector3 dir)
@@ -104,6 +102,9 @@ public class Projectile : MonoBehaviour
         transform.position = startPosition;
         transform.rotation = Quaternion.LookRotation(shooter.forward);
 
+        if (_explosionEffect != null)
+            _explosionEffect.Stop();
+
         if (_effect != null)
             _effect.Play();
 
@@ -145,8 +146,36 @@ public class Projectile : MonoBehaviour
 
         gameObject.GetComponent<Collider>().enabled = false;
 
+        StartCoroutine(DestroyCo());
+    }
+
+    IEnumerator DestroyCo()
+    {
         yield return new WaitForSeconds(_lifeTime);
 
         Managers.Resource.Destroy(gameObject);
+    }
+
+    protected override void AttackOnTriggerEnter(Collider other)
+    {
+        if (!_isHeavy)
+        {
+            StopAllCoroutines();
+
+            gameObject.GetComponent<Collider>().enabled = false;
+
+            if (_explosionEffect != null)
+            {
+                _explosionEffect.Play();
+            }
+
+            StartCoroutine(DestroyCo());
+
+            if(other.tag == "Obstacle")
+                return;
+        }
+
+
+        base.AttackOnTriggerEnter(other);
     }
 }

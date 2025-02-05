@@ -33886,7 +33886,6 @@ GameObject:
   - component: {fileID: 5844311961028813522}
   - component: {fileID: 4316869457796637977}
   - component: {fileID: 7347296642964033472}
-  - component: {fileID: 2586910505347658325}
   - component: {fileID: 1731752884100316795}
   - component: {fileID: 3464563687946091932}
   - component: {fileID: 1473493315230155340}
@@ -38712,19 +38711,6 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &2586910505347658325
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8532793043885528756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e35b7b84ee646ac48a7f3a7de290b34c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _isPlayer: 1
 --- !u!114 &1731752884100316795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38776,6 +38762,6 @@ MonoBehaviour:
   _startOffset: {x: 0, y: 0.74, z: 2.82}
   _duration: 0.15
   _effect: {fileID: 4316869457796637977}
-  _attack: {fileID: 2586910505347658325}
+  _attack: {fileID: 0}
   _laser: {fileID: 7813800668080173249}
   _trailEffect: {fileID: 8684336151850226804}

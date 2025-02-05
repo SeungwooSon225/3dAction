@@ -21,7 +21,7 @@ public class Attack : MonoBehaviour
     public bool IsPlayer { get { return _isPlayer; } set { _isPlayer = value; } }
 
 
-    private void OnTriggerEnter(Collider other)
+    protected virtual void AttackOnTriggerEnter(Collider other)
     {
         //Debug.Log(other.name);
         //if (!IsActive || (other.tag == "Player" && IsPlayer)) return;
@@ -29,11 +29,16 @@ public class Attack : MonoBehaviour
         if (other.tag == "Monster" && !_isPlayer) return;
 
         //Debug.Log(other.name);
-
         Stat stat = other.GetComponent<Stat>();
 
         if (stat == null) return;
 
         stat.OnAttacked(this);
+    }
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        AttackOnTriggerEnter(other);
     }
 }
