@@ -27,6 +27,20 @@ public class CloseCombatBehavior : IBehavior
 
     public BehaviorState Execute()
     {
+        Node barrel = Managers.AStar.FindNearBarrel(_monster.position, 5f);
+        if (barrel != null && (new Vector3(barrel.Position.x, 0f, barrel.Position.y) - _player.position).magnitude < 2f)
+        {
+            Debug.Log(barrel);
+
+            _elapsedTime = 0f;
+            _monsterAI.IsAttacking = true;
+
+            _animator.speed = 1.7f;
+            _animator.SetTrigger("SliceAttack");
+            _monsterStat.Target = barrel.Object.transform;
+            return BehaviorState.Success;
+        }
+
         _monster.rotation = Quaternion.Slerp(_monster.rotation, Quaternion.LookRotation(_monsterStat.Target.position - _monster.position), 10f * Time.deltaTime);
 
         _elapsedTime += Time.deltaTime;

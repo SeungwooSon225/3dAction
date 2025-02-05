@@ -43,6 +43,8 @@ public class EnvObjectStat : Stat
 
     public override void OnAttacked(Attack attacker)
     {
+        if (Hp <= 0) return;
+
         Hp -= 1;
 
         StartCoroutine(InvicibleCo());
@@ -60,7 +62,7 @@ public class EnvObjectStat : Stat
     {
         _collider.enabled = false;
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.3f);
 
         _collider.enabled = true;
     }

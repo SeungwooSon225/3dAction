@@ -14,6 +14,8 @@ public class AStarManager
     public AStarPathfinding _pathfinding;
     public List<Node> _currentPath;
 
+    List<Node> _barrelList;
+
     public float CurrentCost { get; set; }
 
     Vector2Int[] directions = {
@@ -26,8 +28,10 @@ public class AStarManager
 
     public void Init()
     {
+        _barrelList = new List<Node>();
+
         InitializeGrid(60, 60);
-        _pathfinding = new AStarPathfinding(Grid);
+        _pathfinding = new AStarPathfinding(Grid);   
     }
 
     public Node FindPath(GameObject start, GameObject target)
@@ -116,6 +120,12 @@ public class AStarManager
                     //Managers.Resource.Instantiate("BlueCube").transform.position = new Vector3(x, 0f, z);
                 }
             }
+
+            if (child.name == "Barrel")
+            {
+                Grid[centerX, centerZ].NodeType = NodeType.Barrel;
+                _barrelList.Add(Grid[centerX, centerZ]);
+            }
         }
     }
 
@@ -150,5 +160,41 @@ public class AStarManager
             }
         }
 
+        if (obstacle.name == "Barrel")
+        {
+            _barrelList.Remove(Grid[centerX, centerZ]);
+        }
+    }
+
+    public void IncreaseWeight(Transform obstacle, int size)
+    {
+        int centerX = (int)obstacle.position.x;
+        int centerZ = (int)obstacle.position.z;
+        int lenghtX = (int)obstacle.localScale.x / 2;
+        int lenghtZ = (int)obstacle.localScale.z / 2;
+
+        for (int offsetX = -lenghtX - size; offsetX <= lenghtX + size; offsetX++)
+        {
+            for (int offsetZ = -lenghtZ - size; offsetZ <= lenghtZ + size; offsetZ++)
+            {
+                int x = centerX + offsetX;
+                int z = centerZ + offsetZ;
+               
+                Grid[x, z].ZoneWeight += 5f;              
+            }
+        }
+    }
+
+    public Node FindNearBarrel(Vector3 pos, float dis)
+    {
+        foreach (Node n in _barrelList)
+        {
+            if ((new Vector3(n.Position.x, 0f, n.Position.y) - pos).magnitude < dis && n.Object.GetComponent<BarrelStat>().Hp == 1)
+            {
+                return n;
+            }
+        }
+
+        return null;
     }
 }

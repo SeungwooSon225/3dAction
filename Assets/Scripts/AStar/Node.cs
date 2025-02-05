@@ -8,6 +8,7 @@ public enum NodeType
     None,
     Obstacle,
     RemovableObstacle,
+    Barrel,
 }
 
 public class Node

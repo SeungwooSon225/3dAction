@@ -19,6 +19,13 @@ public class BarrelStat : EnvObjectStat
 
     }
 
+    public override void OnAttacked(Attack attacker)
+    {
+        base.OnAttacked(attacker);
+
+        Managers.AStar.IncreaseWeight(transform, 1);
+    }
+
     protected override void OnDead(Attack attacker)
     {
         _map_Barrel.transform.parent = null;

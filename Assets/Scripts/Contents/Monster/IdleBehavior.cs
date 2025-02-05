@@ -33,6 +33,8 @@ public class IdleBehavior : IBehavior
         if(_isDie || _monsterAI.IsAttacking)
             return BehaviorState.Failure;
 
+        _animator.speed = 1f;
+
         if (_isDetect)
             return BehaviorState.Success;
 

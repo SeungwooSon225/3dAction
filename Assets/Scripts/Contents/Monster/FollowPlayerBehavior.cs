@@ -85,11 +85,13 @@ public class FollowPlayerBehavior : IBehavior
             float distance = direction.magnitude; 
             if (Physics.Raycast(_monster.position + Vector3.up * 0.5f, direction.normalized, out RaycastHit hit, distance))
             {
+                Node node = Managers.AStar.FindPath(_monster.gameObject, _player.gameObject);
+
                 // 장애물 있을 때
                 if (hit.collider.CompareTag("Obstacle") || hit.collider.CompareTag("RemovableObstacle"))
                 {
                     //Debug.Log($"Obstacle 발견");
-                    Node node = Managers.AStar.FindPath(_monster.gameObject, _player.gameObject);
+                    //Node node = Managers.AStar.FindPath(_monster.gameObject, _player.gameObject);
 
                     if (node == null)
                         return false;
@@ -117,13 +119,17 @@ public class FollowPlayerBehavior : IBehavior
                 else
                 {
                     _monsterStat.Target = _player;
-                    _moveDestination = _player.position;
+                    //_moveDestination = _player.position;
+                    _moveDestination = new Vector3(node.Position.x, 0, node.Position.y);
                 }
             }
         }
 
-        _monster.rotation = Quaternion.Slerp(_monster.rotation, Quaternion.LookRotation(new Vector3(_moveDestination.x, 0, _moveDestination.z) - _monster.position), 10f * Time.deltaTime);
-        _monster.position += _monster.forward * Time.deltaTime * _monsterStat.MoveSpeed;
+        //_monster.rotation = Quaternion.Slerp(_monster.rotation, Quaternion.LookRotation(new Vector3(_moveDestination.x, 0, _moveDestination.z) - _monster.position), 10f * Time.deltaTime);
+        //_monster.position += _monster.forward * Time.deltaTime * _monsterStat.MoveSpeed;
+
+        _monster.rotation = Quaternion.Slerp(_monster.rotation, Quaternion.LookRotation(_monsterStat.Target.position - _monster.position), 10f * Time.deltaTime);
+        _monster.position += (_moveDestination - _monster.position) * Time.deltaTime * _monsterStat.MoveSpeed;
 
         return false;
     }
