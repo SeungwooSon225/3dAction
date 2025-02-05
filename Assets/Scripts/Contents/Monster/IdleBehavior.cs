@@ -19,7 +19,7 @@ public class IdleBehavior : IBehavior
         _player = player;
         _animator = animator;
         _monsterAI = monsterAI;
-        _monsterStat = monsterStat;     
+        _monsterStat = monsterStat;
     }
 
     public BehaviorState Execute()
@@ -27,10 +27,10 @@ public class IdleBehavior : IBehavior
         if (!_isDie && _monsterStat.Hp == 0)
         {
             _isDie = true;
-            _animator.SetTrigger("Die");       
+            _animator.SetTrigger("Die");
         }
 
-        if(_isDie || _monsterAI.IsAttacking)
+        if (_isDie || _monsterAI.IsAttacking || _monsterAI.IsAttacked)
             return BehaviorState.Failure;
 
         _animator.speed = 1f;

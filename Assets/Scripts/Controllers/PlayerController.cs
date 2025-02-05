@@ -95,7 +95,7 @@ public class PlayerController : MonoBehaviour
 
     protected virtual void Skill()
     {
-        if (_playerStat.IsOnAttacked)
+        if (_playerStat.IsOnAttacked || _playerStat.IsDown)
             return;
 
         if (_animator.GetBool("IsAttacking") || _animator.GetBool("IsDodging"))
@@ -116,7 +116,7 @@ public class PlayerController : MonoBehaviour
 
     protected virtual void Moving()
     {
-        if (_playerStat.IsOnAttacked)
+        if (_playerStat.IsOnAttacked || _playerStat.IsDown)
             return;
 
         if (Input.GetKeyDown(KeyCode.F))

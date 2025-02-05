@@ -14,6 +14,7 @@ public class MonsterAI : MonoBehaviour
     public Attack LeftHandAttack;
 
     public bool IsAttacking;
+    public bool IsAttacked;
 
 
     void Start()
@@ -81,6 +82,11 @@ public class MonsterAI : MonoBehaviour
     private void EndAttack()
     {
         IsAttacking = false;
+    }
+
+    private void EndAttacked()
+    {
+        IsAttacked = false;
     }
 
     private void SummonSnowStorm()

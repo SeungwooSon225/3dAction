@@ -25,8 +25,14 @@ public class MonsterStat : Stat
     public float Gold { get { return _gold; } set { _gold = value; } }
 
 
+    Animator _animator;
+    MonsterAI _monsterAI;
+
     void Start()
     {
+        _animator = GetComponent<Animator>();
+        _monsterAI = GetComponent<MonsterAI>();
+
         // To do
         _hp = 200f;
         _maxHp = 200f;
@@ -48,5 +54,29 @@ public class MonsterStat : Stat
         AttackWeight.Add("CrystalGuardian@ShockwaveAttack", shockwaveAttack);
         Define.AttackWeight missile = new Define.AttackWeight(null, 0.5f);
         AttackWeight.Add("CrystalGuardian@Missile", missile);
+    }
+
+
+    public override void OnAttacked(Attack attacker)
+    {
+        float damage = Mathf.Max(0, attacker.Damage - Defense);
+
+        Hp -= damage;
+
+        if (Hp <= 0)
+        {
+            Hp = 0;
+            OnDead(attacker);
+
+            //IsAttackable = false;
+        }
+
+        if (attacker.AttackType == AttackType.Heavy)
+        {
+            _monsterAI.IsAttacked = true;
+            _monsterAI.IsAttacking = false;
+            _animator.SetTrigger("OnAttacked");
+            _animator.SetBool("Fly Forward", false);
+        }
     }
 }

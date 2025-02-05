@@ -28,6 +28,7 @@ public class SpecialAttackBehavor : IBehavior
         if (_monsterStat.Hp / _monsterStat.MaxHp < 0.7f && _excutedCount == 0)
         {
             Debug.Log("±Ã±Ø±â");
+            _monsterAI.IsAttacking = true;
             _excutedCount = 1;
             _animator.SetBool("SnowStorm", true);
 
@@ -37,6 +38,7 @@ public class SpecialAttackBehavor : IBehavior
         if (_monsterStat.Hp / _monsterStat.MaxHp < 0.3f && _excutedCount == 1)
         {
             Debug.Log("±Ã±Ø±â");
+            _monsterAI.IsAttacking = true;
             _excutedCount = 2;
             _animator.SetBool("SnowStorm", true);
 

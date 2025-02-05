@@ -39,6 +39,8 @@ public class PlayerStat : Stat
     public bool IsOnAttacked { get { return _isOnAttacked; } set { _isOnAttacked = value; } }
     public bool IsOnAttackResist { get { return _isOnAttackResist; } set { _isOnAttackResist = value; } }
 
+    bool _isDown;
+    public bool IsDown { get { return _isDown; } set { _isDown = value; } }
     Animator _animator;
 
     protected virtual void Init()
@@ -79,7 +81,7 @@ public class PlayerStat : Stat
 
     public override void OnAttacked(Attack attacker)
     {
-        if (_isDead) return;
+        if (_isDead || _isDown) return;
 
         float damage = Mathf.Max(0, attacker.Damage - Defense);
 
@@ -93,7 +95,7 @@ public class PlayerStat : Stat
             return;
         }
 
-        if (IsOnAttackResist || IsOnAttacked)
+        if (attacker.AttackType == AttackType.Basic && (IsOnAttackResist || IsOnAttacked))
             return;
 
         StartCoroutine(OnAttackedCo(attacker));
@@ -103,7 +105,14 @@ public class PlayerStat : Stat
     {
         IsOnAttacked = true;
 
-        _animator.SetTrigger("OnAttacked");
+        if (attacker.AttackType == AttackType.Basic)
+            _animator.SetTrigger("OnAttacked");
+        else
+        {
+            _isDown = true;
+            _animator.SetTrigger("OnAttackedHeavy");
+        }
+
         _animator.SetBool("IsAttacking", false);
         _animator.SetBool("IsDodging", false);
         _animator.ResetTrigger("LeftShortClick");
@@ -130,5 +139,10 @@ public class PlayerStat : Stat
     void SetOnAttackedResistFalse()
     {
         _isOnAttackResist = false;
+    }
+
+    void SetIsDownFalse()
+    {
+        _isDown = false;
     }
 }
