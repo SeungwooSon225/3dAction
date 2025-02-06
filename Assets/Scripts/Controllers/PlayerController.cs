@@ -177,13 +177,12 @@ public class PlayerController : MonoBehaviour
                 return;
             }
                 
-
             // 몬스터와 충돌 방지
             if ((Managers.Game.Monster.transform.position - transform.position).magnitude < 2.5f)
             {
                 Vector3 dir = transform.position - Managers.Game.Monster.transform.position;
-
                 transform.position += dir * Time.deltaTime * _playerStat.MoveSpeed;
+
                 return;
             }
 
@@ -208,21 +207,35 @@ public class PlayerController : MonoBehaviour
         Vector3 startPosition = transform.position;
         Vector3 targetPosition = startPosition + transform.forward * distance;
         float elapsedTime = 0f;
+        float speed = distance / duration;
 
         while (elapsedTime < duration)
         {
+            yield return null;
+
             elapsedTime += Time.deltaTime;
 
             float t = elapsedTime / duration; // 진행 비율 (0~1)
 
             // 위치 업데이트
-            if (!Physics.Raycast(transform.position + Vector3.up * 1.5f, transform.forward.normalized, out RaycastHit hit, 0.5f) ||
-                (!hit.collider.CompareTag("Obstacle") && !hit.collider.CompareTag("Monster")))
+
+            // 앞에 장애물이 있으면 못움직인다
+            if (Physics.Raycast(transform.position + Vector3.up * 1.5f, transform.forward.normalized, out RaycastHit hit, 0.5f) &&
+                hit.collider.CompareTag("Obstacle"))
             {
-                transform.position = Vector3.Slerp(startPosition, targetPosition, t);
+                Vector3 dir = transform.position - hit.transform.position;
+                targetPosition += dir * Time.deltaTime * speed;
             }
 
-            yield return null;
+            // 몬스터와 충돌 방지
+            if ((Managers.Game.Monster.transform.position - transform.position).magnitude < 2.5f)
+            {
+                Vector3 dir = transform.position - Managers.Game.Monster.transform.position;
+                targetPosition += dir * Time.deltaTime * speed;
+                //continue;
+            }
+
+            transform.position = Vector3.Slerp(startPosition, targetPosition, t);     
         }
     }
 
