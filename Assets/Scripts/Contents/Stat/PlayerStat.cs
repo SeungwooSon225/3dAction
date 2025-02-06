@@ -39,7 +39,7 @@ public class PlayerStat : Stat
     public bool IsOnAttacked { get { return _isOnAttacked; } set { _isOnAttacked = value; } }
     public bool IsOnAttackResist { get { return _isOnAttackResist; } set { _isOnAttackResist = value; } }
 
-    bool _isDown;
+    protected bool _isDown;
     public bool IsDown { get { return _isDown; } set { _isDown = value; } }
     Animator _animator;
 

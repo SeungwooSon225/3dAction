@@ -40,4 +40,10 @@ public class WarriorStat : PlayerStat
         //Debug.Log(AttackWeight["BasicComboOne"].Weight);
     }
 
+    public override void OnAttacked(Attack attacker)
+    {
+        DisenableAttack("BasicComboOne");
+
+        base.OnAttacked(attacker);
+    }
 }

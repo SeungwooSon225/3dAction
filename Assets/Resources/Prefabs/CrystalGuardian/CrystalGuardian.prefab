@@ -5462,6 +5462,7 @@ MonoBehaviour:
   RightHandAttack: {fileID: 8308337386496507559}
   LeftHandAttack: {fileID: 4980760896219234905}
   IsAttacking: 0
+  IsAttacked: 0
 --- !u!114 &3022807988118627101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5533,10 +5534,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.4
+  m_Radius: 0.7
   m_Height: 6
   m_Direction: 1
-  m_Center: {x: 0, y: -0.13, z: 0.0000000032301222}
+  m_Center: {x: 0, y: 0.45, z: 0.0000000032301222}
 --- !u!114 &7053749751919657597
 MonoBehaviour:
   m_ObjectHideFlags: 0

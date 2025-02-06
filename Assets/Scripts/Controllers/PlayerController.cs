@@ -35,8 +35,19 @@ public class PlayerController : MonoBehaviour
         if (_playerStat.IsDead)
             return;
 
-        Moving();
+        if (Input.GetKeyDown(KeyCode.F))
+            SetLockOnTarget();
+
         RecoverMpStamina();
+
+        if (_playerStat.IsOnAttacked || _playerStat.IsDown)
+            return;
+
+        Moving();
+
+        if (_animator.GetBool("IsAttacking") || _animator.GetBool("IsDodging"))
+            return;
+
         Skill();
     }
 
@@ -95,12 +106,6 @@ public class PlayerController : MonoBehaviour
 
     protected virtual void Skill()
     {
-        if (_playerStat.IsOnAttacked || _playerStat.IsDown)
-            return;
-
-        if (_animator.GetBool("IsAttacking") || _animator.GetBool("IsDodging"))
-            return;
-
         if (Input.GetKeyDown(KeyCode.E) && _playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["SkillE"] && !_uiStat.IsSkillECool)
         {
             _animator.SetTrigger("SkillE");
@@ -116,12 +121,6 @@ public class PlayerController : MonoBehaviour
 
     protected virtual void Moving()
     {
-        if (_playerStat.IsOnAttacked || _playerStat.IsDown)
-            return;
-
-        if (Input.GetKeyDown(KeyCode.F))
-            SetLockOnTarget();
-
         if (_isCanDodge && !_animator.GetBool("IsDodging") && Input.GetKeyDown(KeyCode.Space) && _playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["Dodge"])
         {
             _playerStat.StaminaMp -= _playerStat.StaminaMpConsumption["Dodge"];
@@ -167,16 +166,28 @@ public class PlayerController : MonoBehaviour
             _movementDir = (_movementDirX.normalized + _movementDirY.normalized).normalized;
 
             if (_animator.GetBool("IsAttacking"))
-                return;  
-
+                return;
 
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_movementDir), 20f * Time.deltaTime);
-              
-            if (!Physics.Raycast(transform.position + Vector3.up * 1.5f, transform.forward.normalized, out RaycastHit hit, 0.5f) ||
-                (!hit.collider.CompareTag("Obstacle") && !hit.collider.CompareTag("Monster")))
+
+            // 앞에 장애물이 있으면 못움직인다
+            if (Physics.Raycast(transform.position + Vector3.up * 1.5f, transform.forward.normalized, out RaycastHit hit, 0.5f) &&
+                hit.collider.CompareTag("Obstacle"))
             {
-                transform.position += _movementDir * Time.deltaTime * _playerStat.MoveSpeed;
+                return;
             }
+                
+
+            // 몬스터와 충돌 방지
+            if ((Managers.Game.Monster.transform.position - transform.position).magnitude < 2.5f)
+            {
+                Vector3 dir = transform.position - Managers.Game.Monster.transform.position;
+
+                transform.position += dir * Time.deltaTime * _playerStat.MoveSpeed;
+                return;
+            }
+
+            transform.position += _movementDir * Time.deltaTime * _playerStat.MoveSpeed; 
         }
         else 
         {
