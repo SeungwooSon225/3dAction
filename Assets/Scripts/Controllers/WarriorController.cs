@@ -7,8 +7,6 @@ public class WarriorController : PlayerController
     float _dashLength = 3.5f;
     float _dashDuration = 0.3f;
 
-
-
     //[SerializeField]
     //Attack _attack;
 

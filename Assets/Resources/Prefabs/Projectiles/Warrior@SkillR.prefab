@@ -53,6 +53,7 @@ MonoBehaviour:
   _lifeTime: 0
   _distance: 0
   _effect: {fileID: 0}
+  _explosionEffect: {fileID: 0}
 --- !u!114 &3076873939754071496
 MonoBehaviour:
   m_ObjectHideFlags: 0

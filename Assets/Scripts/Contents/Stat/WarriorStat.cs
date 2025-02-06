@@ -7,10 +7,6 @@ public class WarriorStat : PlayerStat
     [SerializeField]
     Attack _weapon;
 
-    void Start()
-    {
-        Init();
-    }
 
     protected override void Init()
     {
@@ -21,25 +17,10 @@ public class WarriorStat : PlayerStat
         SetAttackWeight();
     }
 
-    //protected override void SetStat(int level)
-    //{
-    //    Dictionary<int, Data.WarriorStat> dict = Managers.Data.WarriorStatDict;
-    //    Data.WarriorStat stat = dict[level];
-
-    //    _hp = stat.maxHp;
-    //    _maxHp = stat.maxHp;
-    //    _attack = stat.attack;
-    //    _defense = stat.defense;
-    //    _moveSpeed = stat.moveSpeed;
-    //    _staminaMp = stat.maxStaminaMP;
-    //    _maxStaminaMp = stat.maxStaminaMP;
-    //    _staminaMpRecoverySpeed = stat.staminaMpRecoverySpeed;
-    //}
 
     protected override void SetAttackWeight()
     {
-        Dictionary<int, Data.Stat> dict = Managers.Data.StatDict;
-        Data.Stat stat = dict[1];
+        Data.Stat stat = Managers.Data.StatDict[1];
 
         Define.AttackWeight basicComboOne = new Define.AttackWeight(_weapon, stat.basicComboOneWeight);
         AttackWeight.Add("BasicComboOne", basicComboOne);

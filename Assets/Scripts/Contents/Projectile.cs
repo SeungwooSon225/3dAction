@@ -24,6 +24,7 @@ public class Projectile : Attack
     public void Shoot(Stat stat)
     {
         Damage = stat.Attack * stat.AttackWeight[gameObject.name].Weight;
+        Debug.Log(stat.AttackWeight[gameObject.name].Weight + " " + gameObject.name);
         gameObject.GetComponent<Collider>().enabled = true;
         StartCoroutine(ShootCo(stat.gameObject.transform, stat.Target));
     }
@@ -102,9 +103,6 @@ public class Projectile : Attack
         transform.position = startPosition;
         transform.rotation = Quaternion.LookRotation(shooter.forward);
 
-        if (_explosionEffect != null)
-            _explosionEffect.Stop();
-
         if (_effect != null)
             _effect.Play();
 
@@ -153,19 +151,30 @@ public class Projectile : Attack
     {
         yield return new WaitForSeconds(_lifeTime);
 
+        if (_explosionEffect != null)
+        {
+            _explosionEffect.transform.localPosition = Vector3.up * 100f;
+        }
+
         Managers.Resource.Destroy(gameObject);
     }
 
     protected override void AttackOnTriggerEnter(Collider other)
     {
+        if (other.tag == "Player" && IsPlayer) return;
+        if (other.tag == "Monster" && !IsPlayer) return;
+
         if (!_isHeavy)
         {
             StopAllCoroutines();
 
+            _effect.Stop();
             gameObject.GetComponent<Collider>().enabled = false;
 
             if (_explosionEffect != null)
             {
+                //_explosionEffect.Stop();
+                _explosionEffect.transform.localPosition = Vector3.zero;
                 _explosionEffect.Play();
             }
 
@@ -176,6 +185,11 @@ public class Projectile : Attack
         }
 
 
-        base.AttackOnTriggerEnter(other);
+        //Debug.Log(other.name);
+        Stat stat = other.GetComponent<Stat>();
+
+        if (stat == null) return;
+
+        stat.OnAttacked(this);
     }
 }

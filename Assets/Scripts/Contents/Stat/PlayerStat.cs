@@ -43,6 +43,13 @@ public class PlayerStat : Stat
     public bool IsDown { get { return _isDown; } set { _isDown = value; } }
     Animator _animator;
 
+
+    void Start()
+    {
+        Init();
+    }
+
+
     protected virtual void Init()
     {
         Managers.Data.InitPlayerStat(_playerClass);

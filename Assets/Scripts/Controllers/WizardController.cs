@@ -21,6 +21,7 @@ public class WizardController : PlayerController
     bool _isStop = false;
 
 
+
     protected override void Init()
     {
         base.Init();
@@ -29,10 +30,7 @@ public class WizardController : PlayerController
         if (skillR != null)
         {
             _effects.Add("SkillR", skillR.GetComponent<ParticleSystem>());
-            wizardSkillR = skillR.GetComponent<Collider>();
-
-            // Todo
-            skillR.GetComponent<Attack>().Damage = 20f;
+            wizardSkillR = skillR.GetComponent<Collider>(); 
         }
 
         _uiStat = Managers.UI.ShowUI<UI_Stat>("UI_WizardStat");
@@ -128,6 +126,7 @@ public class WizardController : PlayerController
 
     private void SkillR()
     {
+        wizardSkillR.GetComponent<Attack>().Damage = _playerStat.Attack * _playerStat.AttackWeight["Wizard@SkillR"].Weight;
         _effects["SkillR"].Play();
     }
 
@@ -135,7 +134,7 @@ public class WizardController : PlayerController
     {
         wizardSkillR.enabled = true;
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
 
         wizardSkillR.enabled = false;
     }

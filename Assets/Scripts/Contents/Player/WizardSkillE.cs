@@ -24,7 +24,7 @@ public class WizardSkillE : MonoBehaviour
     public void Shoot(Stat stat)
     {
         Transform shooter = stat.transform;
-        _attack.Damage = stat.Attack * stat.AttackWeight[gameObject.name].Weight;
+        _attack.Damage = stat.Attack * stat.AttackWeight["Wizard@SkillE"].Weight;
 
         //attack.IsActive = true;
         gameObject.GetComponent<Collider>().enabled = true;
