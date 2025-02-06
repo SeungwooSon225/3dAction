@@ -24,6 +24,8 @@ public class IdleBehavior : IBehavior
 
     public BehaviorState Execute()
     {
+        Debug.Log("Idle");
+
         if (!_isDie && _monsterStat.Hp == 0)
         {
             _isDie = true;
@@ -38,15 +40,14 @@ public class IdleBehavior : IBehavior
         if (_isDetect)
             return BehaviorState.Success;
 
-        if (Vector3.Distance(_monster.position, _player.position) < _monsterStat.DetectRange)
+        if (Vector3.Distance(_monster.position, _player.position) < _monsterStat.DetectRange ||
+            _monsterStat.Hp < _monsterStat.MaxHp - 0.1f)
         {
             Debug.Log("플레이어 탐지!");
+
             _monsterStat.Target = _player;
             _isDetect = true;
-
-            UI_MonsterStat ui = Managers.UI.ShowUI<UI_MonsterStat>();
-            ui.SetName(_monster.name);
-            ui.MonsterStat = _monsterStat;
+            _monsterAI.MonsterUI.gameObject.SetActive(true);
 
             return BehaviorState.Success;
         }

@@ -24,7 +24,7 @@ public class Projectile : Attack
     public void Shoot(Stat stat)
     {
         Damage = stat.Attack * stat.AttackWeight[gameObject.name].Weight;
-        Debug.Log(stat.AttackWeight[gameObject.name].Weight + " " + gameObject.name);
+        //Debug.Log(stat.AttackWeight[gameObject.name].Weight + " " + gameObject.name);
         gameObject.GetComponent<Collider>().enabled = true;
         StartCoroutine(ShootCo(stat.gameObject.transform, stat.Target));
     }

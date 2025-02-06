@@ -16,6 +16,7 @@ public class MonsterAI : MonoBehaviour
     public bool IsAttacking;
     public bool IsAttacked;
 
+    public UI_MonsterStat MonsterUI;
 
     void Start()
     {    
@@ -25,10 +26,16 @@ public class MonsterAI : MonoBehaviour
     private void Init()
     {
         Debug.Log("Monster Init");
+
         _player = Managers.Game.Player.transform;
 
         _animator = gameObject.GetComponent<Animator>();
         _monsterStat = gameObject.GetComponent<MonsterStat>();
+
+        MonsterUI = Managers.UI.ShowUI<UI_MonsterStat>();
+        MonsterUI.SetName(gameObject.name);
+        MonsterUI.MonsterStat = _monsterStat;
+        MonsterUI.gameObject.SetActive(false);
 
         List<IBehavior> IBehaviorTreeList = new List<IBehavior>();
 

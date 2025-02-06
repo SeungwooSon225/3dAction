@@ -358,7 +358,7 @@ public class PlayerController : MonoBehaviour
 
     private void ShootProjectile(string name)
     {
-        Debug.Log("Shoot " + name);
+        //Debug.Log("Shoot " + name);
         GameObject projectile = Managers.Resource.Instantiate($"Projectiles/{name}");
         projectile.GetComponent<Projectile>().Shoot(_playerStat);
     }
