@@ -22,7 +22,9 @@ public class UI_Stat : MonoBehaviour
     Image _lockOnIcon;
 
     [SerializeField]
-    Stat _stat;
+    TMPro.TMP_Text _goldText;
+
+    
     Canvas _canvas;
     Transform _lockOnPoint;
 
@@ -31,18 +33,19 @@ public class UI_Stat : MonoBehaviour
         switch (Managers.Game.PlayerCalss)
         {
             case Define.PlayerClass.Wizard:
-                _stat = Managers.Game.Player.GetComponent<WizardStat>();
+                PlayerStat = Managers.Game.Player.GetComponent<WizardStat>();
                 break;
             case Define.PlayerClass.Warrior:
-                _stat = Managers.Game.Player.GetComponent<WarriorStat>();
+                PlayerStat = Managers.Game.Player.GetComponent<WarriorStat>();
                 break;
         }
         
         _canvas = GetComponent<Canvas>();
+        _goldText.text = PlayerStat.Gold.ToString();
     }
 
     void Update()
-    {
+    {        
         SetHPBar();
         SetAbilityBar();
         SetLockOnIcon();
@@ -50,13 +53,13 @@ public class UI_Stat : MonoBehaviour
 
     public void SetLockOnIcon()
     {
-        if (_stat.Target != null)
+        if (PlayerStat.Target != null)
         {
             if (!_lockOnIcon.enabled)
             {
                 _lockOnIcon.enabled = true;
 
-                _lockOnPoint = Util.FindDeepChild(_stat.Target, "LockOnPoint");
+                _lockOnPoint = Util.FindDeepChild(PlayerStat.Target, "LockOnPoint");
             }
 
             Vector3 screenPos = Camera.main.WorldToScreenPoint(_lockOnPoint.position);
@@ -66,7 +69,7 @@ public class UI_Stat : MonoBehaviour
 
             _lockOnIcon.rectTransform.localPosition = uiPosition;
         }
-        else if (_stat.Target == null && _lockOnIcon.enabled)
+        else if (PlayerStat.Target == null && _lockOnIcon.enabled)
         {
             _lockOnIcon.enabled = false;
         }
@@ -120,5 +123,31 @@ public class UI_Stat : MonoBehaviour
 
         IsSkillRCool = false;
         _skillRIcon.fillAmount = 1f;
+    }
+
+    public void UpdateGold()
+    {
+        //_goldText.text = PlayerStat.Gold.ToString();
+
+        StartCoroutine(UpdateGoldCo());
+    }
+
+    IEnumerator UpdateGoldCo()
+    {
+        int currentGold = int.Parse(_goldText.text);
+        int newGold = PlayerStat.Gold;
+
+        int addGold = (newGold - currentGold) / 100;
+
+        do
+        {
+            currentGold += addGold;
+            _goldText.text = currentGold.ToString();
+            yield return new WaitForSeconds(0.01f);
+        }
+        while (currentGold < newGold);
+
+        currentGold = newGold;
+        _goldText.text = currentGold.ToString();
     }
 }

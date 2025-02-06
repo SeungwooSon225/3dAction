@@ -15,14 +15,14 @@ public class MonsterStat : Stat
     [SerializeField]
     protected float _escapeThreshold;
     [SerializeField]
-    protected float _gold;
+    protected int _dropGold;
 
     public float DetectRange { get { return _detectRange; } set { _detectRange = value; } }
     public float StopDistance { get { return _stopDistance; } set { _stopDistance = value; } }
     public float AttackRange { get { return _attackRange; } set { _attackRange = value; } }
     public float AttackCoolTime { get { return _attackCoolTime; } set { _attackCoolTime = value; } }
     public float EscapeThreshold { get { return _escapeThreshold; } set { _escapeThreshold = value; } }
-    public float Gold { get { return _gold; } set { _gold = value; } }
+    public int DropGold { get { return _dropGold; } set { _dropGold = value; } }
 
 
     Animator _animator;
@@ -34,11 +34,12 @@ public class MonsterStat : Stat
         _monsterAI = GetComponent<MonsterAI>();
 
         // To do
-        _hp = 200f;
-        _maxHp = 200f;
+        _hp = 20f;
+        _maxHp = 20f;
         _attack = 10f;
         _defense = 0f;
         _moveSpeed = 2f;
+        _dropGold = 100000;
         //_isAttackable = true;
 
         _detectRange = 10f;
@@ -78,5 +79,10 @@ public class MonsterStat : Stat
             _animator.SetTrigger("OnAttacked");
             _animator.SetBool("Fly Forward", false);
         }
+    }
+
+    protected override void OnDead(Attack attacker)
+    {
+        Managers.Game.Player.GetComponent<PlayerStat>().Gold += _dropGold;
     }
 }

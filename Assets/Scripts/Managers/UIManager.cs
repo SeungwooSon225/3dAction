@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class UIManager
 {
+    public UI_Stat UI_PlayerStat;
+
     public GameObject Root
     {
         get 
@@ -34,6 +36,12 @@ public class UIManager
 
         T ui = Util.GetOrAddCompoenet<T>(go);
         go.transform.SetParent(Root.transform);
+
+        if (ui.GetType() == typeof(UI_Stat))
+        {
+            Debug.Log("odasfd");
+            UI_PlayerStat = ui as UI_Stat;
+        }
 
         return ui;
     }

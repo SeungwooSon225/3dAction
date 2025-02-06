@@ -16,7 +16,6 @@ public class PlayerStat : Stat
     [SerializeField]
     protected float _staminaMpRecoverySpeed;
 
-    protected int _exp;
     protected int _gold;
 
     [SerializeField]
@@ -33,8 +32,13 @@ public class PlayerStat : Stat
     public float MaxStaminaMp { get { return _maxStaminaMp; } set { _maxStaminaMp = value; } }
     public float StaminaMpRecoverySpeed { get { return _staminaMpRecoverySpeed; } set { _staminaMpRecoverySpeed = value; } }
 
-    public int Exp { get { return _exp; } set { _hp = value; } }
-    public int Gold { get { return _gold; } set { _hp = value; } }
+    public int Gold { get { return _gold; } 
+        set 
+        { 
+            _gold = value;
+            Managers.UI.UI_PlayerStat.UpdateGold();
+        } 
+    }
 
     public bool IsOnAttacked { get { return _isOnAttacked; } set { _isOnAttacked = value; } }
     public bool IsOnAttackResist { get { return _isOnAttackResist; } set { _isOnAttackResist = value; } }
@@ -60,6 +64,8 @@ public class PlayerStat : Stat
         _animator = gameObject.GetComponent<Animator>();
 
         _isOnAttackResist = false;
+
+        _gold = 100;
 
         SetStat(1);
     }
