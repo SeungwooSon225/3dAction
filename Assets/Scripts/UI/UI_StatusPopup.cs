@@ -15,9 +15,11 @@ public class UI_StatusPopup : UI_Base
         Defense,
     }
 
-    #region Buttons
+    #region UIs
     [SerializeField]
     TMPro.TMP_Text _levelText;
+    [SerializeField]
+    TMPro.TMP_Text _goldText;
     [SerializeField]
     TMPro.TMP_Text _costText;
 
@@ -48,8 +50,14 @@ public class UI_StatusPopup : UI_Base
     GameObject _defenseDecreaseButton;
     [SerializeField]
     GameObject _defenseIncreaseButton;
-    #endregion
 
+    [SerializeField]
+    GameObject _closeButton;
+    [SerializeField]
+    GameObject _acceptButton;
+    [SerializeField]
+    Image _acceptButtonImage;
+    #endregion
 
     int _cost = 0;
     int _hpChange = 5;
@@ -59,6 +67,11 @@ public class UI_StatusPopup : UI_Base
 
     public override void Init()
     {
+        GetStat();
+
+        BindEvent(_closeButton, OnCloseButtonClicked, Define.UIEvent.Click);
+        BindEvent(_acceptButton, OnAcceptButtonClicked, Define.UIEvent.Click);
+
         BindEvent(_hpDecreaseButton, OnHpDecreaseButtonClicked, Define.UIEvent.Click);
         BindEvent(_hpIncreaseButton, OnHpIncreaseButtonClicked, Define.UIEvent.Click);
 
@@ -72,6 +85,62 @@ public class UI_StatusPopup : UI_Base
         BindEvent(_defenseIncreaseButton, OnDefenseIncreaseButtonClicked, Define.UIEvent.Click);
     }
 
+    public void GetStat()
+    {
+        _levelText.text = ((int)Managers.Game.PlayerStat.Level).ToString();
+        _goldText.text = ((int)Managers.Game.PlayerStat.Gold).ToString();
+        _hpText.text = ((int)Managers.Game.PlayerStat.MaxHp).ToString();
+        _staminaMpText.text = ((int)Managers.Game.PlayerStat.MaxStaminaMp).ToString();
+        _attackText.text = ((int)Managers.Game.PlayerStat.Attack).ToString();
+        _defenseText.text = ((int)Managers.Game.PlayerStat.Defense).ToString();
+    }
+
+    void OnCloseButtonClicked(PointerEventData data)
+    {
+        Managers.UI.HideStatusPopup();
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    void OnAcceptButtonClicked(PointerEventData data)
+    {
+        if (_cost > Managers.Game.PlayerStat.Gold || _cost == 0)
+            return;
+
+        StartCoroutine(OnAcceptButtonClickedCo());
+
+        int gold = int.Parse(_goldText.text) - _cost;
+        _goldText.text = gold.ToString();
+
+        _cost = 0;
+        _costText.text = "0";
+
+        _levelText.color = Color.white;
+        _costText.color = Color.white;
+        _hpText.color = Color.white;
+        _staminaMpText.color = Color.white;
+        _attackText.color = Color.white;
+        _defenseText.color = Color.white;
+
+        Managers.Game.PlayerStat.Level = int.Parse(_levelText.text);
+        Managers.Game.PlayerStat.Gold = int.Parse(_goldText.text);
+        Managers.Game.PlayerStat.MaxHp = int.Parse(_hpText.text);
+        Managers.Game.PlayerStat.Hp = int.Parse(_hpText.text);
+        Managers.Game.PlayerStat.MaxStaminaMp = int.Parse(_staminaMpText.text);
+        Managers.Game.PlayerStat.StaminaMp = int.Parse(_staminaMpText.text);
+        Managers.Game.PlayerStat.Attack = int.Parse(_attackText.text);
+        Managers.Game.PlayerStat.Defense = int.Parse(_defenseText.text);
+    }
+
+    IEnumerator OnAcceptButtonClickedCo()
+    {
+        _acceptButtonImage.color -= new Color(0.1f, 0.1f, 0.1f);
+
+        yield return new WaitForSeconds(0.1f);
+
+        _acceptButtonImage.color += new Color(0.1f, 0.1f, 0.1f);
+    }
+
+
     int DecreaseLevel()
     {
         int currentLevel = int.Parse(_levelText.text);
@@ -82,6 +151,7 @@ public class UI_StatusPopup : UI_Base
 
         return newLevel;
     }
+
     void UpdateLevel(int newLevel)
     {
         _levelText.text = newLevel.ToString();
@@ -203,7 +273,6 @@ public class UI_StatusPopup : UI_Base
         statText.text = newStat.ToString();
         statText.color = Color.blue;
     }
-
 
     void OnHpDecreaseButtonClicked(PointerEventData data)
     {

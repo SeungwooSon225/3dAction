@@ -14,16 +14,8 @@ public class InputManager
 
     public void OnUpdate()
     {
-        //if (EventSystem.current.IsPointerOverGameObject())
-        //    return;
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if(Cursor.lockState == CursorLockMode.Locked)
-                Cursor.lockState = CursorLockMode.None;
-            else
-                Cursor.lockState = CursorLockMode.Locked;
-        }
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
 
         if (MouseAction != null)
         {

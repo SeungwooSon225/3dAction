@@ -17,6 +17,23 @@ public class GameManager
 
     public GameObject Monster { get { return _monster; } }
 
+    public void OnUpdate()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (Cursor.lockState == CursorLockMode.Locked)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Managers.UI.ShowStatusPopup();
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Managers.UI.HideStatusPopup();
+            }
+        }
+    }
+
     public GameObject Spawn(Define.WorldObject type, string path, Transform parent = null)
     {
         GameObject go = Managers.Resource.Instantiate(path, parent);
@@ -37,5 +54,7 @@ public class GameManager
     public void Init()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        Managers.UI.InstantiateStatusPopupUI();
+        Managers.UI.HideStatusPopup();
     }
 }
