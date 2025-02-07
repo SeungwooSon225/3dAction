@@ -34,8 +34,8 @@ public class MonsterStat : Stat
         _monsterAI = GetComponent<MonsterAI>();
 
         // To do
-        _hp = 20f;
-        _maxHp = 20f;
+        _hp = 50f;
+        _maxHp = 50f;
         _attack = 10f;
         _defense = 0f;
         _moveSpeed = 2f;
