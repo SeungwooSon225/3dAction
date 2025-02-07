@@ -7,10 +7,29 @@ public class GameScene : BaseScene
     [SerializeField]
     Define.PlayerClass _playerClass;
 
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (Cursor.lockState == CursorLockMode.Locked)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Managers.UI.ShowStatusPopup();
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Managers.UI.HideStatusPopup();
+            }
+        }
+    }
+
+
     protected override void Init()
     {
         base.Init();
 
+        Cursor.lockState = CursorLockMode.Locked;
         GameObject player = Managers.Game.Spawn(Define.WorldObject.Player, _playerClass.ToString());
         Managers.Game.PlayerCalss = _playerClass;
         Managers.Game.PlayerStat = player.GetComponent<PlayerStat>();
@@ -20,6 +39,8 @@ public class GameScene : BaseScene
 
         GameObject monster = Managers.Game.Spawn(Define.WorldObject.Monster, "CrystalGuardian/CrystalGuardian");
         monster.transform.position = new Vector3(31f, 0f, 43f);
+
+        Managers.UI.InstantiateStatusPopupUI(_playerClass);
     }
 
     public override void Clear()

@@ -29,9 +29,10 @@ public class UIManager
 
     UI_StatusPopup StatusPopupUI;
 
-    public void InstantiateStatusPopupUI()
+    public void InstantiateStatusPopupUI(Define.PlayerClass playerCalss)
     {
-        StatusPopupUI = Managers.Resource.Instantiate($"UI/UI_StatusPopup").GetComponent<UI_StatusPopup>();
+        StatusPopupUI = Managers.Resource.Instantiate($"UI/UI_StatusPopup{playerCalss.ToString()}").GetComponent<UI_StatusPopup>();
+        HideStatusPopup();
     }
 
     public void ShowStatusPopup()
