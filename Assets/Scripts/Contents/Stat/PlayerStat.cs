@@ -10,6 +10,9 @@ public class PlayerStat : Stat
     protected Define.PlayerClass _playerClass;
 
     [SerializeField]
+    protected int _level;
+
+    [SerializeField]
     protected float _staminaMp;
     [SerializeField]
     protected float _maxStaminaMp;
@@ -28,6 +31,7 @@ public class PlayerStat : Stat
 
     public Define.PlayerClass PlayerClass { get { return _playerClass; } set { _playerClass = value; } }
 
+    public int Level { get { return _level; } set { _level = value; } }
     public float StaminaMp { get { return _staminaMp; } set { _staminaMp = value; } }
     public float MaxStaminaMp { get { return _maxStaminaMp; } set { _maxStaminaMp = value; } }
     public float StaminaMpRecoverySpeed { get { return _staminaMpRecoverySpeed; } set { _staminaMpRecoverySpeed = value; } }
@@ -65,7 +69,7 @@ public class PlayerStat : Stat
 
         _isOnAttackResist = false;
 
-        _gold = 100;
+        _gold = 1000;
 
         SetStat(1);
     }
@@ -73,6 +77,8 @@ public class PlayerStat : Stat
 
     public void SetStat(int level)
     {
+        _level = level;
+
         Data.Stat stat = Managers.Data.StatDict[level];
 
         _hp = stat.maxHp;

@@ -24,10 +24,6 @@ public class CameraController : MonoBehaviour
 
     public Vector3 CameraDir { get; private set; }
 
-    void Start()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-    }
 
     private void Update()
     {

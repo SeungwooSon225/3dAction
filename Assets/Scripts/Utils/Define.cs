@@ -25,6 +25,12 @@ public class Define
         LeftClickUp,
     }
 
+    public enum UIEvent
+    {
+        Click,
+        Drag,
+    }
+
     public class AttackWeight
     { 
         public Attack Attack { get; set; }

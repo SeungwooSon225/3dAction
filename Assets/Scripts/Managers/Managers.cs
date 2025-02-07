@@ -53,6 +53,7 @@ public class Managers : MonoBehaviour
             s_instance._data.Init();
             s_instance._aStar.Init();
             s_instance._pool.Init();
+            s_instance._game.Init();
         }
     }
 }

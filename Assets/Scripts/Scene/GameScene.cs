@@ -13,6 +13,8 @@ public class GameScene : BaseScene
 
         GameObject player = Managers.Game.Spawn(Define.WorldObject.Player, _playerClass.ToString());
         Managers.Game.PlayerCalss = _playerClass;
+        Managers.Game.PlayerStat = player.GetComponent<PlayerStat>();
+
         Camera.main.gameObject.GetOrAddCompoenet<CameraController>().SetPlayer(player);
         player.transform.position = new Vector3(39f, 0f, 26f);
 

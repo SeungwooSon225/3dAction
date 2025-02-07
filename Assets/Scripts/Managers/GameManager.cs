@@ -13,6 +13,8 @@ public class GameManager
     public Action<int> OnSpawnEvent;
 
     public GameObject Player { get { return _player; } }
+    public PlayerStat PlayerStat { get; set; }
+
     public GameObject Monster { get { return _monster; } }
 
     public GameObject Spawn(Define.WorldObject type, string path, Transform parent = null)
@@ -30,5 +32,10 @@ public class GameManager
         }
 
         return go;
+    }
+
+    public void Init()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
     }
 }
