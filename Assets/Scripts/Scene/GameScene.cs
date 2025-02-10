@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class GameScene : BaseScene
 {
-    [SerializeField]
-    Define.PlayerClass _playerClass;
+    //[SerializeField]
+    //Define.PlayerClass _playerClass;
+
+    public AStarManager AStar;
 
     public void Update()
     {
@@ -29,9 +31,10 @@ public class GameScene : BaseScene
     {
         base.Init();
 
+        Managers.AStar.Init();
+
         Cursor.lockState = CursorLockMode.Locked;
-        GameObject player = Managers.Game.Spawn(Define.WorldObject.Player, _playerClass.ToString());
-        Managers.Game.PlayerCalss = _playerClass;
+        GameObject player = Managers.Game.Spawn(Define.WorldObject.Player, Managers.Game.PlayerClass.ToString());
         Managers.Game.PlayerStat = player.GetComponent<PlayerStat>();
 
         Camera.main.gameObject.GetOrAddCompoenet<CameraController>().SetPlayer(player);
@@ -40,7 +43,7 @@ public class GameScene : BaseScene
         GameObject monster = Managers.Game.Spawn(Define.WorldObject.Monster, "CrystalGuardian/CrystalGuardian");
         monster.transform.position = new Vector3(31f, 0f, 43f);
 
-        Managers.UI.InstantiateStatusPopupUI(_playerClass);
+        Managers.UI.InstantiateStatusPopupUI(Managers.Game.PlayerClass);
     }
 
     public override void Clear()

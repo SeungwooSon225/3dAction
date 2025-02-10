@@ -15,6 +15,7 @@ public class Managers : MonoBehaviour
     ResourceManager _resource = new ResourceManager();
     AStarManager _aStar = new AStarManager();
     UIManager _ui = new UIManager();
+    SceneManagerEx _scene = new SceneManagerEx();
 
     public static GameManager Game { get { return Instance._game; } }
     public static DataManager Data { get { return Instance._data; } }
@@ -23,7 +24,7 @@ public class Managers : MonoBehaviour
     public static ResourceManager Resource { get { return Instance._resource; } }
     public static AStarManager AStar { get { return Instance._aStar; } }
     public static UIManager UI { get { return Instance._ui; } }
-
+    public static SceneManagerEx Scene { get { return Instance._scene; } }
 
     void Start()
     {
@@ -51,7 +52,7 @@ public class Managers : MonoBehaviour
             s_instance = managers.GetComponent<Managers>();
 
             s_instance._data.Init();
-            s_instance._aStar.Init();
+            //s_instance._aStar.Init();
             s_instance._pool.Init();
         }
     }

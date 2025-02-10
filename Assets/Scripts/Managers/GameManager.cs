@@ -8,7 +8,7 @@ public class GameManager
     GameObject _player;
     GameObject _monster;
 
-    public Define.PlayerClass PlayerCalss { get; set; }
+    public Define.PlayerClass PlayerClass { get; set; }
 
     public Action<int> OnSpawnEvent;
 

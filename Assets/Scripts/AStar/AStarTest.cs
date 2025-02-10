@@ -21,12 +21,6 @@ public class AStarTest : MonoBehaviour
             new Vector2Int(1, -1), new Vector2Int(-1, 1),   // ´ë°¢¼±
         };
 
-    void Start()
-    {
- 
-    }
-
-
     public Node FindPath(GameObject start, GameObject target)
     {
         _pathfinding.ResetGrid(Grid);
@@ -34,8 +28,6 @@ public class AStarTest : MonoBehaviour
                                              new Vector2Int((int)target.transform.position.x, (int)target.transform.position.z));
 
         if (_currentPath == null) return null;
-
-        
 
         return _currentPath[0];
     }

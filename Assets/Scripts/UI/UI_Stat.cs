@@ -30,7 +30,7 @@ public class UI_Stat : MonoBehaviour
 
     private void Start()
     {
-        switch (Managers.Game.PlayerCalss)
+        switch (Managers.Game.PlayerClass)
         {
             case Define.PlayerClass.Wizard:
                 PlayerStat = Managers.Game.Player.GetComponent<WizardStat>();
