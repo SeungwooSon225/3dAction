@@ -18,7 +18,7 @@ public class UI_Lobby : UI_Base
     [SerializeField]
     GameObject _wizardImage;
     [SerializeField]
-    GameObject _gameStartButton;
+    GameObject _decideButton;
 
     [SerializeField]
     TMPro.TMP_Text _loadingText;
@@ -32,7 +32,7 @@ public class UI_Lobby : UI_Base
     {
         BindEvent(_warriorImage, OnWarriorIamgeClicked, Define.UIEvent.Click);
         BindEvent(_wizardImage, OnWizardIamgeClicked, Define.UIEvent.Click);
-        BindEvent(_gameStartButton, OnGameStartButtonClicked, Define.UIEvent.Click);
+        BindEvent(_decideButton, OnGameStartButtonClicked, Define.UIEvent.Click);
     }
 
     void OnWarriorIamgeClicked(PointerEventData data)
@@ -69,7 +69,7 @@ public class UI_Lobby : UI_Base
             StartCoroutine(BlinkNoticeTextCo());
             return;
         }
-        _gameStartButton.GetComponent<Image>().color = Color.gray;
+        _decideButton.GetComponent<Image>().color = Color.gray;
 
         StartCoroutine(LoadSceneCo());
         //Managers.Scene.LoadScene(Define.Scene.GameScene);

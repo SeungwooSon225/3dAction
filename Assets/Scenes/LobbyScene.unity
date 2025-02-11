@@ -379,7 +379,7 @@ MonoBehaviour:
   _noticeText: {fileID: 877512724}
   _warriorImage: {fileID: 1428823992}
   _wizardImage: {fileID: 1829608366}
-  _gameStartButton: {fileID: 643300687}
+  _decideButton: {fileID: 643300687}
   _loadingText: {fileID: 1968464375}
   _loadingBar: {fileID: 1218045449}
 --- !u!1 &406901719
@@ -685,7 +685,7 @@ GameObject:
   - component: {fileID: 643300690}
   - component: {fileID: 643300689}
   m_Layer: 5
-  m_Name: Button_GameStart
+  m_Name: Button_Decide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -709,7 +709,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -442}
-  m_SizeDelta: {x: 250, y: 110}
+  m_SizeDelta: {x: 200, y: 110}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &643300689
 MonoBehaviour:
@@ -1384,7 +1384,7 @@ GameObject:
   - component: {fileID: 1599722323}
   - component: {fileID: 1599722322}
   m_Layer: 5
-  m_Name: Text (TMP) (1)
+  m_Name: Text_Decide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1429,7 +1429,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uAC8C\uC784 \uC2DC\uC791"
+  m_text: "\uACB0 \uC815"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4a0b76a986c43a54db40451475214f3f, type: 2}
   m_sharedMaterial: {fileID: 243512727154690508, guid: 4a0b76a986c43a54db40451475214f3f, type: 2}
@@ -1820,6 +1820,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1968464373}
   m_CullTransparentMesh: 1
+--- !u!1 &2010764348
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2010764349}
+  - component: {fileID: 2010764350}
+  m_Layer: 0
+  m_Name: '@Scene'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2010764349
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2010764348}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 898.0844, y: 536.60156, z: -14.425747}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2010764350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2010764348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b20aa6a6c3e819447817038c931cd59e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2095451869
 GameObject:
   m_ObjectHideFlags: 0
@@ -1899,6 +1943,7 @@ CanvasRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 2010764349}
   - {fileID: 983937542}
   - {fileID: 406901721}
   - {fileID: 1674646272}

@@ -45,6 +45,8 @@ public class IdleBehavior : IBehavior
         {
             Debug.Log("플레이어 탐지!");
 
+            Managers.BGM.Play("Monster");
+
             _monsterStat.Target = _player;
             _isDetect = true;
             _monsterAI.MonsterUI.gameObject.SetActive(true);

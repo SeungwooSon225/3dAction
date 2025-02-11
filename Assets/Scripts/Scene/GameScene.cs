@@ -31,6 +31,8 @@ public class GameScene : BaseScene
     {
         base.Init();
 
+        Managers.BGM.Play("Game");
+
         Managers.AStar.Init();
 
         Cursor.lockState = CursorLockMode.Locked;
@@ -44,6 +46,8 @@ public class GameScene : BaseScene
         monster.transform.position = new Vector3(31f, 0f, 43f);
 
         Managers.UI.InstantiateStatusPopupUI(Managers.Game.PlayerClass);
+
+        
     }
 
     public override void Clear()
