@@ -42,7 +42,7 @@ public class WizardController : PlayerController
     protected override void OnDodgeEvent()
     {
         ResetClickTriggers();
-
+        _playerStat.SetOnAttackedResistFalse();
         transform.rotation = Quaternion.LookRotation(_movementDir);
 
         if (_chargeCo != null)

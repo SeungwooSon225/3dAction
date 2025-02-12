@@ -25,10 +25,11 @@ public class Attack : MonoBehaviour
     {
         //Debug.Log(other.name);
         //if (!IsActive || (other.tag == "Player" && IsPlayer)) return;
+        if (other.GetComponent<Attack>() != null) return;
         if (other.tag == "Player" && _isPlayer) return;
         if (other.tag == "Monster" && !_isPlayer) return;
 
-        //Debug.Log(other.name);
+        Debug.Log(other.name + " " +gameObject.name);
         Stat stat = other.GetComponent<Stat>();
 
         if (stat == null) return;

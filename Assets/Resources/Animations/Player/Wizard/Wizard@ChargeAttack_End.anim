@@ -75138,8 +75138,15 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.2333333
+  - time: 1.2
     functionName: ResetClickTriggers
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 1.2333333
+    functionName: SetOnAttackedResistFalse
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -75147,13 +75154,6 @@ AnimationClip:
     messageOptions: 0
   - time: 1.3666667
     functionName: SetIsAttacking
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 1.4
-    functionName: SetOnAttackedResistFalse
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

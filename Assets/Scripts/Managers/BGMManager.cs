@@ -34,8 +34,6 @@ public class BGMManager : MonoBehaviour
         _audioSources.pitch = pitch;
         _audioSources.clip = audioClip;
         _audioSources.Play();
-
-        
     }
 
 

@@ -150,12 +150,12 @@ public class PlayerStat : Stat
         _animator.SetTrigger("Die");
     }
 
-    void SetOnAttackedResistTrue()
+    public void SetOnAttackedResistTrue()
     {
         _isOnAttackResist = true;
     }
 
-    void SetOnAttackedResistFalse()
+    public void SetOnAttackedResistFalse()
     {
         _isOnAttackResist = false;
     }

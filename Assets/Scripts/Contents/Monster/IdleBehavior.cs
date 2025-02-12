@@ -24,7 +24,7 @@ public class IdleBehavior : IBehavior
 
     public BehaviorState Execute()
     {
-        Debug.Log("Idle");
+        //Debug.Log("Idle");
 
         if (!_isDie && _monsterStat.Hp == 0)
         {

@@ -82,7 +82,10 @@ public class MonsterStat : Stat
     }
 
     protected override void OnDead(Attack attacker)
-    {
+    {     
         Managers.Game.Player.GetComponent<PlayerStat>().Gold += _dropGold;
+        _dropGold = 0;
+        gameObject.GetComponent<Collider>().enabled = false;
+        Managers.Resource.Destroy(_monsterAI.MonsterUI.gameObject);
     }
 }

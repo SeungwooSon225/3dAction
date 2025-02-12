@@ -278,7 +278,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            while (Quaternion.Angle(transform.rotation, Quaternion.LookRotation(_playerStat.Target.position - gameObject.transform.position)) > 0.1f)
+            while (_playerStat.Target != null && Quaternion.Angle(transform.rotation, Quaternion.LookRotation(_playerStat.Target.position - gameObject.transform.position)) > 0.1f)
             {
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_playerStat.Target.position - gameObject.transform.position), 30f * Time.deltaTime);
 

@@ -161,8 +161,11 @@ public class Projectile : Attack
 
     protected override void AttackOnTriggerEnter(Collider other)
     {
+        if (other.GetComponent<Attack>() != null) return;
         if (other.tag == "Player" && IsPlayer) return;
         if (other.tag == "Monster" && !IsPlayer) return;
+
+        Debug.Log(other.name + " " + gameObject.name);
 
         if (!_isHeavy)
         {

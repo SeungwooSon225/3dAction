@@ -45,9 +45,7 @@ public class GameScene : BaseScene
         GameObject monster = Managers.Game.Spawn(Define.WorldObject.Monster, "CrystalGuardian/CrystalGuardian");
         monster.transform.position = new Vector3(31f, 0f, 43f);
 
-        Managers.UI.InstantiateStatusPopupUI(Managers.Game.PlayerClass);
-
-        
+        Managers.UI.InstantiateStatusPopupUI(Managers.Game.PlayerClass);        
     }
 
     public override void Clear()

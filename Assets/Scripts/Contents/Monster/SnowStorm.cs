@@ -22,9 +22,10 @@ public class SnowStorm : MonoBehaviour
 
     IEnumerator CastStormCo()
     {
+        float defense = Managers.Game.Monster.GetComponent<Stat>().Defense;
+        Managers.Game.Monster.GetComponent<Stat>().Defense = 10000f;
         yield return new WaitForSeconds(.5f);
         
-
         for (int i=0; i<5; i++)
         {
             CastStorm();
@@ -39,6 +40,8 @@ public class SnowStorm : MonoBehaviour
 
         _animator.SetBool("SnowStorm", false);
         gameObject.GetComponent<ParticleSystem>().Stop();
+
+        Managers.Game.Monster.GetComponent<Stat>().Defense = defense;
 
         yield return new WaitForSeconds(1f);
 
