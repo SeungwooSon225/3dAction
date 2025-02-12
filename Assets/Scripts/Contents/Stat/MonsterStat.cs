@@ -71,8 +71,7 @@ public class MonsterStat : Stat
 
             //IsAttackable = false;
         }
-
-        if (attacker.AttackType == AttackType.Heavy)
+        else if (attacker.AttackType == AttackType.Heavy)
         {
             _monsterAI.IsAttacked = true;
             _monsterAI.IsAttacking = false;

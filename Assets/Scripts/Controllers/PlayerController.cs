@@ -35,6 +35,8 @@ public class PlayerController : MonoBehaviour
         if (_playerStat.IsDead)
             return;
 
+        transform.position = new Vector3(transform.position.x, 0f, transform.position.z);
+
         if (Input.GetKeyDown(KeyCode.F))
             SetLockOnTarget();
 

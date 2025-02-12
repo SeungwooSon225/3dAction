@@ -79,6 +79,8 @@ public class AStarManager
                     int x = centerX + offsetX;
                     int z = centerZ + offsetZ;
 
+                    if (x < 0 || x > width || z < 0 || z > height) continue;
+
                     // 장애물 주변
                     if (x < centerX - lenghtX || x > centerX + lenghtX || z < centerZ - lenghtZ || z > centerZ + lenghtZ)
                     {
