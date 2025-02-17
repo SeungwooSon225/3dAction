@@ -4,21 +4,19 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField]
+    protected PlayerStat _playerStat;
     protected Animator _animator;
 
-    [SerializeField]
-    protected Vector3 _movementDir;
     Vector3 _movementDirX;
     Vector3 _movementDirY;
+    protected Vector3 _movementDir;
 
-    protected PlayerStat _playerStat;
     protected IEnumerator _moveForwardCo;
     protected IEnumerator _fastRotationCo;
 
     protected bool _isCanDodge;
 
-    //protected Dictionary<string, float> _attackRatio = new Dictionary<string, float>();
+    // to do
     protected Dictionary<string, ParticleSystem> _effects = new Dictionary<string, ParticleSystem>();
 
     protected UI_Stat _uiStat;
@@ -118,7 +116,6 @@ public class PlayerController : MonoBehaviour
             _animator.SetTrigger("SkillR");
             StartCoroutine(_uiStat.SkillRCoolDown());
         }
-
     }
 
     protected virtual void Moving()
@@ -217,9 +214,7 @@ public class PlayerController : MonoBehaviour
 
             elapsedTime += Time.deltaTime;
 
-            float t = elapsedTime / duration; // 진행 비율 (0~1)
-
-            // 위치 업데이트
+            float t = elapsedTime / duration; // 진행 비율 (0~1)        
 
             // 앞에 장애물이 있으면 못움직인다
             if (Physics.Raycast(transform.position + Vector3.up * 1.5f, transform.forward.normalized, out RaycastHit hit, 0.5f) &&
@@ -237,16 +232,15 @@ public class PlayerController : MonoBehaviour
                 //continue;
             }
 
+            // 위치 업데이트
             transform.position = Vector3.Slerp(startPosition, targetPosition, t);     
         }
     }
 
     void SetLockOnTarget()
     {  
-        //Debug.Log("S L T " + (gameObject.transform.position - Managers.Game.Monster.transform.position).magnitude);
         if (_playerStat.Target == null && (gameObject.transform.position - Managers.Game.Monster.transform.position).magnitude < 1000f)
         {
-            //Debug.Log("S L T sdf" + Managers.Game.Monster);
             _playerStat.Target = Managers.Game.Monster.transform;
         }
         else if (_playerStat.Target != null)
@@ -288,7 +282,6 @@ public class PlayerController : MonoBehaviour
             }
         }
         
-
         yield return null;
     }
 
@@ -338,13 +331,11 @@ public class PlayerController : MonoBehaviour
 
     private void SetAttackableTrue()
     {
-        //_playerStat.IsAttackable = true;
         _collider.enabled = true;
     }
 
     private void SetAttackableFalse()
     {
-        //_playerStat.IsAttackable = false;
         _collider.enabled = false;
     }
 
@@ -360,7 +351,6 @@ public class PlayerController : MonoBehaviour
 
     private void ShootProjectile(string name)
     {
-        //Debug.Log("Shoot " + name);
         GameObject projectile = Managers.Resource.Instantiate($"Projectiles/{name}");
         projectile.GetComponent<Projectile>().Shoot(_playerStat);
     }

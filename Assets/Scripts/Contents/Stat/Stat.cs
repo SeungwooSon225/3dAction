@@ -34,6 +34,10 @@ public class Stat : MonoBehaviour
 
     public Dictionary<string, Define.AttackWeight> AttackWeight { get { return _attackWeight; } set { _attackWeight = value; } }
 
+
+    Collider _collider;
+
+
     void Start()
     {
         //_isAttackable = true;
