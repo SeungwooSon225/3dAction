@@ -10,6 +10,13 @@ public class Define
         GameScene,
     }
 
+    public enum Skill
+    { 
+        None,
+        E,
+        R,
+    }
+
     public enum PlayerClass
     {
         Warrior,

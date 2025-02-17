@@ -35,15 +35,12 @@ public class Stat : MonoBehaviour
     public Dictionary<string, Define.AttackWeight> AttackWeight { get { return _attackWeight; } set { _attackWeight = value; } }
 
 
-    Collider _collider;
+    //Collider _collider;
 
 
     void Start()
-    {
-        //_isAttackable = true;
-        _hp = 100;
-        _maxHp = 100;
-
+    { 
+        //_collider = GetComponent<Collider>();
         AttackWeight = new Dictionary<string, Define.AttackWeight>();
     }
 

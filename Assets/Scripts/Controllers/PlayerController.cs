@@ -7,19 +7,21 @@ public class PlayerController : MonoBehaviour
     protected PlayerStat _playerStat;
     protected Animator _animator;
 
-    Vector3 _movementDirX;
-    Vector3 _movementDirY;
     protected Vector3 _movementDir;
 
-    protected IEnumerator _moveForwardCo;
-    protected IEnumerator _fastRotationCo;
+    [SerializeField]
+    bool _isDodging;
+    [SerializeField]
+    bool _isAttacking;
+    public bool IsDodging { get { return _isDodging; } set { _isDodging = value; } }
+    public bool IsAttacking { get { return _isAttacking; } set { _isAttacking = value; } }
 
-    protected bool _isCanDodge;
-
-    // to do
     protected Dictionary<string, ParticleSystem> _effects = new Dictionary<string, ParticleSystem>();
 
     protected UI_Stat _uiStat;
+
+    protected IEnumerator _moveForwardCo;
+    protected IEnumerator _fastRotationCo;
 
     Collider _collider;
 
@@ -35,17 +37,20 @@ public class PlayerController : MonoBehaviour
 
         transform.position = new Vector3(transform.position.x, 0f, transform.position.z);
 
-        if (Input.GetKeyDown(KeyCode.F))
-            SetLockOnTarget();
+        SetLockOnTarget();
+
+        if (_isDodging)
+            return;
 
         RecoverMpStamina();
 
         if (_playerStat.IsOnAttacked || _playerStat.IsDown)
             return;
 
-        Moving();
+        Dodge();
+        Move();
 
-        if (_animator.GetBool("IsAttacking") || _animator.GetBool("IsDodging"))
+        if (_isAttacking)
             return;
 
         Skill();
@@ -62,24 +67,15 @@ public class PlayerController : MonoBehaviour
 
         _movementDir = Vector3.forward;
 
-        _isCanDodge = true;
-
-        Transform effects = transform.Find("Effects");
-        if (effects != null)
+        Transform skillE = Util.FindDeepChild(transform, "SkillE");
+        if (skillE != null)
         {
-            Transform skillE = effects.Find("SkillE");
-            if (skillE != null)
-            {
-                _effects.Add("SkillE", skillE.GetComponent<ParticleSystem>());
-                skillE.parent = null;
-            }
-
-            Transform skillR = effects.Find("SkillR");
-            if (skillR != null)
-            {
-                _effects.Add("SkillR", skillR.GetComponent<ParticleSystem>());
-                skillR.parent = null;
-            }
+            _effects.Add("SkillE", skillE.GetComponent<ParticleSystem>());
+        }
+        Transform skillR = Util.FindDeepChild(transform, "SkillR");
+        if (skillR != null)
+        {
+            _effects.Add("SkillR", skillR.GetComponent<ParticleSystem>());
         }
     }
 
@@ -106,76 +102,68 @@ public class PlayerController : MonoBehaviour
 
     protected virtual void Skill()
     {
-        if (Input.GetKeyDown(KeyCode.E) && _playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["SkillE"] && !_uiStat.IsSkillECool)
+        Define.Skill skill = Managers.Input.GetSkillInput();
+
+        switch (skill)
         {
-            _animator.SetTrigger("SkillE");
-            StartCoroutine(_uiStat.SkillECoolDown());
-        }
-        else if (Input.GetKeyDown(KeyCode.R) && _playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["SkillR"] && !_uiStat.IsSkillRCool)
-        {
-            _animator.SetTrigger("SkillR");
-            StartCoroutine(_uiStat.SkillRCoolDown());
+            case Define.Skill.E:
+                if (_playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["SkillE"] && !_uiStat.IsSkillECool)
+                {
+                    _animator.SetTrigger("SkillE");
+                    StartCoroutine(_uiStat.SkillECoolDown());
+                }
+                break;
+
+            case Define.Skill.R:
+                if (_playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["SkillR"] && !_uiStat.IsSkillRCool)
+                {
+                    _animator.SetTrigger("SkillR");
+                    StartCoroutine(_uiStat.SkillRCoolDown());
+                }
+                break;
         }
     }
 
-    protected virtual void Moving()
+    protected virtual void Dodge()
     {
-        if (_isCanDodge && !_animator.GetBool("IsDodging") && Input.GetKeyDown(KeyCode.Space) && _playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["Dodge"])
+        if (Input.GetKeyDown(KeyCode.Space) && _playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["Dodge"])
         {
             _playerStat.StaminaMp -= _playerStat.StaminaMpConsumption["Dodge"];
+
             _animator.SetTrigger("Dodge");
+            ResetClickTriggers();
+
             if (_fastRotationCo != null) StopCoroutine(_fastRotationCo);
-            if(_moveForwardCo != null) StopCoroutine(_moveForwardCo);
+            if (_moveForwardCo != null) StopCoroutine(_moveForwardCo);
+
             OnDodgeEvent();
         }
+    }
 
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
+    protected virtual void Move()
+    {
+        Vector3 movementDir = Managers.Input.GetMovementInput();
+
+        if (movementDir != Vector3.zero)
         {
             if (_animator.GetBool("IsRunning") == false)
                 _animator.SetBool("IsRunning", true);
 
-            _movementDirX = Vector3.zero;
-            _movementDirY = Vector3.zero;
-
-            if (_animator.GetBool("IsDodging"))
+            // 공격 콤보 도중 방향 전환을 위해 만약 공격 중이라면 _movementDir만 업데이트 한 후 실제 이동은 하지 않는다.
+            _movementDir = movementDir;
+            if (_isAttacking)
                 return;
 
-            if (Input.GetKey(KeyCode.W))
-            {
-                _movementDirX = Camera.main.transform.forward;
-            }
-
-            if (Input.GetKey(KeyCode.S))
-            {
-                _movementDirX = -Camera.main.transform.forward;
-            }
-
-            if (Input.GetKey(KeyCode.A))
-            {
-                _movementDirY = -Camera.main.transform.right;
-            }
-
-            if (Input.GetKey(KeyCode.D))
-            {
-                _movementDirY = Camera.main.transform.right;
-            }
-
-            _movementDirX.y = 0f;
-            _movementDirY.y = 0f;
-            _movementDir = (_movementDirX.normalized + _movementDirY.normalized).normalized;
-
-            if (_animator.GetBool("IsAttacking"))
-                return;
-
+            // 회전
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_movementDir), 20f * Time.deltaTime);
 
-            // 앞에 장애물이 있으면 못움직인다
+            // 앞에 장애물이 있으면 못움직임
             if (Physics.Raycast(transform.position + Vector3.up * 1.5f, transform.forward.normalized, out RaycastHit hit, 0.5f) &&
                 hit.collider.CompareTag("Obstacle"))
             {
                 return;
             }
-                
+
             // 몬스터와 충돌 방지
             if ((Managers.Game.Monster.transform.position - transform.position).magnitude < 2.5f)
             {
@@ -185,23 +173,21 @@ public class PlayerController : MonoBehaviour
                 return;
             }
 
-            transform.position += _movementDir * Time.deltaTime * _playerStat.MoveSpeed; 
+            // 이동
+            transform.position += _movementDir * Time.deltaTime * _playerStat.MoveSpeed;
         }
-        else 
+        else
         {
             if (_animator.GetBool("IsRunning"))
                 _animator.SetBool("IsRunning", false);
-        } 
+        }
     }
 
-    protected virtual void OnDodgeEvent() 
-    {
-        ResetClickTriggers();
-    }
+    protected virtual void OnDodgeEvent() { }
 
     protected virtual void RecoverMpStamina() { }
 
-    protected IEnumerator MoveForwardCo(float distance, float duration)
+    IEnumerator MoveForwardCo(float distance, float duration)
     {
         Vector3 startPosition = transform.position;
         Vector3 targetPosition = startPosition + transform.forward * distance;
@@ -238,19 +224,23 @@ public class PlayerController : MonoBehaviour
     }
 
     void SetLockOnTarget()
-    {  
-        if (_playerStat.Target == null && (gameObject.transform.position - Managers.Game.Monster.transform.position).magnitude < 1000f)
+    {
+        if (Input.GetKeyDown(KeyCode.F) && _playerStat.Target == null)
         {
             _playerStat.Target = Managers.Game.Monster.transform;
         }
         else if (_playerStat.Target != null)
+        {
             _playerStat.Target = null;
+        }
     }
 
     #region Animation
     private void SetIsAttacking(int value)
     {
-        _animator.SetBool("IsAttacking", value == 0 ? false : true);
+        //_animator.SetBool("IsAttacking", value == 0 ? false : true);
+
+        _isAttacking = value == 0 ? false : true;
     }
 
     private void DoFastRotation()
@@ -302,7 +292,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void MoveForward(int distanceDuration)
+    protected void MoveForward(int distanceDuration)
     {
         int first = distanceDuration / 1000;
         distanceDuration -= first * 1000;
@@ -315,7 +305,6 @@ public class PlayerController : MonoBehaviour
         float distance = first + second * 0.1f;
         float duration = third + forth * 0.1f;
 
-        //Debug.Log($"{distance} {duration}");
         if (_moveForwardCo != null) StopCoroutine(_moveForwardCo);
         _moveForwardCo = MoveForwardCo(distance, duration);
         StartCoroutine(_moveForwardCo);
@@ -339,14 +328,14 @@ public class PlayerController : MonoBehaviour
         _collider.enabled = false;
     }
 
-    private void SetIsCanDodgeTrue()
+    private void SetIsDodgingTrue()
     {
-        _isCanDodge = true;
+        _isDodging = true;
     }
 
-    private void SetIsCanDodgeFalse()
+    private void SetIsDodgingFalse()
     {
-        _isCanDodge = false;
+        _isDodging = false;
     }
 
     private void ShootProjectile(string name)

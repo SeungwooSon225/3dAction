@@ -68706,7 +68706,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0
-    functionName: SetIsCanDodgeFalse
+    functionName: SetIsDodgingTrue
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -68755,7 +68755,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 1.0333333
-    functionName: SetIsCanDodgeTrue
+    functionName: SetIsDodgingFalse
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

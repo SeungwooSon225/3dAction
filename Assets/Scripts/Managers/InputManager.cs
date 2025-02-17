@@ -56,4 +56,58 @@ public class InputManager
             }
         }
     }
+
+
+    public Vector3 GetMovementInput()
+    {
+        Vector3 movementDir = Vector3.zero;
+
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
+        {
+            Vector3 movementDirX = Vector3.zero;
+            Vector3 movementDirY = Vector3.zero;
+
+            if (Input.GetKey(KeyCode.W))
+            {
+                movementDirX = Camera.main.transform.forward;
+            }
+
+            if (Input.GetKey(KeyCode.S))
+            {
+                movementDirX = -Camera.main.transform.forward;
+            }
+
+            if (Input.GetKey(KeyCode.A))
+            {
+                movementDirY = -Camera.main.transform.right;
+            }
+
+            if (Input.GetKey(KeyCode.D))
+            {
+                movementDirY = Camera.main.transform.right;
+            }
+
+            movementDirX.y = 0f;
+            movementDirY.y = 0f;
+            movementDir = (movementDirX.normalized + movementDirY.normalized).normalized;
+        }
+
+        return movementDir;
+    }
+
+    public Define.Skill GetSkillInput()
+    {
+        Define.Skill skillInput = Define.Skill.None;
+
+        if (Input.GetKey(KeyCode.E))
+        {
+            skillInput = Define.Skill.E;
+        }
+        else if (Input.GetKey(KeyCode.R))
+        {
+            skillInput = Define.Skill.R;
+        }
+
+        return skillInput;
+    }
 }

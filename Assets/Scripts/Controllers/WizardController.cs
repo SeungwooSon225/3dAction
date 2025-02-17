@@ -10,7 +10,7 @@ public class WizardController : PlayerController
     GameObject _chargeAttack;
     Projectile _chargeAttackProjectile;
 
-    Collider wizardSkillR;
+    Collider wizardSkillRCollider;
 
     [SerializeField]
     WizardMaterialController _wizardMaterialController;
@@ -26,13 +26,7 @@ public class WizardController : PlayerController
     {
         base.Init();
 
-        Transform skillR = Util.FindDeepChild(transform, "SkillR");
-        if (skillR != null)
-        {
-            _effects.Add("SkillR", skillR.GetComponent<ParticleSystem>());
-            wizardSkillR = skillR.GetComponent<Collider>(); 
-        }
-
+        wizardSkillRCollider = _effects["SkillR"].GetComponent<Collider>();
         _uiStat = Managers.UI.ShowUI<UI_Stat>("UI_WizardStat");
         _uiStat.PlayerStat = _playerStat;
     }
@@ -126,17 +120,17 @@ public class WizardController : PlayerController
 
     private void SkillR()
     {
-        wizardSkillR.GetComponent<Attack>().Damage = _playerStat.Attack * _playerStat.AttackWeight["Wizard@SkillR"].Weight;
+        wizardSkillRCollider.GetComponent<Attack>().Damage = _playerStat.Attack * _playerStat.AttackWeight["Wizard@SkillR"].Weight;
         _effects["SkillR"].Play();
     }
 
     IEnumerator SkillRExplosionCo()
     {
-        wizardSkillR.enabled = true;
+        wizardSkillRCollider.enabled = true;
 
         yield return new WaitForSeconds(0.2f);
 
-        wizardSkillR.enabled = false;
+        wizardSkillRCollider.enabled = false;
     }
 
     private void TeleportStart()
