@@ -5,9 +5,10 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     protected PlayerStat _playerStat;
-    protected Animator _animator;
+    public Animator Animator { get; private set; }
+    protected UI_Stat _uiStat;
 
-    protected Vector3 _movementDir;
+    public Vector3 MovementDir { get; set; }
 
     [SerializeField]
     bool _isDodging;
@@ -18,12 +19,10 @@ public class PlayerController : MonoBehaviour
 
     protected Dictionary<string, ParticleSystem> _effects = new Dictionary<string, ParticleSystem>();
 
-    protected UI_Stat _uiStat;
-
     protected IEnumerator _moveForwardCo;
     protected IEnumerator _fastRotationCo;
 
-    Collider _collider;
+    PlayerStateMachine _stateMachine;
 
     void Start()
     {
@@ -56,27 +55,23 @@ public class PlayerController : MonoBehaviour
         Skill();
     }
 
+    public void HandleMovement(Vector3 dir)
+    {
+        // 회전, 충돌 체크 등
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 20f * Time.deltaTime);
+        transform.position += dir * Time.deltaTime * _playerStat.MoveSpeed;
+    }
+
     protected virtual void Init()
     {
         _playerStat = GetComponent<PlayerStat>();
-        _animator = GetComponent<Animator>();
-        _collider = GetComponent<Collider>();
+        Animator = GetComponent<Animator>();
+        _stateMachine = new PlayerStateMachine(this);
 
         Managers.Input.MouseAction -= OnMouseEvent;
         Managers.Input.MouseAction += OnMouseEvent;
 
-        _movementDir = Vector3.forward;
-
-        Transform skillE = Util.FindDeepChild(transform, "SkillE");
-        if (skillE != null)
-        {
-            _effects.Add("SkillE", skillE.GetComponent<ParticleSystem>());
-        }
-        Transform skillR = Util.FindDeepChild(transform, "SkillR");
-        if (skillR != null)
-        {
-            _effects.Add("SkillR", skillR.GetComponent<ParticleSystem>());
-        }
+        MovementDir = Vector3.forward;
     }
 
     protected virtual void OnMouseEvent(Define.MouseEvent evt)
@@ -88,14 +83,14 @@ public class PlayerController : MonoBehaviour
         {
             case Define.MouseEvent.LeftShortClick:
                 if (_playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["BasicAttack"])
-                    _animator.SetTrigger("LeftShortClick");
+                    Animator.SetTrigger("LeftShortClick");
                 break;
             case Define.MouseEvent.LeftLongClick:
                 if (_playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["ChargeAttack"])
-                    _animator.SetTrigger("LeftLongClick");
+                    Animator.SetTrigger("LeftLongClick");
                 break;
             case Define.MouseEvent.LeftClickUp:
-                _animator.SetTrigger("LeftClickUp");
+                Animator.SetTrigger("LeftClickUp");
                 break;
         }
     }
@@ -109,16 +104,16 @@ public class PlayerController : MonoBehaviour
             case Define.Skill.E:
                 if (_playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["SkillE"] && !_uiStat.IsSkillECool)
                 {
-                    _animator.SetTrigger("SkillE");
-                    StartCoroutine(_uiStat.SkillECoolDown());
+                    Animator.SetTrigger("SkillE");
+                    _uiStat.IsSkillECool = true;
                 }
                 break;
 
             case Define.Skill.R:
                 if (_playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["SkillR"] && !_uiStat.IsSkillRCool)
                 {
-                    _animator.SetTrigger("SkillR");
-                    StartCoroutine(_uiStat.SkillRCoolDown());
+                    Animator.SetTrigger("SkillR");
+                    _uiStat.IsSkillRCool = true;
                 }
                 break;
         }
@@ -130,7 +125,7 @@ public class PlayerController : MonoBehaviour
         {
             _playerStat.StaminaMp -= _playerStat.StaminaMpConsumption["Dodge"];
 
-            _animator.SetTrigger("Dodge");
+            Animator.SetTrigger("Dodge");
             ResetClickTriggers();
 
             if (_fastRotationCo != null) StopCoroutine(_fastRotationCo);
@@ -140,46 +135,59 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+    Vector3 CheckObstacle()
+    {
+        Vector3 dir = Vector3.zero;
+
+        // 앞에 장애물이 있으면 못움직임
+        if (Physics.Raycast(transform.position + Vector3.up * 1.5f, transform.forward.normalized, out RaycastHit hit, 0.5f) &&
+            hit.collider.CompareTag("Obstacle"))
+        {
+            dir = transform.position - hit.transform.position;
+        }
+
+        // 몬스터와 충돌 방지
+        if ((Managers.Game.Monster.transform.position - transform.position).magnitude < 2.5f)
+        {
+            dir = transform.position - Managers.Game.Monster.transform.position;
+        }
+
+        return dir;
+    }
+
     protected virtual void Move()
     {
         Vector3 movementDir = Managers.Input.GetMovementInput();
 
         if (movementDir != Vector3.zero)
         {
-            if (_animator.GetBool("IsRunning") == false)
-                _animator.SetBool("IsRunning", true);
+            if (Animator.GetBool("IsRunning") == false)
+                Animator.SetBool("IsRunning", true);
 
             // 공격 콤보 도중 방향 전환을 위해 만약 공격 중이라면 _movementDir만 업데이트 한 후 실제 이동은 하지 않는다.
-            _movementDir = movementDir;
+            MovementDir = movementDir;
             if (_isAttacking)
                 return;
 
             // 회전
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_movementDir), 20f * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(MovementDir), 20f * Time.deltaTime);
 
-            // 앞에 장애물이 있으면 못움직임
-            if (Physics.Raycast(transform.position + Vector3.up * 1.5f, transform.forward.normalized, out RaycastHit hit, 0.5f) &&
-                hit.collider.CompareTag("Obstacle"))
+            Vector3 obstacleDir = CheckObstacle();
+
+            if (obstacleDir != Vector3.zero)
             {
-                return;
+                transform.position += obstacleDir * Time.deltaTime * _playerStat.MoveSpeed;
             }
-
-            // 몬스터와 충돌 방지
-            if ((Managers.Game.Monster.transform.position - transform.position).magnitude < 2.5f)
+            else 
             {
-                Vector3 dir = transform.position - Managers.Game.Monster.transform.position;
-                transform.position += dir * Time.deltaTime * _playerStat.MoveSpeed;
-
-                return;
+                transform.position += MovementDir * Time.deltaTime * _playerStat.MoveSpeed;
             }
-
-            // 이동
-            transform.position += _movementDir * Time.deltaTime * _playerStat.MoveSpeed;
         }
         else
         {
-            if (_animator.GetBool("IsRunning"))
-                _animator.SetBool("IsRunning", false);
+            if (Animator.GetBool("IsRunning"))
+                Animator.SetBool("IsRunning", false);
         }
     }
 
@@ -202,20 +210,11 @@ public class PlayerController : MonoBehaviour
 
             float t = elapsedTime / duration; // 진행 비율 (0~1)        
 
-            // 앞에 장애물이 있으면 못움직인다
-            if (Physics.Raycast(transform.position + Vector3.up * 1.5f, transform.forward.normalized, out RaycastHit hit, 0.5f) &&
-                hit.collider.CompareTag("Obstacle"))
-            {
-                Vector3 dir = transform.position - hit.transform.position;
-                targetPosition += dir * Time.deltaTime * speed;
-            }
+            Vector3 obstacleDir = CheckObstacle();
 
-            // 몬스터와 충돌 방지
-            if ((Managers.Game.Monster.transform.position - transform.position).magnitude < 2.5f)
+            if (obstacleDir != Vector3.zero)
             {
-                Vector3 dir = transform.position - Managers.Game.Monster.transform.position;
-                targetPosition += dir * Time.deltaTime * speed;
-                //continue;
+                targetPosition += obstacleDir * Time.deltaTime * speed;
             }
 
             // 위치 업데이트
@@ -255,9 +254,9 @@ public class PlayerController : MonoBehaviour
     {
         if (_playerStat.Target == null)
         {
-            while (Quaternion.Angle(transform.rotation, Quaternion.LookRotation(_movementDir)) > 0.1f)
+            while (Quaternion.Angle(transform.rotation, Quaternion.LookRotation(MovementDir)) > 0.1f)
             {
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_movementDir), 30f * Time.deltaTime);
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(MovementDir), 30f * Time.deltaTime);
 
                 yield return null;
             }
@@ -277,20 +276,14 @@ public class PlayerController : MonoBehaviour
 
     protected void ResetClickTriggers()
     {
-        _animator.ResetTrigger("LeftShortClick");
-        _animator.ResetTrigger("LeftLongClick");
-        _animator.ResetTrigger("LeftClickUp");
-        _animator.ResetTrigger("SkillE");
-        _animator.ResetTrigger("SkillR");
+        Animator.ResetTrigger("LeftShortClick");
+        Animator.ResetTrigger("LeftLongClick");
+        Animator.ResetTrigger("LeftClickUp");
+        Animator.ResetTrigger("SkillE");
+        Animator.ResetTrigger("SkillR");
     }
 
-    private void SpendStaminaMp(string attackName)
-    {
-        if (_playerStat.StaminaMp >= _playerStat.StaminaMpConsumption[attackName])
-        {
-            _playerStat.StaminaMp -= _playerStat.StaminaMpConsumption[attackName];
-        }
-    }
+
 
     protected void MoveForward(int distanceDuration)
     {
@@ -314,18 +307,7 @@ public class PlayerController : MonoBehaviour
     {
         _effects[effectName].gameObject.transform.position = transform.position;
         _effects[effectName].gameObject.transform.rotation = Quaternion.LookRotation(transform.forward);
-        //Debug.Log($"e {transform.forward}, {_effects[effectName].gameObject.transform.rotation} {_effects[effectName].gameObject.transform.position}");
         _effects[effectName].Play();
-    }
-
-    private void SetAttackableTrue()
-    {
-        _collider.enabled = true;
-    }
-
-    private void SetAttackableFalse()
-    {
-        _collider.enabled = false;
     }
 
     private void SetIsDodgingTrue()

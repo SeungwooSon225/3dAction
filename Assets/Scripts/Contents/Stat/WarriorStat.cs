@@ -4,31 +4,25 @@ using UnityEngine;
 
 public class WarriorStat : PlayerStat
 {
-    [SerializeField]
-    Attack _weapon;
-
-
     protected override void Init()
     {
         _playerClass = Define.PlayerClass.Warrior;
-
+        
         base.Init();
-
-        SetAttackWeight();
     }
-
 
     protected override void SetAttackWeight()
     {
         Data.Stat stat = Managers.Data.StatDict[1];
+        Attack sword = Util.FindDeepChild(transform, "Sword").GetComponent<Attack>(); ;
 
-        Define.AttackWeight basicComboOne = new Define.AttackWeight(_weapon, stat.basicComboOneWeight);
+        Define.AttackWeight basicComboOne = new Define.AttackWeight(sword, stat.basicComboOneWeight);
         AttackWeight.Add("BasicComboOne", basicComboOne);
 
-        Define.AttackWeight basicComboTwo = new Define.AttackWeight(_weapon, stat.basicComboTwoWeight);
+        Define.AttackWeight basicComboTwo = new Define.AttackWeight(sword, stat.basicComboTwoWeight);
         AttackWeight.Add("BasicComboTwo", basicComboTwo);
 
-        Define.AttackWeight basicComboThree = new Define.AttackWeight(_weapon, stat.basicComboThreeWeight);
+        Define.AttackWeight basicComboThree = new Define.AttackWeight(sword, stat.basicComboThreeWeight);
         AttackWeight.Add("BasicComboThree", basicComboThree);
 
         Define.AttackWeight skillE = new Define.AttackWeight(null, stat.skillEWeight);
@@ -36,8 +30,6 @@ public class WarriorStat : PlayerStat
 
         Define.AttackWeight skillR = new Define.AttackWeight(null, stat.skillRWeight);
         AttackWeight.Add("Warrior@SkillR", skillR);
-
-        //Debug.Log(AttackWeight["BasicComboOne"].Weight);
     }
 
     public override void OnAttacked(Attack attacker)

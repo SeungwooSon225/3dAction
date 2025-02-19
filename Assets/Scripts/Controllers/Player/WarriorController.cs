@@ -11,15 +11,25 @@ public class WarriorController : PlayerController
     {
         base.Init();
 
-        _effects["SkillE"].transform.parent = null;
-        _effects["SkillR"].transform.parent = null;
+        Transform skillE = Util.FindDeepChild(transform, "SkillE");
+        if (skillE != null)
+        {
+            _effects.Add("SkillE", skillE.GetComponent<ParticleSystem>());
+            skillE.transform.parent = null;
+        }
+        Transform skillR = Util.FindDeepChild(transform, "SkillR");
+        if (skillR != null)
+        {
+            _effects.Add("SkillR", skillR.GetComponent<ParticleSystem>());
+        }
+
         _uiStat = Managers.UI.ShowUI<UI_Stat>();
         _uiStat.PlayerStat = _playerStat;
     }
 
     protected override void RecoverMpStamina()
     {
-        if (_playerStat.StaminaMp <= _playerStat.MaxStaminaMp && !_animator.GetBool("IsDodging") && !_animator.GetBool("IsAttacking"))
+        if (_playerStat.StaminaMp <= _playerStat.MaxStaminaMp && !IsDodging && !IsAttacking)
         {
             _playerStat.StaminaMp += _playerStat.StaminaMpRecoverySpeed * Time.deltaTime;
 
@@ -32,7 +42,7 @@ public class WarriorController : PlayerController
     {
         ResetClickTriggers();
 
-        transform.rotation = Quaternion.LookRotation(_movementDir);
+        transform.rotation = Quaternion.LookRotation(MovementDir);
 
         MoveForward((int)(_dashLength * 1000) + (int)(_dashDuration * 10));
     }

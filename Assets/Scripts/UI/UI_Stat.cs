@@ -6,8 +6,32 @@ using UnityEngine.UI;
 public class UI_Stat : MonoBehaviour
 {
     public PlayerStat PlayerStat { get; set; }
-    public bool IsSkillECool { get; set; } = false;
-    public bool IsSkillRCool { get; set; } = false;
+    bool _isSkillECool;
+    bool _isSkillRCool;
+    public bool IsSkillECool 
+    {
+        get { return _isSkillECool; }
+        set 
+        {
+            _isSkillECool = value;
+            if (_isSkillECool == true)
+            {
+                StartCoroutine(SkillECoolDownCo());
+            }
+        }
+    }
+    public bool IsSkillRCool
+    {
+        get { return _isSkillRCool; }
+        set
+        {
+            _isSkillRCool = value;
+            if (_isSkillRCool == true)
+            {
+                StartCoroutine(SkillRCoolDownCo());
+            }
+        }
+    }
 
     [SerializeField]
     Slider _hpBar;
@@ -87,9 +111,8 @@ public class UI_Stat : MonoBehaviour
         _staminaMpBar.value = ratio;
     }
 
-    public IEnumerator SkillECoolDown()
+    public IEnumerator SkillECoolDownCo()
     {
-        IsSkillECool = true;
         _skillEIcon.fillAmount = 0f;
 
         float elapsedTime = 0f;
@@ -106,9 +129,8 @@ public class UI_Stat : MonoBehaviour
         _skillEIcon.fillAmount = 1f;
     }
 
-    public IEnumerator SkillRCoolDown()
+    public IEnumerator SkillRCoolDownCo()
     {
-        IsSkillRCool = true;
         _skillRIcon.fillAmount = 0f;
 
         float elapsedTime = 0f;

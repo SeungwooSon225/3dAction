@@ -21,12 +21,17 @@ public class WizardController : PlayerController
     bool _isStop = false;
 
 
-
     protected override void Init()
     {
         base.Init();
 
-        wizardSkillRCollider = _effects["SkillR"].GetComponent<Collider>();
+        Transform skillR = Util.FindDeepChild(transform, "SkillR");
+        if (skillR != null)
+        {
+            _effects.Add("SkillR", skillR.GetComponent<ParticleSystem>());
+            wizardSkillRCollider = skillR.GetComponent<Collider>();
+        }
+
         _uiStat = Managers.UI.ShowUI<UI_Stat>("UI_WizardStat");
         _uiStat.PlayerStat = _playerStat;
     }
@@ -37,7 +42,7 @@ public class WizardController : PlayerController
     {
         ResetClickTriggers();
         _playerStat.SetOnAttackedResistFalse();
-        transform.rotation = Quaternion.LookRotation(_movementDir);
+        transform.rotation = Quaternion.LookRotation(MovementDir);
 
         if (_chargeCo != null)
         {
@@ -62,16 +67,13 @@ public class WizardController : PlayerController
 
         _previousPos = transform.position;
 
-        if (_playerStat.StaminaMp < _playerStat.MaxStaminaMp && !_animator.GetBool("IsDodging") && !_animator.GetBool("IsAttacking"))
-        {
-            if(_isStop && (Time.time - _stopTime) > 1f)
-                _playerStat.StaminaMp += _playerStat.StaminaMpRecoverySpeed * Time.deltaTime * 5f;
-            else
-                _playerStat.StaminaMp += _playerStat.StaminaMpRecoverySpeed * Time.deltaTime;
+        if(_isStop && (Time.time - _stopTime) > 1f)
+            _playerStat.StaminaMp += _playerStat.StaminaMpRecoverySpeed * Time.deltaTime * 5f;
+        else
+            _playerStat.StaminaMp += _playerStat.StaminaMpRecoverySpeed * Time.deltaTime;
 
-            if (_playerStat.StaminaMp > _playerStat.MaxStaminaMp)
-                _playerStat.StaminaMp = _playerStat.MaxStaminaMp;
-        }     
+        if (_playerStat.StaminaMp > _playerStat.MaxStaminaMp)
+            _playerStat.StaminaMp = _playerStat.MaxStaminaMp;         
     }
 
     IEnumerator _chargeCo;

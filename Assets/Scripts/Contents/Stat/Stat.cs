@@ -14,10 +14,9 @@ public class Stat : MonoBehaviour
     protected float _defense;
     [SerializeField]
     protected float _moveSpeed;
-    //[SerializeField]
-    //protected bool _isAttackable;
     [SerializeField]
     protected bool _isDead;
+
     [SerializeField]
     protected Transform _target;
 
@@ -29,19 +28,50 @@ public class Stat : MonoBehaviour
     public float Defense { get { return _defense; } set { _defense = value; } }
     public float MoveSpeed { get { return _moveSpeed; } set { _moveSpeed = value; } }
     public bool IsDead { get { return _isDead; } set { _isDead = value; } }
-    //public bool IsAttackable { get { return _isAttackable; } set { _isAttackable = value; } }
+
     public Transform Target { get { return _target; } set { _target = value; } }
 
     public Dictionary<string, Define.AttackWeight> AttackWeight { get { return _attackWeight; } set { _attackWeight = value; } }
 
-
-    //Collider _collider;
+    protected Collider _collider;
 
 
     void Start()
+    {
+        Init();
+    }
+
+
+    protected virtual void Init()
     { 
-        //_collider = GetComponent<Collider>();
+        _collider = GetComponent<Collider>();
         AttackWeight = new Dictionary<string, Define.AttackWeight>();
+    }
+
+
+    public virtual void OnAttacked(Attack attacker)
+    {
+        float damage = Mathf.Max(0, attacker.Damage - Defense);
+
+        Hp -= damage;
+
+        if (Hp <= 0)
+        {
+            Hp = 0;
+            OnDead(attacker);
+        }
+    }
+
+    protected virtual void OnDead(Attack attacker) { }
+
+    private void SetAttackableTrue()
+    {
+        _collider.enabled = true;
+    }
+
+    private void SetAttackableFalse()
+    {
+        _collider.enabled = false;
     }
 
     public virtual void EnableAttack(string name)
@@ -55,31 +85,5 @@ public class Stat : MonoBehaviour
         _attackWeight[name].Attack.GetComponent<Collider>().enabled = false;
     }
 
-    public virtual void OnAttacked(Attack attacker)
-    {
-        //if (!IsAttackable) return;
-
-        float damage = Mathf.Max(0, attacker.Damage - Defense);
-
-        Hp -= damage;
-
-        if (Hp <= 0)
-        {
-            Hp = 0;
-            OnDead(attacker);
-
-            //IsAttackable = false;
-        }
-    }
-
-
-    protected virtual void OnDead(Attack attacker)
-    {
-
-    }
-
-    protected virtual void SetAttackWeight()
-    { 
-    
-    }
+    protected virtual void SetAttackWeight() { }
 }

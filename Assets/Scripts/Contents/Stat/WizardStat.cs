@@ -4,17 +4,11 @@ using UnityEngine;
 
 public class WizardStat : PlayerStat
 {
-    [SerializeField]
-    Attack _weapon;
-
-
     protected override void Init()
     {
         _playerClass = Define.PlayerClass.Wizard;
 
         base.Init();
-
-        SetAttackWeight();
     }
 
     protected override void SetAttackWeight()
@@ -35,7 +29,5 @@ public class WizardStat : PlayerStat
 
         Define.AttackWeight skillRAttack = new Define.AttackWeight(null, stat.skillRWeight);
         AttackWeight.Add("Wizard@SkillR", skillRAttack);
-
-        //Debug.Log(AttackWeight["BasicComboOne"].Weight);
     }
 }

@@ -4,22 +4,20 @@ using UnityEngine;
 
 public class PlayerStat : Stat
 {
-    protected Dictionary<string, float> _staminaMpConsumption;
-
     [SerializeField]
     protected Define.PlayerClass _playerClass;
-
     [SerializeField]
     protected int _level;
-
     [SerializeField]
     protected float _staminaMp;
     [SerializeField]
     protected float _maxStaminaMp;
     [SerializeField]
     protected float _staminaMpRecoverySpeed;
-
+    [SerializeField]
     protected int _gold;
+
+    protected Dictionary<string, float> _staminaMpConsumption;
 
     [SerializeField]
     protected bool _isOnAttacked;
@@ -27,15 +25,11 @@ public class PlayerStat : Stat
     protected bool _isOnAttackResist;
 
 
-    public Dictionary<string, float> StaminaMpConsumption { get { return _staminaMpConsumption; } }
-
     public Define.PlayerClass PlayerClass { get { return _playerClass; } set { _playerClass = value; } }
-
     public int Level { get { return _level; } set { _level = value; } }
     public float StaminaMp { get { return _staminaMp; } set { _staminaMp = value; } }
     public float MaxStaminaMp { get { return _maxStaminaMp; } set { _maxStaminaMp = value; } }
     public float StaminaMpRecoverySpeed { get { return _staminaMpRecoverySpeed; } set { _staminaMpRecoverySpeed = value; } }
-
     public int Gold { get { return _gold; } 
         set 
         { 
@@ -44,25 +38,23 @@ public class PlayerStat : Stat
         } 
     }
 
+    public Dictionary<string, float> StaminaMpConsumption { get { return _staminaMpConsumption; } }
+
     public bool IsOnAttacked { get { return _isOnAttacked; } set { _isOnAttacked = value; } }
     public bool IsOnAttackResist { get { return _isOnAttackResist; } set { _isOnAttackResist = value; } }
 
     protected bool _isDown;
     public bool IsDown { get { return _isDown; } set { _isDown = value; } }
+
     Animator _animator;
 
 
-    void Start()
+    protected override void Init()
     {
-        Init();
-    }
+        _collider = GetComponent<Collider>();
 
-
-    protected virtual void Init()
-    {
         Managers.Data.InitPlayerStat(_playerClass);
 
-        //_isAttackable = true;
         _attackWeight = new Dictionary<string, Define.AttackWeight>();
         _staminaMpConsumption = new Dictionary<string, float>();
         _animator = gameObject.GetComponent<Animator>();
@@ -72,6 +64,7 @@ public class PlayerStat : Stat
         _gold = 1000;
 
         SetStat(1);
+        SetAttackWeight();
     }
 
 
@@ -163,5 +156,13 @@ public class PlayerStat : Stat
     void SetIsDownFalse()
     {
         _isDown = false;
+    }
+
+    private void SpendStaminaMp(string attackName)
+    {
+        if (_staminaMp >= _staminaMpConsumption[attackName])
+        {
+            _staminaMp -=_staminaMpConsumption[attackName];
+        }
     }
 }
