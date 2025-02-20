@@ -41,6 +41,7 @@ public class PlayerStat : Stat
     Animator _animator;
     protected PlayerStateMachine _stateMachine;
 
+
     protected override void Init()
     {
         _stateMachine = GetComponent<PlayerController>().StateMachine;
@@ -100,9 +101,6 @@ public class PlayerStat : Stat
             return;
         }
 
-        //Debug.Log(_stateMachine.CurrentState);
-        //Debug.Log(_stateMachine.CurrentState == _stateMachine.OnAttackedState);
-
         if (attacker.AttackType == AttackType.Basic && (IsOnAttackResist || _stateMachine.CurrentStateType == PlayerStateType.OnAttacked))
             return;
 
@@ -115,33 +113,7 @@ public class PlayerStat : Stat
         }
 
         _stateMachine.ChangeState(PlayerStateType.OnAttacked);
-
-        //StartCoroutine(OnAttackedCo(attacker));
     }
-
-    //IEnumerator OnAttackedCo(Attack attacker)
-    //{
-    //    IsOnAttacked = true;
-
-    //    if (attacker.AttackType == AttackType.Basic)
-    //        _animator.SetTrigger("OnAttacked");
-    //    else
-    //    {
-    //        _isDown = true;
-    //        _animator.SetTrigger("OnAttackedHeavy");
-    //    }
-
-    //    _animator.SetBool("IsAttacking", false);
-    //    _animator.SetBool("IsDodging", false);
-    //    _animator.ResetTrigger("LeftShortClick");
-    //    _animator.ResetTrigger("LeftLongClick");
-    //    _animator.ResetTrigger("SkillE");
-    //    _animator.ResetTrigger("SkillR");
-
-    //    yield return new WaitForSeconds(0.5f);
-
-    //    IsOnAttacked = false;
-    //}
 
     protected override void OnDead(Attack attacker)
     {

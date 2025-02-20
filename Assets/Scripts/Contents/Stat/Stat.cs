@@ -42,11 +42,7 @@ public abstract class Stat : MonoBehaviour
     }
 
 
-    protected virtual void Init()
-    { 
-
-    }
-
+    protected virtual void Init() { }
 
     public abstract void OnAttacked(Attack attacker);
 

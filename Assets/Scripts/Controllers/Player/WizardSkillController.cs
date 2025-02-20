@@ -10,6 +10,7 @@ public class WizardSkillController : MonoBehaviour
     WizardController _wizardController;
     Collider _wizardSkillRCollider;
 
+    [SerializeField]
     Transform _staff;
     GameObject _chargeAttack;
 
@@ -19,6 +20,8 @@ public class WizardSkillController : MonoBehaviour
 
     private void Start()
     {
+        _staff = Util.FindDeepChild(transform, "Staff");
+        _wizardController = GetComponent<WizardController>();
         Transform skillR = Util.FindDeepChild(transform, "SkillR");
         if (skillR != null)
         {
@@ -102,5 +105,18 @@ public class WizardSkillController : MonoBehaviour
     private void TeleportEnd()
     {
         _wizardMaterialController.FadeIn();
+    }
+
+    private void PlayEffect(string effectName)
+    {
+        _effects[effectName].gameObject.transform.position = transform.position;
+        _effects[effectName].gameObject.transform.rotation = Quaternion.LookRotation(transform.forward);
+        _effects[effectName].Play();
+    }
+
+    private void ShootProjectile(string name)
+    {
+        GameObject projectile = Managers.Resource.Instantiate($"Projectiles/{name}");
+        projectile.GetComponent<Projectile>().Shoot(_wizardController.PlayerStat);
     }
 }

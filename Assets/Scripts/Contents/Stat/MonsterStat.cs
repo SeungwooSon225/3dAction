@@ -69,9 +69,10 @@ public class MonsterStat : Stat
             Hp = 0;
             OnDead(attacker);
 
-            //IsAttackable = false;
+            return;
         }
-        else if (attacker.AttackType == AttackType.Heavy)
+
+        if (attacker.AttackType == AttackType.Heavy)
         {
             _monsterAI.IsAttacked = true;
             _monsterAI.IsAttacking = false;
@@ -88,3 +89,6 @@ public class MonsterStat : Stat
         Managers.Resource.Destroy(_monsterAI.MonsterUI.gameObject);
     }
 }
+
+
+

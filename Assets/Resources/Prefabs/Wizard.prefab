@@ -40308,6 +40308,7 @@ GameObject:
   - component: {fileID: 8977919163208084034}
   - component: {fileID: -3469401615314720220}
   - component: {fileID: 5155451166692370570}
+  - component: {fileID: 5200631699284170790}
   m_Layer: 0
   m_Name: Wizard
   m_TagString: Player
@@ -40367,11 +40368,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d473c5c5474c945a3d0f7005aa7948, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 0}
-  _movementDir: {x: 0, y: 0, z: 0}
-  _staff: {fileID: 1149752617242174611}
-  _wizardMaterialController: {fileID: 6845102437093572736}
-  _isStop: 0
+  StateMachine: {fileID: 0}
 --- !u!114 &8977919163208084034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40389,14 +40386,13 @@ MonoBehaviour:
   _attack: 0
   _defense: 0
   _moveSpeed: 0
-  _isAttackable: 0
+  _isDead: 0
   _target: {fileID: 0}
-  _playerClass: 0
+  _level: 0
   _staminaMp: 0
   _maxStaminaMp: 0
   _staminaMpRecoverySpeed: 0
-  _isOnAttacked: 0
-  _weapon: {fileID: 0}
+  _gold: 0
 --- !u!54 &-3469401615314720220
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -40447,6 +40443,20 @@ CapsuleCollider:
   m_Height: 1.8457209
   m_Direction: 1
   m_Center: {x: 0, y: 0.9185371, z: 0}
+--- !u!114 &5200631699284170790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6063606197381341076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74bd0956b7ccb544fb65e4b4ed4bb6f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _wizardMaterialController: {fileID: 6845102437093572736}
+  _staff: {fileID: 0}
 --- !u!1 &6104904229554006333
 GameObject:
   m_ObjectHideFlags: 0
@@ -51203,7 +51213,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: d2bf295b931260844ae49c916d7fc5e9, type: 2}
     - target: {fileID: 919132149155446097, guid: acd76795deeadd846a39bed2115bcc9b, type: 3}
       propertyPath: m_Name
-      value: Staff
+      value: StaffModel
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
