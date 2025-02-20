@@ -75627,7 +75627,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.1
-    functionName: SetIsAttacking
+    functionName: SetIsAttackingTrue
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -75669,7 +75669,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 1
-    functionName: SetIsAttacking
+    functionName: SetIsAttackingFalse
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

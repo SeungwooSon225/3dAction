@@ -32271,7 +32271,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.6
-    functionName: DisenableAttack
+    functionName: DisableAttackCollider
     data: PunchAttack
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

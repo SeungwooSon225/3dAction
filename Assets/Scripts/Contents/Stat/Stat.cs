@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Stat : MonoBehaviour
+public abstract class Stat : MonoBehaviour
 {
     [SerializeField]
     protected float _hp;
@@ -44,25 +44,13 @@ public class Stat : MonoBehaviour
 
     protected virtual void Init()
     { 
-        _collider = GetComponent<Collider>();
-        AttackWeight = new Dictionary<string, Define.AttackWeight>();
+
     }
 
 
-    public virtual void OnAttacked(Attack attacker)
-    {
-        float damage = Mathf.Max(0, attacker.Damage - Defense);
+    public abstract void OnAttacked(Attack attacker);
 
-        Hp -= damage;
-
-        if (Hp <= 0)
-        {
-            Hp = 0;
-            OnDead(attacker);
-        }
-    }
-
-    protected virtual void OnDead(Attack attacker) { }
+    protected abstract void OnDead(Attack attacker);
 
     private void SetAttackableTrue()
     {
@@ -80,7 +68,7 @@ public class Stat : MonoBehaviour
         _attackWeight[name].Attack.GetComponent<Collider>().enabled = true;
     }
 
-    public virtual void DisenableAttack(string name)
+    public virtual void DisableAttackCollider(string name)
     {
         _attackWeight[name].Attack.GetComponent<Collider>().enabled = false;
     }

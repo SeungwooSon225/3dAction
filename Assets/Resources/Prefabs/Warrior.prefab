@@ -956,6 +956,7 @@ GameObject:
   - component: {fileID: 5349061497174187691}
   - component: {fileID: 4069294732079362923}
   - component: {fileID: 592001977497971688}
+  - component: {fileID: 6221670791403565463}
   m_Layer: 0
   m_Name: Warrior
   m_TagString: Player
@@ -1014,8 +1015,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00328d71e8a7a094f880c46bc64ec15c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isDodging: 0
-  _isAttacking: 0
+  StateMachine: {fileID: 0}
 --- !u!136 &5349061497174187691
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1085,14 +1085,25 @@ MonoBehaviour:
   _moveSpeed: 0
   _isDead: 0
   _target: {fileID: 0}
-  _collider: {fileID: 0}
   _playerClass: 0
   _level: 0
   _staminaMp: 0
   _maxStaminaMp: 0
   _staminaMpRecoverySpeed: 0
+  _gold: 0
   _isOnAttacked: 0
-  _weapon: {fileID: 75907533714420445}
+--- !u!114 &6221670791403565463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3192325604997802973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aae0760ef81249a41be2c5af5d5e9569, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3248128618062482585
 GameObject:
   m_ObjectHideFlags: 0

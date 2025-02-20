@@ -29,7 +29,7 @@ public class Attack : MonoBehaviour
         if (other.tag == "Player" && _isPlayer) return;
         if (other.tag == "Monster" && !_isPlayer) return;
 
-        Debug.Log(other.name + " " +gameObject.name);
+        //Debug.Log(other.name + " " +gameObject.name);
         Stat stat = other.GetComponent<Stat>();
 
         if (stat == null) return;

@@ -63,10 +63,7 @@ public class UI_EnvObjHPBar : MonoBehaviour
         // 완전히 불투명하게 설정
         _canvasGroup.alpha = 1f;
 
-        
-
         yield return new WaitForSeconds(3f);
-
 
         elapsedTime = 0f;
 

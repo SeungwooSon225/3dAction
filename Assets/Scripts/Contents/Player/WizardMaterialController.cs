@@ -42,7 +42,7 @@ public class WizardMaterialController : MonoBehaviour
         _staffOriginalColor = _staffMaterial.color;
     }
 
-    public IEnumerator FadeOutCo()
+    private IEnumerator FadeOutCo()
     {
         _teleportStart.Play();
         _fire.Stop();
@@ -63,7 +63,7 @@ public class WizardMaterialController : MonoBehaviour
         _staffRenderer.enabled = false;      
     }
 
-    public IEnumerator FadeInCo()
+    private IEnumerator FadeInCo()
     {
         _renderer.enabled = true;
         _staffRenderer.enabled = true;
@@ -84,4 +84,13 @@ public class WizardMaterialController : MonoBehaviour
         }
     }
 
+    public void FadeOut()
+    {
+        StartCoroutine(FadeOutCo());
+    }
+
+    public void FadeIn()
+    {
+        StartCoroutine(FadeInCo());
+    }
 }

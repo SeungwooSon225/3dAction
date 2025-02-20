@@ -2,27 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public abstract class PlayerController : MonoBehaviour
 {
-    protected PlayerStat _playerStat;
+    public PlayerStat PlayerStat { get; private set; }
     public Animator Animator { get; private set; }
-    protected UI_Stat _uiStat;
 
     public Vector3 MovementDir { get; set; }
 
-    [SerializeField]
-    bool _isDodging;
-    [SerializeField]
-    bool _isAttacking;
-    public bool IsDodging { get { return _isDodging; } set { _isDodging = value; } }
-    public bool IsAttacking { get { return _isAttacking; } set { _isAttacking = value; } }
-
-    protected Dictionary<string, ParticleSystem> _effects = new Dictionary<string, ParticleSystem>();
+    public bool IsDodging { get; set; }
+    public bool IsAttacking { get; set; }
 
     protected IEnumerator _moveForwardCo;
     protected IEnumerator _fastRotationCo;
 
-    PlayerStateMachine _stateMachine;
+    public PlayerStateMachine StateMachine;
 
     void Start()
     {
@@ -31,110 +24,29 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (_playerStat.IsDead)
-            return;
-
-        transform.position = new Vector3(transform.position.x, 0f, transform.position.z);
-
-        SetLockOnTarget();
-
-        if (_isDodging)
-            return;
-
-        RecoverMpStamina();
-
-        if (_playerStat.IsOnAttacked || _playerStat.IsDown)
-            return;
-
-        Dodge();
-        Move();
-
-        if (_isAttacking)
-            return;
-
-        Skill();
-    }
-
-    public void HandleMovement(Vector3 dir)
-    {
-        // 회전, 충돌 체크 등
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 20f * Time.deltaTime);
-        transform.position += dir * Time.deltaTime * _playerStat.MoveSpeed;
+        if (!PlayerStat.IsDead)
+            StateMachine.Update();
     }
 
     protected virtual void Init()
     {
-        _playerStat = GetComponent<PlayerStat>();
+        PlayerStat = GetComponent<PlayerStat>();
         Animator = GetComponent<Animator>();
-        _stateMachine = new PlayerStateMachine(this);
+        StateMachine = new PlayerStateMachine(this);
 
         Managers.Input.MouseAction -= OnMouseEvent;
         Managers.Input.MouseAction += OnMouseEvent;
-
-        MovementDir = Vector3.forward;
     }
+
+    public virtual int GetIdleRecoverScale() { return 1; }
+    public virtual int GetMoveRecoverScale() { return 1; }
+
+    public abstract PlayerDodgeState CreateDodgeState(PlayerStateMachine stateMachine);
 
     protected virtual void OnMouseEvent(Define.MouseEvent evt)
     {
-        if (_playerStat.IsOnAttacked)
-            return;
-
-        switch (evt)
-        {
-            case Define.MouseEvent.LeftShortClick:
-                if (_playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["BasicAttack"])
-                    Animator.SetTrigger("LeftShortClick");
-                break;
-            case Define.MouseEvent.LeftLongClick:
-                if (_playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["ChargeAttack"])
-                    Animator.SetTrigger("LeftLongClick");
-                break;
-            case Define.MouseEvent.LeftClickUp:
-                Animator.SetTrigger("LeftClickUp");
-                break;
-        }
+        StateMachine.HandleMouseEvent(evt);     
     }
-
-    protected virtual void Skill()
-    {
-        Define.Skill skill = Managers.Input.GetSkillInput();
-
-        switch (skill)
-        {
-            case Define.Skill.E:
-                if (_playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["SkillE"] && !_uiStat.IsSkillECool)
-                {
-                    Animator.SetTrigger("SkillE");
-                    _uiStat.IsSkillECool = true;
-                }
-                break;
-
-            case Define.Skill.R:
-                if (_playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["SkillR"] && !_uiStat.IsSkillRCool)
-                {
-                    Animator.SetTrigger("SkillR");
-                    _uiStat.IsSkillRCool = true;
-                }
-                break;
-        }
-    }
-
-    protected virtual void Dodge()
-    {
-        if (Input.GetKeyDown(KeyCode.Space) && _playerStat.StaminaMp >= _playerStat.StaminaMpConsumption["Dodge"])
-        {
-            _playerStat.StaminaMp -= _playerStat.StaminaMpConsumption["Dodge"];
-
-            Animator.SetTrigger("Dodge");
-            ResetClickTriggers();
-
-            if (_fastRotationCo != null) StopCoroutine(_fastRotationCo);
-            if (_moveForwardCo != null) StopCoroutine(_moveForwardCo);
-
-            OnDodgeEvent();
-        }
-    }
-
 
     Vector3 CheckObstacle()
     {
@@ -153,47 +65,41 @@ public class PlayerController : MonoBehaviour
             dir = transform.position - Managers.Game.Monster.transform.position;
         }
 
-        return dir;
+        return dir; 
     }
 
-    protected virtual void Move()
+    public void HandleMovement(Vector3 dir)
     {
-        Vector3 movementDir = Managers.Input.GetMovementInput();
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 20f * Time.deltaTime);
 
-        if (movementDir != Vector3.zero)
+        Vector3 obstacleDir = CheckObstacle();
+        if (obstacleDir != Vector3.zero)
         {
-            if (Animator.GetBool("IsRunning") == false)
-                Animator.SetBool("IsRunning", true);
-
-            // 공격 콤보 도중 방향 전환을 위해 만약 공격 중이라면 _movementDir만 업데이트 한 후 실제 이동은 하지 않는다.
-            MovementDir = movementDir;
-            if (_isAttacking)
-                return;
-
-            // 회전
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(MovementDir), 20f * Time.deltaTime);
-
-            Vector3 obstacleDir = CheckObstacle();
-
-            if (obstacleDir != Vector3.zero)
-            {
-                transform.position += obstacleDir * Time.deltaTime * _playerStat.MoveSpeed;
-            }
-            else 
-            {
-                transform.position += MovementDir * Time.deltaTime * _playerStat.MoveSpeed;
-            }
+            transform.position += obstacleDir * Time.deltaTime * PlayerStat.MoveSpeed;
         }
         else
         {
-            if (Animator.GetBool("IsRunning"))
-                Animator.SetBool("IsRunning", false);
+            transform.position += MovementDir * Time.deltaTime * PlayerStat.MoveSpeed;
         }
     }
 
-    protected virtual void OnDodgeEvent() { }
+    public void MoveForward(int distanceDuration)
+    {
+        int first = distanceDuration / 1000;
+        distanceDuration -= first * 1000;
+        int second = distanceDuration / 100;
+        distanceDuration -= second * 100;
+        int third = distanceDuration / 10;
+        distanceDuration -= third * 10;
+        int forth = distanceDuration;
 
-    protected virtual void RecoverMpStamina() { }
+        float distance = first + second * 0.1f;
+        float duration = third + forth * 0.1f;
+
+        if (_moveForwardCo != null) StopCoroutine(_moveForwardCo);
+        _moveForwardCo = MoveForwardCo(distance, duration);
+        StartCoroutine(_moveForwardCo);
+    }
 
     IEnumerator MoveForwardCo(float distance, float duration)
     {
@@ -222,26 +128,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void SetLockOnTarget()
-    {
-        if (Input.GetKeyDown(KeyCode.F) && _playerStat.Target == null)
-        {
-            _playerStat.Target = Managers.Game.Monster.transform;
-        }
-        else if (_playerStat.Target != null)
-        {
-            _playerStat.Target = null;
-        }
-    }
-
-    #region Animation
-    private void SetIsAttacking(int value)
-    {
-        //_animator.SetBool("IsAttacking", value == 0 ? false : true);
-
-        _isAttacking = value == 0 ? false : true;
-    }
-
     private void DoFastRotation()
     {
         if (_fastRotationCo != null)
@@ -252,7 +138,7 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator FastRotationCo()
     {
-        if (_playerStat.Target == null)
+        if (PlayerStat.Target == null)
         {
             while (Quaternion.Angle(transform.rotation, Quaternion.LookRotation(MovementDir)) > 0.1f)
             {
@@ -263,9 +149,9 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            while (_playerStat.Target != null && Quaternion.Angle(transform.rotation, Quaternion.LookRotation(_playerStat.Target.position - gameObject.transform.position)) > 0.1f)
+            while (PlayerStat.Target != null && Quaternion.Angle(transform.rotation, Quaternion.LookRotation(PlayerStat.Target.position - gameObject.transform.position)) > 0.1f)
             {
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_playerStat.Target.position - gameObject.transform.position), 30f * Time.deltaTime);
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(PlayerStat.Target.position - gameObject.transform.position), 30f * Time.deltaTime);
 
                 yield return null;
             }
@@ -274,7 +160,35 @@ public class PlayerController : MonoBehaviour
         yield return null;
     }
 
-    protected void ResetClickTriggers()
+    private void SetIsAttackingTrue()
+    {
+        IsAttacking = true;
+    }
+
+    private void SetIsAttackingFalse()
+    {
+        IsAttacking = false;
+    }
+
+    private void SetIsDodgingTrue()
+    {
+        IsDodging = true;
+    }
+
+    private void SetIsDodgingFalse()
+    {
+        IsDodging = false;
+    }
+
+    public void StopMoveRotationCo()
+    {
+        if (_fastRotationCo != null) StopCoroutine(_fastRotationCo);
+        if (_moveForwardCo != null) StopCoroutine(_moveForwardCo);
+    }
+
+    public virtual void RecoverMpStamina() { }
+
+    public void ResetClickTriggers()
     {
         Animator.ResetTrigger("LeftShortClick");
         Animator.ResetTrigger("LeftLongClick");
@@ -282,49 +196,4 @@ public class PlayerController : MonoBehaviour
         Animator.ResetTrigger("SkillE");
         Animator.ResetTrigger("SkillR");
     }
-
-
-
-    protected void MoveForward(int distanceDuration)
-    {
-        int first = distanceDuration / 1000;
-        distanceDuration -= first * 1000;
-        int second = distanceDuration / 100;
-        distanceDuration -= second * 100;
-        int third = distanceDuration / 10;
-        distanceDuration -= third * 10;
-        int forth = distanceDuration;
-
-        float distance = first + second * 0.1f;
-        float duration = third + forth * 0.1f;
-
-        if (_moveForwardCo != null) StopCoroutine(_moveForwardCo);
-        _moveForwardCo = MoveForwardCo(distance, duration);
-        StartCoroutine(_moveForwardCo);
-    }
-
-    private void PlayEffect(string effectName)
-    {
-        _effects[effectName].gameObject.transform.position = transform.position;
-        _effects[effectName].gameObject.transform.rotation = Quaternion.LookRotation(transform.forward);
-        _effects[effectName].Play();
-    }
-
-    private void SetIsDodgingTrue()
-    {
-        _isDodging = true;
-    }
-
-    private void SetIsDodgingFalse()
-    {
-        _isDodging = false;
-    }
-
-    private void ShootProjectile(string name)
-    {
-        GameObject projectile = Managers.Resource.Instantiate($"Projectiles/{name}");
-        projectile.GetComponent<Projectile>().Shoot(_playerStat);
-    }
-
-    #endregion Animation
 }

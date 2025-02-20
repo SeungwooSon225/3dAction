@@ -165,7 +165,7 @@ public class Projectile : Attack
         if (other.tag == "Player" && IsPlayer) return;
         if (other.tag == "Monster" && !IsPlayer) return;
 
-        Debug.Log(other.name + " " + gameObject.name);
+        //Debug.Log(other.name + " " + gameObject.name);
 
         if (!_isHeavy)
         {

@@ -4,13 +4,6 @@ using UnityEngine;
 
 public class WarriorStat : PlayerStat
 {
-    protected override void Init()
-    {
-        _playerClass = Define.PlayerClass.Warrior;
-        
-        base.Init();
-    }
-
     protected override void SetAttackWeight()
     {
         Data.Stat stat = Managers.Data.StatDict[1];
@@ -34,7 +27,7 @@ public class WarriorStat : PlayerStat
 
     public override void OnAttacked(Attack attacker)
     {
-        DisenableAttack("BasicComboOne");
+        DisableAttackCollider("BasicComboOne");
 
         base.OnAttacked(attacker);
     }

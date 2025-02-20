@@ -5,8 +5,6 @@ using UnityEngine;
 public class PlayerStat : Stat
 {
     [SerializeField]
-    protected Define.PlayerClass _playerClass;
-    [SerializeField]
     protected int _level;
     [SerializeField]
     protected float _staminaMp;
@@ -19,13 +17,8 @@ public class PlayerStat : Stat
 
     protected Dictionary<string, float> _staminaMpConsumption;
 
-    [SerializeField]
-    protected bool _isOnAttacked;
-
     protected bool _isOnAttackResist;
 
-
-    public Define.PlayerClass PlayerClass { get { return _playerClass; } set { _playerClass = value; } }
     public int Level { get { return _level; } set { _level = value; } }
     public float StaminaMp { get { return _staminaMp; } set { _staminaMp = value; } }
     public float MaxStaminaMp { get { return _maxStaminaMp; } set { _maxStaminaMp = value; } }
@@ -40,20 +33,20 @@ public class PlayerStat : Stat
 
     public Dictionary<string, float> StaminaMpConsumption { get { return _staminaMpConsumption; } }
 
-    public bool IsOnAttacked { get { return _isOnAttacked; } set { _isOnAttacked = value; } }
     public bool IsOnAttackResist { get { return _isOnAttackResist; } set { _isOnAttackResist = value; } }
 
     protected bool _isDown;
     public bool IsDown { get { return _isDown; } set { _isDown = value; } }
 
     Animator _animator;
-
+    protected PlayerStateMachine _stateMachine;
 
     protected override void Init()
     {
+        _stateMachine = GetComponent<PlayerController>().StateMachine;
         _collider = GetComponent<Collider>();
 
-        Managers.Data.InitPlayerStat(_playerClass);
+        Managers.Data.InitPlayerStat(Managers.Game.PlayerClass);
 
         _attackWeight = new Dictionary<string, Define.AttackWeight>();
         _staminaMpConsumption = new Dictionary<string, float>();
@@ -107,15 +100,11 @@ public class PlayerStat : Stat
             return;
         }
 
-        if (attacker.AttackType == AttackType.Basic && (IsOnAttackResist || IsOnAttacked))
+        //Debug.Log(_stateMachine.CurrentState);
+        //Debug.Log(_stateMachine.CurrentState == _stateMachine.OnAttackedState);
+
+        if (attacker.AttackType == AttackType.Basic && (IsOnAttackResist || _stateMachine.CurrentStateType == PlayerStateType.OnAttacked))
             return;
-
-        StartCoroutine(OnAttackedCo(attacker));
-    }
-
-    IEnumerator OnAttackedCo(Attack attacker)
-    {
-        IsOnAttacked = true;
 
         if (attacker.AttackType == AttackType.Basic)
             _animator.SetTrigger("OnAttacked");
@@ -125,17 +114,34 @@ public class PlayerStat : Stat
             _animator.SetTrigger("OnAttackedHeavy");
         }
 
-        _animator.SetBool("IsAttacking", false);
-        _animator.SetBool("IsDodging", false);
-        _animator.ResetTrigger("LeftShortClick");
-        _animator.ResetTrigger("LeftLongClick");
-        _animator.ResetTrigger("SkillE");
-        _animator.ResetTrigger("SkillR");
+        _stateMachine.ChangeState(PlayerStateType.OnAttacked);
 
-        yield return new WaitForSeconds(0.5f);
-
-        IsOnAttacked = false;
+        //StartCoroutine(OnAttackedCo(attacker));
     }
+
+    //IEnumerator OnAttackedCo(Attack attacker)
+    //{
+    //    IsOnAttacked = true;
+
+    //    if (attacker.AttackType == AttackType.Basic)
+    //        _animator.SetTrigger("OnAttacked");
+    //    else
+    //    {
+    //        _isDown = true;
+    //        _animator.SetTrigger("OnAttackedHeavy");
+    //    }
+
+    //    _animator.SetBool("IsAttacking", false);
+    //    _animator.SetBool("IsDodging", false);
+    //    _animator.ResetTrigger("LeftShortClick");
+    //    _animator.ResetTrigger("LeftLongClick");
+    //    _animator.ResetTrigger("SkillE");
+    //    _animator.ResetTrigger("SkillR");
+
+    //    yield return new WaitForSeconds(0.5f);
+
+    //    IsOnAttacked = false;
+    //}
 
     protected override void OnDead(Attack attacker)
     {
@@ -163,6 +169,17 @@ public class PlayerStat : Stat
         if (_staminaMp >= _staminaMpConsumption[attackName])
         {
             _staminaMp -=_staminaMpConsumption[attackName];
+        }
+    }
+
+    public virtual void RecoverMpStamina(int scale)
+    {
+        if (StaminaMp <= MaxStaminaMp)
+        {
+            StaminaMp += StaminaMpRecoverySpeed * Time.deltaTime * scale;
+
+            if (StaminaMp > MaxStaminaMp)
+                StaminaMp = MaxStaminaMp;
         }
     }
 }

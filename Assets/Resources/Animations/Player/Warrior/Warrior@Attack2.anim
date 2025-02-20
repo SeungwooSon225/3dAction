@@ -50731,7 +50731,7 @@ AnimationClip:
     intParameter: 1
     messageOptions: 0
   - time: 0.36666667
-    functionName: DisenableAttack
+    functionName: DisableAttackCollider
     data: BasicComboTwo
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -50744,8 +50744,8 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.8666667
-    functionName: SetIsAttacking
+  - time: 0.9
+    functionName: SetIsAttackingFalse
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

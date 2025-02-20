@@ -374,7 +374,7 @@ GameObject:
   - component: {fileID: 3700781013312766620}
   - component: {fileID: 8057415024568360079}
   m_Layer: 5
-  m_Name: UI_Stat
+  m_Name: UI_WarriorStat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

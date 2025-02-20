@@ -4,13 +4,6 @@ using UnityEngine;
 
 public class WizardStat : PlayerStat
 {
-    protected override void Init()
-    {
-        _playerClass = Define.PlayerClass.Wizard;
-
-        base.Init();
-    }
-
     protected override void SetAttackWeight()
     {
         Data.Stat stat = Managers.Data.StatDict[1];

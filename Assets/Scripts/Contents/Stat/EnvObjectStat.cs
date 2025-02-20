@@ -8,14 +8,14 @@ public class EnvObjectStat : Stat
 {
     protected UI_EnvObjHPBar _uI_EnvObjHPBar;
     Transform _effect;
-    Collider _collider;
+
 
     void Start()
     {
         Init();
     }
 
-    protected virtual void Init()
+    protected override void Init()
     {
         _hp = 3;
         _maxHp = 3;
